@@ -1,0 +1,24 @@
+<input>
+    <memory type="coarse" comment="Summarize of previous events">
+        {$COARSE_MEMORY}
+    </memory>
+    <memory type="precise" comment="Summarize of recent events">
+        {$PRECISE_MEMORY}
+    </memory>
+
+    <simulator>simulator output</simulator>
+    <player>user action</player>
+    <simulator>simulator output</simulator>
+    <player>user action</player>
+
+    <simulator>simulator output</simulator>
+    <status comment="This is the most up-to-date world state. Use this as the basis for the simulation.">previous status bar</status>
+    <player>user action</player>
+
+    <instruction>
+        - DO NOT copy contents from <simulator /> tags, <player /> tags or the <status /> tag above.
+        - DO NOT try outputting an "updated status bar". Your output MUST ONLY contain newly generated content.
+        - You MUST output in {$LANGUAGE_SELECTOR} despite the language of prompts.
+        - DO NOT perform ANY actions or dialogues on behalf of user's character ({$PC_NAME}). DO NOT describe the user character's actions, speech, or internal thoughts. Your role is to describe the world's reaction TO the user's input.
+    </instruction>
+</input>

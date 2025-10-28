@@ -1,0 +1,23 @@
+<input>
+    <memory type="coarse" comment="Summarize of previous events">
+        {$COARSE_MEMORY}
+    </memory>
+    <memory type="precise" comment="Summarize of recent events">
+        {$PRECISE_MEMORY}
+    </memory>
+
+    <simulator comment="Simulator's output before player's action">
+        {$SIMULATOR_OUTPUT_BEFORE_USER_ACTION}
+    </simulator>
+    <status comment="Previous status bar, may be empty for the first input">
+        {$PREVIOUS_STATUS_BAR}
+    </status>
+
+    <player comment="Player's action after the above simulator output">
+        {$PLAYER_ACTION}
+    </player>
+
+    <simulator comment="Simulator's output after player's action">
+        {$SIMULATOR_OUTPUT_AFTER_USER_ACTION}
+    </simulator>
+</input>
