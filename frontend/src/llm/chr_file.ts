@@ -1,6 +1,8 @@
-export type LanguageSelector = 'en' | 'zh_CN'
+import type { LanguageSelector } from './lang_config'
 
-export interface SimulatorCHR {
+export interface CHRBase {}
+
+export interface SimulatorCHR extends CHRBase {
     universeName: string
     literalWorkName: string
     prologue?: string
@@ -12,15 +14,23 @@ export interface SimulatorCHR {
     memory?: MemorySummarizerConfig
 }
 
-export interface AdditionalCHR {
+export interface AdditionalCHR extends CHRBase {
     statusBar?: StatusBarConfig
     simulator?: SimulatorConfig
     memory?: MemorySummarizerConfig
 }
 
-export interface PlayerCHR {
+export interface PlayerCHR extends CHRBase{
     playerName: string
     settings?: string
+}
+
+export type CHR = SimulatorCHR | AdditionalCHR | PlayerCHR
+
+export interface CHRFile<C extends CHRBase> {
+    fileName: string
+    absolutePath: string
+    chr: C
 }
 
 export interface StatusBarConfig {

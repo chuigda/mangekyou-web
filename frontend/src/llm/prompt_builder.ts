@@ -1,7 +1,7 @@
-import { isBlank as isBlank, isDefined as isDefined } from '../util/check'
 import { LanguageConfigs } from './lang_config'
-import type { AdditionalCHR, PlayerCHR, SimulatorCHR } from './chrs'
+import type { AdditionalCHR, PlayerCHR, SimulatorCHR } from './chr_file'
 import type { Message as ChatMessage } from './chat_message'
+import { isBlank, isDefined } from '../util/check'
 
 import SimulatorSystemPromptTemplate from '../assets/prompts/simulator.xml?raw'
 import SimulatorUserPromptInstructionTemplate from '../assets/prompts/simulator-user-instruction.xml?raw'

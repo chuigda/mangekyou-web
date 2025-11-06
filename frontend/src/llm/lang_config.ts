@@ -1,4 +1,4 @@
-import type { LanguageSelector } from './chrs'
+export type LanguageSelector = 'en' | 'zh_CN'
 
 export interface LanguageConfig {
     name: string

@@ -1,4 +1,4 @@
-import type { SimulatorCHR, PlayerCHR, AdditionalCHR } from './chrs'
+import type { SimulatorCHR, PlayerCHR, AdditionalCHR } from './chr_file'
 import type { Message } from './chat_message'
 
 export interface SimulationContext {
