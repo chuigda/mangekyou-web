@@ -3,34 +3,35 @@ import type { AdditionalCHR, CHRFile, PlayerCHR, SimulatorCHR } from '../llm/chr
 
 // const {
 //     simulatorCHRFile,
+//     playerCHR,
 //     additionalCHRs,
-//     playerCHR
 // } = defineProps<{
 //     simulatorCHRFile: CHRFile<SimulatorCHR>
-//     additionalCHRs: CHRFile<AdditionalCHR>[]
 //     playerCHR: CHRFile<PlayerCHR>
+//     additionalCHRs: CHRFile<AdditionalCHR>[]
 // }>()
+
+const showDialog = true
 </script>
 
 <template>
-    <v-card class="card-container">
-        <v-container>
-            <v-row>
-                <v-col>
-                    <v-text-field readonly :value="''" />
-                </v-col>
-            </v-row>
-            <v-row>
-                <v-col>
-                    <v-text-field readonly :value="''" />
-                </v-col>
-            </v-row>
-        </v-container>
-    </v-card>
+    <v-dialog v-model="showDialog" max-width="600">
+        <v-card>
+            <v-card-title>模拟器配置</v-card-title>
+            <v-container>
+                <v-row>
+                    <v-col cols="10"><v-text-field label="模拟器角色文件" density="compact" readonly /></v-col>
+                    <v-col cols="2"><v-btn color="primary">上传</v-btn></v-col>
+                </v-row>
+                <v-row>
+                    <v-col cols="10"><v-text-field label="玩家角色文件" density="compact" readonly /></v-col>
+                    <v-col cols="2"><v-btn color="primary">上传</v-btn></v-col>
+                </v-row>
+                <v-row>
+                    <v-col cols="10"><v-text-field label="额外角色文件" density="compact" readonly /></v-col>
+                    <v-col cols="2"><v-btn color="primary">上传</v-btn></v-col>
+                </v-row>
+            </v-container>
+        </v-card>
+    </v-dialog>
 </template>
-
-<style>
-.card-container {
-    margin: 16px;
-}
-</style>

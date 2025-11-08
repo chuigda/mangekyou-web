@@ -20,6 +20,6 @@
     "vite": "^7.1.7",
     "vite-plugin-vuetify": "^2.1.2",
     "vue-tsc": "^3.1.0",
-    "vuetify": "^3.10.7"
+    "vuetify": "^3.10.9"
   }
 }

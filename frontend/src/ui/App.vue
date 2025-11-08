@@ -21,10 +21,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import ChatConfig from './ChatConfig.vue'
-import { useTheme } from 'vuetify/lib/composables/theme.mjs'
 
 const drawer = ref<boolean | null>(null)
-
-const theme = useTheme()
-theme.toggle()
 </script>
