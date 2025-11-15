@@ -1,4 +1,121 @@
+:root {
+    --base-font-size: 16px;
+    font-size: var(--base-font-size);
+}
+
 body {
+    background-color: var(--navbar-background-color);
+    color: var(--body-text-color);
+    font-family: var(--body-font-family);
     margin: 0;
     padding: 0;
+
+    user-select: none;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    padding: 0;
+    margin: 0;
+}
+
+hr {
+    width: 100%;
+    border: none;
+    border-top: 1px solid var(--border-color);
+}
+
+a {
+    color: var(--link-color);
+}
+
+input, select, button {
+    height: 2em;
+
+    box-sizing: border-box;
+    font-family: var(--body-font-family);
+    font-size: 1em;
+    border: 1px solid var(--border-color);
+    border-radius: 0;
+    background-color: var(--section-background-color);
+    color: var(--body-text-color);
+}
+
+input, select {
+    width: 20em;
+}
+
+input.short, select.short {
+    width: 8em;
+}
+
+textarea {
+    font-family: var(--body-font-family);
+    font-size: 1em;
+    box-sizing: border-box;
+    border: 1px solid var(--border-color);
+    border-radius: 0;
+    background-color: var(--section-background-color);
+    color: var(--body-text-color);
+    resize: none;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--selected-background-color);
+    box-shadow: 0 0 0 2px var(--selected-background-color);
+}
+
+button {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
+
+.button {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    height: 2em;
+    box-sizing: border-box;
+
+    border: 1px solid var(--border-color);
+    background-color: var(--section-background-color);
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toggled {
+    background-color: var(--selected-background-color);
+    color: var(--selected-text-color);
+}
+
+button:disabled {
+    color: var(--snippet-text-color);
+}
+
+button:hover:not(:disabled) {
+    color: var(--link-color);
+    cursor: pointer;
+}
+
+button:active:not(:disabled) {
+    background-color: var(--selected-background-color);
+    color: var(--selected-text-color);
+}
+
+.tooltip {
+    color: var(--snippet-text-color);
+    font-size: 0.9em;
+}
+
+.red-tooltip {
+    color: #cd0000
 }
