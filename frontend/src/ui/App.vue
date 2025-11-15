@@ -1,10 +1,8 @@
 <template>
-    <div>
-        <h1>Hello Mangekyou</h1>
-    </div>
+    <NavBar />
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import NavBar from './NavBar.vue'
 
 </script>
