@@ -1,16 +1,13 @@
 use serde::{Serialize, Deserialize};
 
+use crate::protocol::openai;
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MangekyouRequest {
     pub api_url: String,
     pub api_key: String,
-    pub model: String,
-    pub messages: Vec<MangekyouMessage>,
-    pub temperature: f32,
-    pub top_p: f32,
-    pub presence_penalty: f32,
-    pub frequency_penalty: f32,
-    pub token_budget: usize
+    
+    pub openai_request: openai::ChatCompletionRequest
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -22,17 +19,4 @@ pub struct MangekyouResponse {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MangekyouErrorResponse {
     pub error: String
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum MangekyouMessageRole {
-    System,
-    User,
-    Assistant
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct MangekyouMessage {
-    pub role: MangekyouMessageRole,
-    pub content: String,
 }
