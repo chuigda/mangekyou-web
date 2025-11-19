@@ -17,6 +17,8 @@ use crate::protocol::openai::ChatCompletionResponse;
 
 #[tokio::main]
 async fn main() {
+    tracing_subscriber::fmt::init();
+
     let app = Router::new()
         .route("/ws", any(websocket_handler));
     let listener = TcpListener::bind("127.0.0.1:3000").await.unwrap();
@@ -37,9 +39,7 @@ async fn handle_websocket(ws: WebSocket) {
         };
         let message = message.as_str();
         let Ok(mangekyou_request) = serde_json::from_str::<MangekyouRequest>(message) else {
-            let _ = sender.lock().await.send(Message::from(serde_json::to_string(&MangekyouErrorResponse {
-                error: "Invalid request format".to_string(),
-            }).unwrap())).await;
+            tracing::error!("Failed to parse MangekyouRequest: {}", message);
             continue;
         };
 
@@ -68,6 +68,7 @@ async fn handle_websocket(ws: WebSocket) {
                     .ok_or_else(|| "No choices in response".to_string())?;
 
                 Ok(MangekyouResponse {
+                    id: mangekyou_request.req_id,
                     content: choice.message.content.clone(),
                     actual_token_usage: chat_response.usage.total_tokens as usize,
                 })
@@ -76,30 +77,14 @@ async fn handle_websocket(ws: WebSocket) {
             let response_text = match result {
                 Ok(resp) => serde_json::to_string(&resp).unwrap(),
                 Err(error_msg) => serde_json::to_string(&MangekyouErrorResponse {
+                    id: mangekyou_request.req_id,
                     error: error_msg,
                 }).unwrap(),
             };
 
             if let Err(e) = sender.lock().await.send(Message::from(response_text)).await {
-                show_error_message_box(&format!("Failed to send response: {}", e));
+                tracing::error!("Failed to send response: {}", e);
             }
         });
-    }
-}
-
-#[link(name = "user32")]
-unsafe extern "system" {
-    fn MessageBoxW(hwnd: *mut std::ffi::c_void, lpText: *const u16, lpCaption: *const u16, uType: u32) -> i32;
-}
-
-fn show_error_message_box(message: &str) {
-    use std::ffi::OsStr;
-    use std::os::windows::ffi::OsStrExt;
-
-    let msg: Vec<u16> = OsStr::new(message).encode_wide().chain(Some(0)).collect();
-    let caption: Vec<u16> = OsStr::new("Error").encode_wide().chain(Some(0)).collect();
-
-    unsafe {
-        MessageBoxW(std::ptr::null_mut(), msg.as_ptr(), caption.as_ptr(), 0);
     }
 }
