@@ -28,7 +28,6 @@ async fn websocket_handler(ws: WebSocketUpgrade) -> Response {
 }
 
 async fn handle_websocket(ws: WebSocket) {
-    // split the websocket into sender and receiver
     let (sender, mut receiver) = ws.split();
     let sender = Arc::new(Mutex::new(sender));
 
@@ -55,9 +54,11 @@ async fn handle_websocket(ws: WebSocket) {
                     .await
                     .map_err(|e| format!("Request failed: {}", e))?;
 
-                if !response.status().is_success() {
+                let status  = response.status();
+
+                if !status.is_success() {
                     let error_text = response.text().await.unwrap_or_else(|_| "Unknown error".to_string());
-                    return Err(format!("API returned error status: {}. Body: {}", error_text, error_text));
+                    return Err(format!("API returned error status: {}. Body: {}", status, error_text));
                 }
 
                 let chat_response = response.json::<ChatCompletionResponse>().await
