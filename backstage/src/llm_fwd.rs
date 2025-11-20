@@ -1,7 +1,6 @@
 use std::sync::Arc;
-use std::sync::OnceLock;
 
-use axum::extract::WebSocketUpgrade;
+use axum::extract::{State, WebSocketUpgrade};
 use axum::extract::ws::{Message, WebSocket};
 use axum::response::Response;
 use futures_util::{SinkExt, StreamExt};
@@ -10,18 +9,13 @@ use tokio::sync::Mutex;
 
 use crate::protocol::mangekyou::{MangekyouErrorResponse, MangekyouRequest, MangekyouSuccessResponse};
 use crate::protocol::openai::ChatCompletionResponse;
+use crate::state::AppState;
 
-static HTTP_CLIENT: OnceLock<reqwest::Client> = OnceLock::new();
-
-fn client() -> &'static reqwest::Client {
-    HTTP_CLIENT.get_or_init(|| reqwest::Client::new())
+pub async fn websocket_handler(State(state): State<AppState>, ws: WebSocketUpgrade) -> Response {
+    ws.on_upgrade(move |socket| handle_websocket(socket, state.client))
 }
 
-pub async fn websocket_handler(ws: WebSocketUpgrade) -> Response {
-    ws.on_upgrade(handle_websocket)
-}
-
-async fn handle_websocket(ws: WebSocket) {
+async fn handle_websocket(ws: WebSocket, client: reqwest::Client) {
     let (sender, mut receiver) = ws.split();
     let sender = Arc::new(Mutex::new(sender));
 
@@ -41,8 +35,9 @@ async fn handle_websocket(ws: WebSocket) {
         tracing::info!("Handling MangekyouRequest ID: {}", mangekyou_request.id);
 
         let sender = sender.clone();
+        let client = client.clone();
         spawn(async move {
-            let result = forward_mangekyou_request(mangekyou_request).await;
+            let result = forward_mangekyou_request(mangekyou_request, client).await;
 
             let response_text = match result {
                 Ok(resp) => serde_json::to_string(&resp).unwrap(),
@@ -57,9 +52,9 @@ async fn handle_websocket(ws: WebSocket) {
 }
 
 async fn forward_mangekyou_request(
-    mangekyou_request: MangekyouRequest
+    mangekyou_request: MangekyouRequest,
+    client: reqwest::Client,
 ) -> Result<MangekyouSuccessResponse, MangekyouErrorResponse> {
-    let client = client();
     let response = client.post(&mangekyou_request.api_url)
         .header("Authorization", format!("Bearer {}", mangekyou_request.api_key))
         .json(&mangekyou_request.openai_request)

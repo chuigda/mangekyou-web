@@ -1,16 +1,16 @@
 use std::collections::HashMap;
-use std::sync::OnceLock;
 use std::path::Path;
 
+use axum::extract::State;
 use axum::Json;
 use axum::response::{IntoResponse, Response};
 use serde::{Deserialize, Serialize};
 use tokenizers::Tokenizer;
 use tokio::task::block_in_place;
 
-static TOKENIZERS: OnceLock<HashMap<String, Tokenizer>> = OnceLock::new();
+use crate::state::AppState;
 
-pub fn init_tokenizer() -> Result<(), Box<dyn std::error::Error>> {
+pub fn load_tokenizers() -> Result<HashMap<String, Tokenizer>, Box<dyn std::error::Error>> {
     let path = Path::new("modele");
     if !path.exists() || !path.is_dir() {
         return Err("Directory 'modele' is absent".into());
@@ -42,19 +42,12 @@ pub fn init_tokenizer() -> Result<(), Box<dyn std::error::Error>> {
         return Err("Directory 'modele' is empty or contains no valid tokenizers".into());
     }
 
-    TOKENIZERS.set(m).map_err(|_| "Tokenizers have already been initialized")?;
-    tracing::info!("Loaded {} tokenizers", TOKENIZERS.get().unwrap().len());
-
-    Ok(())
+    tracing::info!("Loaded {} tokenizers", m.len());
+    Ok(m)
 }
 
-pub fn tokenizers() -> &'static HashMap<String, Tokenizer> {
-    TOKENIZERS.get().expect("Tokenizers have not been initialized")
-}
-
-pub async fn list_tokenizers() -> Json<Vec<String>> {
-    let tokenizers = tokenizers();
-    let tokenizers: Vec<String> = tokenizers.keys().cloned().collect();
+pub async fn list_tokenizers(State(state): State<AppState>) -> Json<Vec<String>> {
+    let tokenizers: Vec<String> = state.tokenizers.keys().cloned().collect();
     Json(tokenizers)
 }
 
@@ -75,9 +68,8 @@ pub struct TokenizerErrorResponse {
     pub error: String,
 }
 
-pub async fn tokenize(Json(payload): Json<TokenizeRequest>) -> Response {
-    let tokenizers = tokenizers();
-    if let Some(tokenizer) = tokenizers.get(&payload.tokenizer) {
+pub async fn tokenize(State(state): State<AppState>, Json(payload): Json<TokenizeRequest>) -> Response {
+    if let Some(tokenizer) = state.tokenizers.get(&payload.tokenizer) {
         match block_in_place(|| tokenizer.encode(payload.text, false)) {
             Ok(encoding) => {
                 let ids = encoding.get_ids().to_vec();
