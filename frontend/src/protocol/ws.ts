@@ -5,8 +5,13 @@ type ResolveFn = (value: MangekyouResponse) => void
 let websocketConnection: WebSocket | null = null
 let nextRequestId = 1
 const pendingRequests = new Map<number, ResolveFn>()
+let onDisconnectCallback: (() => void) | null = null
 
-export function initWebsocket(url: string): Promise<boolean> {
+export function initWebsocket(url: string, onDisconnect?: () => void): Promise<boolean> {
+    if (onDisconnect) {
+        onDisconnectCallback = onDisconnect
+    }
+
     if (websocketConnection) {
         return Promise.resolve(true)
     }
@@ -43,6 +48,9 @@ export function initWebsocket(url: string): Promise<boolean> {
                 })
             }
             pendingRequests.clear()
+            if (onDisconnectCallback) {
+                onDisconnectCallback()
+            }
             resolve(false)
         }
 

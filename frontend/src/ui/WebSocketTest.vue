@@ -69,7 +69,10 @@ function addLog(msg: string) {
 async function connect() {
   try {
     addLog(`Connecting to ${wsUrl.value}...`)
-    const success = await initWebsocket(wsUrl.value)
+    const success = await initWebsocket(wsUrl.value, () => {
+      isConnected.value = false
+      addLog('Disconnected from WebSocket')
+    })
     if (success) {
       isConnected.value = true
       addLog('Connected successfully')
@@ -105,7 +108,7 @@ async function send() {
     }
   }
 
-  addLog('Sending request...')
+  addLog(`Sending request: ${JSON.stringify(requestBody, null, 2)}`)
   try {
     const response = await sendRequest(requestBody)
     addLog(`Response received: ${JSON.stringify(response, null, 2)}`)
