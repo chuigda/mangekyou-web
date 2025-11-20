@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
 use axum::Json;
+use axum::response::{IntoResponse, Response};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -31,39 +32,34 @@ pub struct AdditionalCHR {
 }
 
 #[derive(Debug, Clone, Serialize)]
-pub struct ParseResult<T: Serialize> {
-    pub success: bool,
-    pub message: Option<String>,
-    pub data: Option<T>
+pub struct ParseSuccessResult<T: Serialize> {
+    pub data: T
 }
 
-pub async fn parse_simulator(body: String) -> Json<ParseResult<SimulatorCHR>> {
-    parse_toml(&body)
+#[derive(Debug, Clone, Serialize)]
+pub struct ParseErrorResult {
+    pub error: String
 }
 
-pub async fn parse_additional(body: String) -> Json<ParseResult<AdditionalCHR>> {
-    parse_toml(&body)
+pub async fn parse_simulator(body: String) -> Response {
+    parse_toml::<SimulatorCHR>(&body)
 }
 
-pub async fn parse_player(body: String) -> Json<ParseResult<PlayerCHR>> {
-    parse_toml(&body)
+pub async fn parse_additional(body: String) -> Response {
+    parse_toml::<AdditionalCHR>(&body)
 }
 
-pub fn parse_toml<T>(body: &str) -> Json<ParseResult<T>>
+pub async fn parse_player(body: String) -> Response {
+    parse_toml::<PlayerCHR>(&body)
+}
+
+pub fn parse_toml<T>(body: &str) -> Response
 where
     T: Serialize + for<'de> Deserialize<'de>,
 {
     match toml::from_str::<T>(body) {
-        Ok(v) => Json(ParseResult {
-            success: true,
-            message: None,
-            data: Some(v),
-        }),
-        Err(e) => Json(ParseResult {
-            success: false,
-            message: Some(e.to_string()),
-            data: None,
-        }),
+        Ok(data) => Json(ParseSuccessResult { data }).into_response(),
+        Err(e) => Json(ParseErrorResult { error: e.to_string() }).into_response(),
     }
 }
 
