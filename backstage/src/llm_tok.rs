@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 use std::path::Path;
+use std::sync::Arc;
 
 use axum::extract::State;
 use axum::Json;
@@ -10,7 +11,7 @@ use tokio::task::spawn_blocking;
 
 use crate::state::AppState;
 
-pub fn load_tokenizers() -> Result<HashMap<String, Tokenizer>, Box<dyn std::error::Error>> {
+pub fn load_tokenizers() -> Result<HashMap<String, Arc<Tokenizer>>, Box<dyn std::error::Error>> {
     let path = Path::new("modele");
     if !path.exists() || !path.is_dir() {
         return Err("Directory 'modele' is absent".into());
@@ -33,7 +34,7 @@ pub fn load_tokenizers() -> Result<HashMap<String, Tokenizer>, Box<dyn std::erro
         tracing::info!("Loading tokenizer {}", key);
 
         match Tokenizer::from_file(&path) {
-            Ok(tokenizer) => { m.insert(key, tokenizer); },
+            Ok(tokenizer) => { m.insert(key, Arc::new(tokenizer)); },
             Err(e) => { tracing::warn!("Failed to load tokenizer from {:?}: {}", path, e); }    
         }
     }
