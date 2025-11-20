@@ -39,6 +39,7 @@ async fn application_start() -> Result<(), Box<dyn std::error::Error>> {
     };
 
     let app = Router::new()
+        .route("/", get(|| async { "Zdravstvuyte, mir!" }))
         .route("/ws", any(llm_fwd::websocket_handler))
         .route("/parse/simulator", post(chr::parse_simulator))
         .route("/parse/additional", post(chr::parse_additional))
@@ -47,6 +48,9 @@ async fn application_start() -> Result<(), Box<dyn std::error::Error>> {
         .route("/tokenizer/tokenize", post(llm_tok::tokenize))
         .layer(CorsLayer::permissive())
         .with_state(state);
+
+    tracing::info!("Starting HTTP server on http://127.0.0.1:3000");
+    tracing::info!("WebSocket endpoint available at ws://127.0.0.1:3000/ws");
 
     let listener = TcpListener::bind("127.0.0.1:3000").await?;
     axum::serve(listener, app).await?;

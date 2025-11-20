@@ -6,7 +6,7 @@ use axum::Json;
 use axum::response::{IntoResponse, Response};
 use serde::{Deserialize, Serialize};
 use tokenizers::Tokenizer;
-use tokio::task::block_in_place;
+use tokio::task::spawn_blocking;
 
 use crate::state::AppState;
 
@@ -68,19 +68,27 @@ pub struct TokenizerErrorResponse {
     pub error: String,
 }
 
-pub async fn tokenize(State(state): State<AppState>, Json(payload): Json<TokenizeRequest>) -> Response {
-    if let Some(tokenizer) = state.tokenizers.get(&payload.tokenizer) {
-        match block_in_place(|| tokenizer.encode(payload.text, false)) {
-            Ok(encoding) => {
-                let ids = encoding.get_ids().to_vec();
-                let tokens = encoding.get_tokens().to_vec();
-                Json(TokenizeSuccessResponse { ids, tokens }).into_response()
-            },
-            Err(e) => {
-                Json(TokenizerErrorResponse { error: format!("Tokenization error: {}", e) }).into_response()
-            }
+pub async fn tokenize(
+    State(state): State<AppState>,
+    Json(payload): Json<TokenizeRequest>
+) -> Response {
+    let Some(tokenizer) = state.tokenizers.get(&payload.tokenizer) else {
+        return Json(TokenizerErrorResponse { error: "Tokenizer not found".to_string() }).into_response();
+    };
+
+    let tokenizer = tokenizer.clone();
+
+    match spawn_blocking(move || tokenizer.encode(payload.text, false)).await {
+        Ok(Ok(encoding)) => {
+            let ids = encoding.get_ids().to_vec();
+            let tokens = encoding.get_tokens().to_vec();
+            Json(TokenizeSuccessResponse { ids, tokens }).into_response()
+        },
+        Ok(Err(e)) => {
+            Json(TokenizerErrorResponse { error: format!("Tokenization error: {}", e) }).into_response()
+        },
+        Err(e) => {
+            Json(TokenizerErrorResponse { error: format!("Tokio task error: {}", e) }).into_response()
         }
-    } else {
-        Json(TokenizerErrorResponse { error: "Tokenizer not found".to_string() }).into_response()
     }
 }
