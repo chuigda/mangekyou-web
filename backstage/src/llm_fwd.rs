@@ -40,9 +40,9 @@ async fn handle_websocket(ws: WebSocket, client: reqwest::Client) {
             let result = forward_mangekyou_request(mangekyou_request, client).await;
 
             let response_text = match result {
-                Ok(resp) => serde_json::to_string(&resp).unwrap(),
-                Err(error_resp) => serde_json::to_string(&error_resp).unwrap(),
-            };
+                Ok(resp) => serde_json::to_string(&resp),
+                Err(error_resp) => serde_json::to_string(&error_resp),
+            }.unwrap();
 
             if let Err(e) = sender.lock().await.send(Message::from(response_text)).await {
                 tracing::error!("Failed to send response: {}", e);

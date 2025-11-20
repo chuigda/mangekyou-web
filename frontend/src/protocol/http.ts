@@ -1,3 +1,4 @@
+import type { SimulatorCHR, PlayerCHR, AdditionalCHR } from '../llm/chr_file'
 import { JsonResponder, mobius } from '../util'
 
 export let urlBase = ''
@@ -13,14 +14,41 @@ export interface TokenizeErrorResponse {
 
 export type TokenizeResponse = TokenizeSuccessResponse | TokenizeErrorResponse
 
-export async function tokenizersList(): Promise<string[]> {
+export function tokenizersList(): Promise<string[]> {
     return mobius.get(`${urlBase}/tokenizer/list`, {}, JsonResponder)
 }
 
-export async function tokenize(tokenizer: string, text: string): Promise<TokenizeResponse> {
+export function tokenize(tokenizer: string, text: string): Promise<TokenizeResponse> {
     return mobius.postJson(
         `${urlBase}/tokenizer/tokenize`,
         { tokenizer, text },
+        {},
+        JsonResponder
+    )
+}
+
+export function parseSimulator(toml: string): Promise<SimulatorCHR> {
+    return mobius.postText(
+        `${urlBase}/chr/parse/simulator`,
+        toml,
+        {},
+        JsonResponder
+    )
+}
+
+export function parsePlayer(toml: string): Promise<PlayerCHR> {
+    return mobius.postText(
+        `${urlBase}/chr/parse/player`,
+        toml,
+        {},
+        JsonResponder
+    )
+}
+
+export function parseAdditional(toml: string): Promise<AdditionalCHR> {
+    return mobius.postText(
+        `${urlBase}/chr/parse/additional`,
+        toml,
         {},
         JsonResponder
     )
