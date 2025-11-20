@@ -1,9 +1,10 @@
 mod protocol;
 mod chr;
 mod llm_fwd;
+mod llm_tok;
 
 use axum::Router;
-use axum::routing::{any, post};
+use axum::routing::{any, post, get};
 use tokio::net::TcpListener;
 use tower_http::cors::CorsLayer;
 
@@ -16,6 +17,8 @@ async fn main() {
         .route("/parse/simulator", post(chr::parse_simulator))
         .route("/parse/additional", post(chr::parse_additional))
         .route("/parse/player", post(chr::parse_player))
+        .route("/tokenizer/list", get(llm_tok::list_tokenizers))
+        .route("/tokenizer/tokenize", post(llm_tok::tokenize))
         .layer(CorsLayer::permissive());
     let listener = TcpListener::bind("127.0.0.1:3000").await.unwrap();
 
