@@ -6,45 +6,51 @@ let websocketConnection: WebSocket | null = null
 let nextRequestId = 1
 const pendingRequests = new Map<number, ResolveFn>()
 
-export function initWebsocket(url: string) {
+export function initWebsocket(url: string): Promise<boolean> {
     if (websocketConnection) {
-        websocketConnection.close()
-    }
-    websocketConnection = new WebSocket(url)
-
-    websocketConnection.onopen = () => {
-        console.log('WebSocket connected')
+        return Promise.resolve(true)
     }
 
-    websocketConnection.onmessage = (event) => {
-        try {
-            const response: MangekyouResponse = JSON.parse(event.data)
-            const { id } = response
-            const resolveFn = pendingRequests.get(id)
-            if (resolveFn) {
-                resolveFn(response)
-                pendingRequests.delete(id)
+    return new Promise((resolve) => {
+        websocketConnection = new WebSocket(url)
+
+        websocketConnection.onopen = () => {
+            console.log('WebSocket connected')
+            resolve(true)
+        }
+
+        websocketConnection.onmessage = (event) => {
+            try {
+                const response: MangekyouResponse = JSON.parse(event.data)
+                const { id } = response
+                const resolveFn = pendingRequests.get(id)
+                if (resolveFn) {
+                    resolveFn(response)
+                    pendingRequests.delete(id)
+                }
+            } catch (e) {
+                console.error('Failed to parse websocket message', e)
             }
-        } catch (e) {
-            console.error('Failed to parse websocket message', e)
         }
-    }
 
-    websocketConnection.onclose = () => {
-        console.log('WebSocket disconnected')
-        websocketConnection = null
-        for (const [id, resolveFn] of pendingRequests.entries()) {
-            resolveFn({
-                id: id,
-                error: 'WebSocket disconnected'
-            })
+        websocketConnection.onclose = () => {
+            console.log('WebSocket disconnected')
+            websocketConnection = null
+            for (const [id, resolveFn] of pendingRequests.entries()) {
+                resolveFn({
+                    id: id,
+                    error: 'WebSocket disconnected'
+                })
+            }
+            pendingRequests.clear()
+            resolve(false)
         }
-        pendingRequests.clear()
-    }
 
-    websocketConnection.onerror = (error) => {
-        console.error('WebSocket error', error)
-    }
+        websocketConnection.onerror = (error) => {
+            console.error('WebSocket error', error)
+            resolve(false)
+        }
+    })
 }
 
 export function sendRequest(requestBody: MangekyouRequestBody): Promise<MangekyouResponse> {
