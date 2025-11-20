@@ -1,49 +1,77 @@
-import type { MangekyouRequest, MangekyouResponseBase } from './mangekyou'
+import type { MangekyouRequest, MangekyouRequestBody, MangekyouResponse } from './mangekyou'
 
-let ws_connection: WebSocket | null = null
+type ResolveFn = (value: MangekyouResponse) => void
 
-export function initWebsocket() {
-    ws_connection = new WebSocket(`ws://localhost:3000/ws`)
+let websocketConnection: WebSocket | null = null
+let nextRequestId = 1
+const pendingRequests = new Map<number, ResolveFn>()
 
-    ws_connection.onopen = () => {
-        console.log('WebSocket connection established')
+export function initWebsocket(url: string) {
+    if (websocketConnection) {
+        websocketConnection.close()
+    }
+    websocketConnection = new WebSocket(url)
+
+    websocketConnection.onopen = () => {
+        console.log('WebSocket connected')
     }
 
-    ws_connection.onclose = () => {
-        console.log('WebSocket connection closed')
-        initWebsocket()
-    }
-
-    ws_connection.onerror = err => {
-        console.error('WebSocket error:', err)
-    }
-
-    ws_connection.onmessage = event => {
-        const data: MangekyouResponseBase = JSON.parse(event.data)
-        const resolver = awaiting[data.id]
-        if (resolver) {
-            resolver(data)
-            delete awaiting[data.id]
+    websocketConnection.onmessage = (event) => {
+        try {
+            const response: MangekyouResponse = JSON.parse(event.data)
+            const { id } = response
+            const resolveFn = pendingRequests.get(id)
+            if (resolveFn) {
+                resolveFn(response)
+                pendingRequests.delete(id)
+            }
+        } catch (e) {
+            console.error('Failed to parse websocket message', e)
         }
+    }
+
+    websocketConnection.onclose = () => {
+        console.log('WebSocket disconnected')
+        websocketConnection = null
+        for (const [id, resolveFn] of pendingRequests.entries()) {
+            resolveFn({
+                id: id,
+                error: 'WebSocket disconnected'
+            })
+        }
+        pendingRequests.clear()
+    }
+
+    websocketConnection.onerror = (error) => {
+        console.error('WebSocket error', error)
     }
 }
 
-const awaiting: Record<number, (data: MangekyouResponseBase) => void> = {}
+export function sendRequest(requestBody: MangekyouRequestBody): Promise<MangekyouResponse> {
+    return new Promise(resolve => {
+        const id = nextRequestId++
 
-export function sendWebsocketRequest(req: MangekyouRequest): Promise<MangekyouResponseBase> {
-    return new Promise((resolve, reject) => {
-        if (!ws_connection || ws_connection.readyState !== WebSocket.OPEN) {
-            return reject(new Error('WebSocket is not connected'))
+        if (!websocketConnection || websocketConnection.readyState !== WebSocket.OPEN) {
+            return resolve({
+                id: id,
+                error: 'WebSocket is not connected'
+            })
+        }
+        const request: MangekyouRequest = {
+            ...requestBody,
+            id
         }
 
-        awaiting[req.id] = resolve
-        ws_connection.send(JSON.stringify(req))
+        pendingRequests.set(id, resolve)
 
-        setTimeout(() => {
-            if (awaiting[req.id]) {
-                delete awaiting[req.id]
-                reject(new Error('WebSocket request timed out'))
-            }
-        }, 3 * 60 * 1000) // timeout after 3 minutes
+        try {
+            websocketConnection.send(JSON.stringify(request))
+        } catch (e) {
+            pendingRequests.delete(id)
+            return resolve({
+                id: id,
+                error: 'Failed to send request over WebSocket'
+            })
+        }
     })
 }

@@ -12,7 +12,7 @@ use tokio::spawn;
 use tokio::sync::Mutex;
 use futures_util::{SinkExt, StreamExt};
 
-use crate::protocol::mangekyou::{MangekyouErrorResponse, MangekyouRequest, MangekyouResponse};
+use crate::protocol::mangekyou::{MangekyouErrorResponse, MangekyouRequest, MangekyouSuccessResponse};
 use crate::protocol::openai::ChatCompletionResponse;
 
 #[tokio::main]
@@ -67,10 +67,10 @@ async fn handle_websocket(ws: WebSocket) {
                 let choice = chat_response.choices.first()
                     .ok_or_else(|| "No choices in response".to_string())?;
 
-                Ok(MangekyouResponse {
+                Ok(MangekyouSuccessResponse {
                     id: mangekyou_request.req_id,
                     content: choice.message.content.clone(),
-                    actual_token_usage: chat_response.usage.total_tokens as usize,
+                    token_usage: chat_response.usage.total_tokens,
                 })
             }.await;
 

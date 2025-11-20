@@ -13,11 +13,11 @@ pub struct MangekyouRequest {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct MangekyouResponse {
+pub struct MangekyouSuccessResponse {
     pub id: u32,
 
     pub content: String,
-    pub actual_token_usage: usize
+    pub token_usage: u32
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
