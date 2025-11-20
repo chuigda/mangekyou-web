@@ -3,6 +3,8 @@ mod chr;
 mod llm_fwd;
 mod llm_tok;
 
+use std::thread;
+
 use axum::Router;
 use axum::routing::{any, post, get};
 use tokio::net::TcpListener;
@@ -21,6 +23,12 @@ async fn main() {
         .route("/tokenizer/tokenize", post(llm_tok::tokenize))
         .layer(CorsLayer::permissive());
     let listener = TcpListener::bind("127.0.0.1:3000").await.unwrap();
+
+    thread::spawn(|| {
+        tracing::info!("Pre-initializing tokenizers");
+        let _ = llm_tok::tokenizers();
+        tracing::info!("Tokenizers pre-initialization complete");
+    });
 
     tracing::info!("HTTP Server listening on http://127.0.0.1:3000");
     tracing::info!("Websocket Server listening on ws://127.0.0.1:3000/ws");

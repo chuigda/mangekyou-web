@@ -4,6 +4,7 @@ type ResolveFn = (value: MangekyouResponse) => void
 
 let websocketConnection: WebSocket | null = null
 let nextRequestId = 1
+
 const pendingRequests = new Map<number, ResolveFn>()
 let onDisconnectCallback: (() => void) | null = null
 
@@ -24,7 +25,7 @@ export function initWebsocket(url: string, onDisconnect?: () => void): Promise<b
             resolve(true)
         }
 
-        websocketConnection.onmessage = (event) => {
+        websocketConnection.onmessage = event => {
             try {
                 const response: MangekyouResponse = JSON.parse(event.data)
                 const { id } = response
@@ -54,7 +55,7 @@ export function initWebsocket(url: string, onDisconnect?: () => void): Promise<b
             resolve(false)
         }
 
-        websocketConnection.onerror = (error) => {
+        websocketConnection.onerror = error => {
             console.error('WebSocket error', error)
             resolve(false)
         }

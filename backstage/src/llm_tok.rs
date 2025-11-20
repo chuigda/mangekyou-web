@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 
 static TOKENIZERS: OnceLock<HashMap<String, Tokenizer>> = OnceLock::new();
 
-fn tokenizers() -> &'static HashMap<String, Tokenizer> {
+pub fn tokenizers() -> &'static HashMap<String, Tokenizer> {
     TOKENIZERS.get_or_init(|| {
         let path = Path::new("modele");
         if !path.exists() || !path.is_dir() {
@@ -28,6 +28,8 @@ fn tokenizers() -> &'static HashMap<String, Tokenizer> {
             };
 
             let key = stem.split('.').next().unwrap_or(stem).to_string();
+            tracing::info!("Loading tokenizer {}", key);
+
             match Tokenizer::from_file(&path) {
                 Ok(tokenizer) => { m.insert(key, tokenizer); },
                 Err(e) => { tracing::warn!("Failed to load tokenizer from {:?}: {}", path, e); }    
@@ -37,6 +39,8 @@ fn tokenizers() -> &'static HashMap<String, Tokenizer> {
         if m.is_empty() {
             panic!("Directory 'modele' is empty or contains no valid tokenizers");
         }
+        
+        tracing::info!("Loaded {} tokenizers", m.len());
         m
     })
 }
