@@ -7,9 +7,7 @@ export interface SimulatorMessage extends MessageBase<'simulator'> {
     summarize: string[]
     statusBar: string
 
-    promptTokenCount: number
     tokenCount: number
-    statusBarPromptTokenCount: number
     statusBarTokenCount: number
 }
 
