@@ -2,4 +2,4 @@ pub mod mangekyou;
 pub mod openai;
 
 // TBD
-pub mod gemini;
+#[cfg(false)] pub mod gemini;
