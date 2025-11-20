@@ -1,4 +1,5 @@
 use std::sync::Arc;
+use std::sync::OnceLock;
 
 use axum::extract::WebSocketUpgrade;
 use axum::extract::ws::{Message, WebSocket};
@@ -9,6 +10,12 @@ use tokio::sync::Mutex;
 
 use crate::protocol::mangekyou::{MangekyouErrorResponse, MangekyouRequest, MangekyouSuccessResponse};
 use crate::protocol::openai::ChatCompletionResponse;
+
+static HTTP_CLIENT: OnceLock<reqwest::Client> = OnceLock::new();
+
+fn client() -> &'static reqwest::Client {
+    HTTP_CLIENT.get_or_init(|| reqwest::Client::new())
+}
 
 pub async fn websocket_handler(ws: WebSocketUpgrade) -> Response {
     ws.on_upgrade(handle_websocket)
@@ -52,7 +59,7 @@ async fn handle_websocket(ws: WebSocket) {
 async fn forward_mangekyou_request(
     mangekyou_request: MangekyouRequest
 ) -> Result<MangekyouSuccessResponse, MangekyouErrorResponse> {
-    let client = reqwest::Client::new();
+    let client = client();
     let response = client.post(&mangekyou_request.api_url)
         .header("Authorization", format!("Bearer {}", mangekyou_request.api_key))
         .json(&mangekyou_request.openai_request)
