@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 
 static TOKENIZERS: OnceLock<HashMap<String, Tokenizer>> = OnceLock::new();
 
-pub fn get_tokenizers() -> &'static HashMap<String, Tokenizer> {
+fn tokenizers() -> &'static HashMap<String, Tokenizer> {
     TOKENIZERS.get_or_init(|| {
         let path = Path::new("modele");
         if !path.exists() || !path.is_dir() {
@@ -19,18 +19,18 @@ pub fn get_tokenizers() -> &'static HashMap<String, Tokenizer> {
 
         for entry in entries.flatten() {
             let path = entry.path();
-            if path.extension().map_or(false, |ext| ext == "json") {
-                if let Some(stem) = path.file_stem().and_then(|s| s.to_str()) {
-                    let key = stem.split('.').next().unwrap_or(stem).to_string();
-                    match Tokenizer::from_file(&path) {
-                        Ok(tokenizer) => {
-                            m.insert(key, tokenizer);
-                        }
-                        Err(e) => {
-                            tracing::warn!("Failed to load tokenizer from {:?}: {}", path, e);
-                        }
-                    }
-                }
+            if !path.extension().map_or(false, |ext| ext == "json") {
+                continue
+            }
+
+            let Some(stem) = path.file_stem().and_then(|s| s.to_str()) else {
+                continue
+            };
+
+            let key = stem.split('.').next().unwrap_or(stem).to_string();
+            match Tokenizer::from_file(&path) {
+                Ok(tokenizer) => { m.insert(key, tokenizer); },
+                Err(e) => { tracing::warn!("Failed to load tokenizer from {:?}: {}", path, e); }    
             }
         }
 
@@ -42,7 +42,7 @@ pub fn get_tokenizers() -> &'static HashMap<String, Tokenizer> {
 }
 
 pub async fn list_tokenizers() -> impl IntoResponse {
-    let tokenizers = get_tokenizers();
+    let tokenizers = tokenizers();
     let tokenizers: Vec<String> = tokenizers.keys().cloned().collect();
     Json(tokenizers)
 }
@@ -65,7 +65,7 @@ pub struct TokenizerErrorResponse {
 }
 
 pub async fn tokenize(Json(payload): Json<TokenizeRequest>) -> impl IntoResponse {
-    let tokenizers = get_tokenizers();
+    let tokenizers = tokenizers();
     if let Some(tokenizer) = tokenizers.get(&payload.tokenizer) {
         match tokenizer.encode(payload.text, false) {
             Ok(encoding) => {
