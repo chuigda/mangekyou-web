@@ -1,7 +1,15 @@
 import type { SimulatorCHR, PlayerCHR, AdditionalCHR } from './chr_file'
 import type { Message } from './chat_message'
-import { buildMemorySummarizerSystemPrompt, buildMemorySummarizerUserPrompt, buildSimulatorSystemPrompt, buildSimulatorUserPrompt, buildStatusBarUpdaterSystemPrompt, buildStatusBarUpdaterUserPrompt } from './prompt_builder'
 import type { ChatCompletionRequest } from '../protocol/openai'
+import {
+    buildMemorySummarizerSystemPrompt,
+    buildMemorySummarizerUserPrompt,
+    buildSimulatorSystemPrompt,
+    buildSimulatorUserPrompt,
+    buildStatusBarUpdaterSystemPrompt,
+    buildStatusBarUpdaterUserPrompt
+} from './prompt_builder'
+import { isDefined } from '../util'
 
 export interface SimulationContext {
     simulatorCHR: SimulatorCHR
@@ -41,7 +49,10 @@ export function buildSimulationRequest(
     )
 
     const lastSimulatorMessage = ctx.messages.findLast(m => m.$k === 'simulator')
-    const statusBar = lastSimulatorMessage?.statusBar ?? '' 
+    const lastSimulatorMessageVersion = isDefined(lastSimulatorMessage) 
+        ? lastSimulatorMessage.versions[lastSimulatorMessage.currentVersionIndex]
+        : undefined
+    const statusBar = lastSimulatorMessageVersion?.statusBar ?? ''
 
     const userPrompt = buildSimulatorUserPrompt(
         ctx.simulatorCHR,
@@ -92,14 +103,17 @@ export function buildStatusBarUpdateRequest(
     )
 
     const lastSimulatorMessage = ctx.messages.findLast(m => m.$k === 'simulator')
-    const lastSimulatorOutput = lastSimulatorMessage?.content ?? ''
-    const statusBar = lastSimulatorMessage?.statusBar ?? ''
+    const lastSimulatorMessageVersion = isDefined(lastSimulatorMessage) 
+        ? lastSimulatorMessage.versions[lastSimulatorMessage.currentVersionIndex]
+        : undefined
+    const prevStatusBar = lastSimulatorMessageVersion?.statusBar ?? ''
+    const lastSimulatorOutput = lastSimulatorMessageVersion?.content ?? ''
 
     const userPrompt = buildStatusBarUpdaterUserPrompt(
         ctx.coarseMemory,
         ctx.preciseMemory.join('\n'),
         lastSimulatorOutput,
-        statusBar,
+        prevStatusBar,
         playerAction,
         simulatorOutput
     )
