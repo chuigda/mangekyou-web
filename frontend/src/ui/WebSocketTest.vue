@@ -102,7 +102,7 @@ async function send() {
       n: 1,
       stream: false,
       stop: [],
-      max_tokens: 1000,
+      max_completion_tokens: 1000,
       presence_penalty: 0,
       frequency_penalty: 0
     }

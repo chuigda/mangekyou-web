@@ -72,7 +72,7 @@ export function buildSimulationRequest(
         presence_penalty: llmConfig.presencePenalty,
         frequency_penalty: llmConfig.frequencyPenalty,
     
-        max_tokens: maxTokens,
+        max_completion_tokens: maxTokens,
 
         stream: false,
         stop: [],
@@ -126,7 +126,7 @@ export function buildStatusBarUpdateRequest(
         presence_penalty: llmConfig.presencePenalty,
         frequency_penalty: llmConfig.frequencyPenalty,
             
-        max_tokens: 4096,
+        max_completion_tokens: 4096,
         stream: false,
         stop: [],
 
@@ -165,7 +165,7 @@ export function buildMemorySummarizeRequest(
         presence_penalty: llmConfig.presencePenalty,
         frequency_penalty: llmConfig.frequencyPenalty,
             
-        max_tokens: 4096,
+        max_completion_tokens: 4096,
         stream: false,
         stop: [],
 

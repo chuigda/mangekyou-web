@@ -24,7 +24,7 @@ pub struct ChatCompletionRequest {
     pub n: u32,
     pub stream: bool,
     pub stop: Vec<String>,
-    pub max_tokens: u32,
+    pub max_completion_tokens: u32,
     pub presence_penalty: f32,
     pub frequency_penalty: f32
 }

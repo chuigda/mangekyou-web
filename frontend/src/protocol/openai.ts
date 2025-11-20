@@ -13,7 +13,7 @@ export interface ChatCompletionRequest {
     n: number
     stream: boolean
     stop: string[]
-    max_tokens: number
+    max_completion_tokens: number
     presence_penalty: number
     frequency_penalty: number
 }
