@@ -17,7 +17,7 @@ export function initWebsocket(url: string, onDisconnect?: () => void): Promise<b
         return Promise.resolve(true)
     }
 
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
         websocketConnection = new WebSocket(url)
 
         websocketConnection.onopen = () => {

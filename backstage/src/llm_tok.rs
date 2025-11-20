@@ -1,9 +1,11 @@
 use std::collections::HashMap;
 use std::sync::OnceLock;
 use std::path::Path;
-use tokenizers::Tokenizer;
-use axum::{Json, response::IntoResponse};
+
+use axum::Json;
+use axum::response::{IntoResponse, Response};
 use serde::{Deserialize, Serialize};
+use tokenizers::Tokenizer;
 
 static TOKENIZERS: OnceLock<HashMap<String, Tokenizer>> = OnceLock::new();
 
@@ -45,7 +47,7 @@ pub fn tokenizers() -> &'static HashMap<String, Tokenizer> {
     })
 }
 
-pub async fn list_tokenizers() -> impl IntoResponse {
+pub async fn list_tokenizers() -> Json<Vec<String>> {
     let tokenizers = tokenizers();
     let tokenizers: Vec<String> = tokenizers.keys().cloned().collect();
     Json(tokenizers)
@@ -68,7 +70,7 @@ pub struct TokenizerErrorResponse {
     pub error: String,
 }
 
-pub async fn tokenize(Json(payload): Json<TokenizeRequest>) -> impl IntoResponse {
+pub async fn tokenize(Json(payload): Json<TokenizeRequest>) -> Response {
     let tokenizers = tokenizers();
     if let Some(tokenizer) = tokenizers.get(&payload.tokenizer) {
         match tokenizer.encode(payload.text, false) {
