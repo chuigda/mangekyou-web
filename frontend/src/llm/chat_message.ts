@@ -1,18 +1,23 @@
 export interface MessageBase<K extends string> {
     $k: K
-    content: string
 }
 
 export interface SimulatorMessage extends MessageBase<'simulator'> {
+    versions: SimulatorMessageVersion[]
+    currentVersionIndex: number
+}
+
+export interface SimulatorMessageVersion {
+    content: string
     summarize: string[]
     statusBar: string
 
-    promptTokenCount: number
     tokenCount: number
-    statusBarPromptTokenCount: number
     statusBarTokenCount: number
 }
 
-export interface PlayerMessage extends MessageBase<'player'> {}
+export interface PlayerMessage extends MessageBase<'player'> {
+    content: string
+}
 
 export type Message = SimulatorMessage | PlayerMessage
