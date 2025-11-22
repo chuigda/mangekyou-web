@@ -4,6 +4,7 @@
 
 <template>
     <nav>
+        <slot />
     </nav>
 </template>
 
@@ -11,5 +12,9 @@
 nav {
     background-color: var(--body-background-color);
     padding: 0.5em;
+
+    display: flex;
+    column-gap: 0.5em;
+    align-items: center;
 }
 </style>
