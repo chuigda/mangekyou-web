@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import WebSocketTest from './WebSocketTest.vue'
+import { ref } from 'vue'
 
+import WebSocketTest from './WebSocketTest.vue'
 
 import type { AdditionalCHR, PlayerCHR, SimulatorCHR } from '../llm/chr_file'
 
