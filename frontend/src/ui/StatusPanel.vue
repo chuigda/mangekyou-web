@@ -1,12 +1,20 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { messages, coarseMemory, preciseMemory } from '../store'
+import type { SimulatorMessage } from '../llm/chat_message'
 import EditableText from '../component/EditableText.vue'
 
-const latestStatusBar = computed(() => {
-    const last = messages.value.findLast(m => m.$k === 'simulator')
-    if (!last || last.$k !== 'simulator') return ''
-    return last.versions[last.currentVersionIndex]!!.statusBar
+const latestStatusBar = computed({
+    get() {
+        const last = messages.value.findLast(m => m.$k === 'simulator')
+        if (!last || last.$k !== 'simulator') return ''
+        return last.versions[last.currentVersionIndex]!!.statusBar
+    },
+    set(value: string) {
+        const last = messages.value.findLast(m => m.$k === 'simulator')
+        if (!last || last.$k !== 'simulator') return
+        ;(last as SimulatorMessage).versions[last.currentVersionIndex]!!.statusBar = value
+    }
 })
 
 const totalTokens = computed(() => {
@@ -37,12 +45,12 @@ function updatePreciseMemory(index: number, value: string) {
     <div class="status-panel panel">
         <h3>状态栏</h3>
         <div class="status-bar-content">
-            <pre v-if="latestStatusBar">{{ latestStatusBar }}</pre>
+            <EditableText v-if="latestStatusBar || messages.some(m => m.$k === 'simulator')" v-model="latestStatusBar" />
             <span v-else class="tooltip">暂无状态</span>
         </div>
 
         <hr />
-        <h3>粗粒度记忆</h3>
+        <h3>总结记忆</h3>
         <EditableText v-model="coarseMemory" />
 
         <hr />
@@ -74,7 +82,7 @@ function updatePreciseMemory(index: number, value: string) {
 
 <style scoped>
 .status-panel {
-    flex: 1;
+    flex: 2;
     min-width: 0;
     overflow-y: auto;
     display: flex;

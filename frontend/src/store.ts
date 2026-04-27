@@ -233,6 +233,76 @@ export async function regenerateSimulatorMessage() {
     }
 }
 
+// ── Save / Load Context ──
+
+interface SavedContext {
+    apiUrl: string
+    apiKey: string
+    wsUrl: string
+    chatConfig: LLMConfig
+    statusBarConfig: LLMConfig
+    memoryConfig: LLMConfig
+    outputBudget: number
+    simulatorCHR: SimulatorCHR | undefined
+    playerCHR: PlayerCHR | undefined
+    additionalCHRs: AdditionalCHR[]
+    compressedAdditionalCHR: AdditionalCHR
+    userAdditionalCHR: AdditionalCHR
+    messages: Message[]
+    coarseMemory: string
+    preciseMemory: string[]
+}
+
+export function saveContext() {
+    const data: SavedContext = {
+        apiUrl: apiUrl.value,
+        apiKey: apiKey.value,
+        wsUrl: wsUrl.value,
+        chatConfig: { ...chatConfig },
+        statusBarConfig: { ...statusBarConfig },
+        memoryConfig: { ...memoryConfig },
+        outputBudget: outputBudget.value,
+        simulatorCHR: simulatorCHR.value,
+        playerCHR: playerCHR.value,
+        additionalCHRs: additionalCHRs.value,
+        compressedAdditionalCHR: compressedAdditionalCHR.value,
+        userAdditionalCHR: userAdditionalCHR.value,
+        messages: messages.value,
+        coarseMemory: coarseMemory.value,
+        preciseMemory: preciseMemory.value,
+    }
+    const json = JSON.stringify(data, null, 2)
+    const blob = new Blob([json], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `mangekyou-context-${Date.now()}.json`
+    a.click()
+    URL.revokeObjectURL(url)
+}
+
+export function loadContext(json: string) {
+    const data: SavedContext = JSON.parse(json)
+
+    apiUrl.value = data.apiUrl
+    apiKey.value = data.apiKey
+    wsUrl.value = data.wsUrl
+
+    Object.assign(chatConfig, data.chatConfig)
+    Object.assign(statusBarConfig, data.statusBarConfig)
+    Object.assign(memoryConfig, data.memoryConfig)
+
+    outputBudget.value = data.outputBudget
+    simulatorCHR.value = data.simulatorCHR
+    playerCHR.value = data.playerCHR
+    additionalCHRs.value = data.additionalCHRs
+    compressedAdditionalCHR.value = data.compressedAdditionalCHR
+    userAdditionalCHR.value = data.userAdditionalCHR
+    messages.value = data.messages
+    coarseMemory.value = data.coarseMemory
+    preciseMemory.value = data.preciseMemory
+}
+
 /** Regenerate only the status bar for the current version of the last simulator message */
 export async function regenerateStatusBar() {
     const ctx = getSimulationContext()

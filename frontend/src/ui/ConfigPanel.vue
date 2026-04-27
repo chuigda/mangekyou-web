@@ -5,13 +5,15 @@ import {
     chatConfig, statusBarConfig, memoryConfig, outputBudget,
     simulatorCHR, playerCHR, additionalCHRs,
     connectWs, disconnectWs,
-    uploadSimulatorCHR, uploadPlayerCHR, uploadAdditionalCHR
+    uploadSimulatorCHR, uploadPlayerCHR, uploadAdditionalCHR,
+    saveContext, loadContext
 } from '../store'
 import Row from '../component/Row.vue'
 
 const simulatorFileInput = ref<HTMLInputElement>()
 const playerFileInput = ref<HTMLInputElement>()
 const additionalFileInput = ref<HTMLInputElement>()
+const contextFileInput = ref<HTMLInputElement>()
 
 async function handleFileUpload(
     event: Event,
@@ -28,10 +30,28 @@ async function handleFileUpload(
 function removeAdditionalCHR(index: number) {
     additionalCHRs.value.splice(index, 1)
 }
+
+async function handleLoadContext(event: Event) {
+    const input = event.target as HTMLInputElement
+    const file = input.files?.[0]
+    if (!file) return
+    const text = await file.text()
+    loadContext(text)
+    input.value = ''
+}
 </script>
 
 <template>
     <div class="config-panel panel">
+        <h3>上下文</h3>
+        <Row>
+            <button @click="saveContext">保存</button>
+            <button @click="contextFileInput?.click()">加载</button>
+        </Row>
+        <input ref="contextFileInput" type="file" accept=".json" hidden
+               @change="handleLoadContext" />
+        <hr />
+
         <h3>连接</h3>
         <Row>
             <label>WS 地址</label>
@@ -157,7 +177,7 @@ function removeAdditionalCHR(index: number) {
 
 <style scoped>
 .config-panel {
-    width: 320px;
+    width: 360px;
     min-width: 280px;
     overflow-y: auto;
     display: flex;

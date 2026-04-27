@@ -29,7 +29,7 @@ function cancel() {
 <template>
     <div class="editable-text" :class="{ editing }">
         <div v-if="!editing" class="view" @dblclick="enterEdit">
-            <span class="text">{{ model || '&nbsp;' }}</span>
+            <code class="text"><pre>{{ model || '&nbsp;' }}</pre></code>
         </div>
         <div v-else class="edit">
             <div class="toolbar">

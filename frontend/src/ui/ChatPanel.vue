@@ -96,7 +96,7 @@ const canRegenerate = computed(() =>
 
 <style scoped>
 .chat-panel {
-    flex: 1;
+    flex: 3;
     min-width: 0;
     display: flex;
     flex-direction: column;
