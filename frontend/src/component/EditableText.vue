@@ -52,11 +52,17 @@ function cancel() {
     border-color: var(--border-color);
 }
 
+.edit {
+    position: relative;
+}
+
 .toolbar {
+    position: absolute;
+    top: 0.25em;
+    right: 0.25em;
     display: flex;
-    justify-content: flex-end;
     gap: 0.25em;
-    margin-bottom: 0.25em;
+    z-index: 1;
 }
 
 .toolbar .button {
