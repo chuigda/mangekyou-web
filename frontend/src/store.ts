@@ -90,6 +90,14 @@ export async function uploadAdditionalCHR(text: string) {
     }
 }
 
+function splitSimulatorOutput(raw: string): { content: string; summarize: string } {
+    const parts = raw.split('------SPLIT------')
+    if (parts.length >= 2) {
+        return { content: parts[0]!!.trim(), summarize: parts.slice(1).join('').trim() }
+    }
+    return { content: raw, summarize: '' }
+}
+
 function getSimulationContext(): SimulationContext | undefined {
     if (!simulatorCHR.value || !playerCHR.value) return undefined
     return {
@@ -132,12 +140,13 @@ export async function sendPlayerMessage(playerAction: string) {
             return
         }
 
-        const simulatorOutput = accumulated || (response as MangekyouSuccessResponse).content
+        const rawOutput = accumulated || (response as MangekyouSuccessResponse).content
         const tokenCount = (response as MangekyouSuccessResponse).token_usage ?? 0
+        const { content: simulatorContent, summarize } = splitSimulatorOutput(rawOutput)
 
         // Step 2: Status bar update (non-streaming)
         const updatedCtx = getSimulationContext()!
-        const statusRequest = buildStatusBarUpdateRequest(updatedCtx, statusBarConfig, playerAction, simulatorOutput)
+        const statusRequest = buildStatusBarUpdateRequest(updatedCtx, statusBarConfig, playerAction, simulatorContent)
         const statusRequestBody = { api_url: apiUrl.value, api_key: apiKey.value, openai_request: statusRequest }
         const statusResponse = await sendRequest(statusRequestBody)
 
@@ -146,8 +155,8 @@ export async function sendPlayerMessage(playerAction: string) {
 
         // Add simulator message
         const version: SimulatorMessageVersion = {
-            content: simulatorOutput,
-            summarize: [],
+            content: simulatorContent,
+            summarize,
             statusBar,
             tokenCount,
             statusBarTokenCount
@@ -183,6 +192,19 @@ export async function regenerateSimulatorMessage() {
     if (lastSimIdx < 0) return
 
     const playerAction = findPlayerActionBefore(lastSimIdx)
+    const simMsg = messages.value[lastSimIdx] as SimulatorMessage
+
+    // 1. Create empty version and switch to it immediately
+    const emptyVersion: SimulatorMessageVersion = {
+        content: '',
+        summarize: '',
+        statusBar: '',
+        tokenCount: 0,
+        statusBarTokenCount: 0
+    }
+    simMsg.versions.push(emptyVersion)
+    simMsg.currentVersionIndex = simMsg.versions.length - 1
+    const versionIdx = simMsg.currentVersionIndex
 
     isSending.value = true
     streamingContent.value = ''
@@ -204,29 +226,26 @@ export async function regenerateSimulatorMessage() {
             return
         }
 
-        const simulatorOutput = accumulated || (response as MangekyouSuccessResponse).content
+        const rawOutput = accumulated || (response as MangekyouSuccessResponse).content
         const tokenCount = (response as MangekyouSuccessResponse).token_usage ?? 0
+        const { content: simulatorContent, summarize } = splitSimulatorOutput(rawOutput)
+
+        // 3. Fill content into the version
+        simMsg.versions[versionIdx]!!.content = simulatorContent
+        simMsg.versions[versionIdx]!!.summarize = summarize
+        simMsg.versions[versionIdx]!!.tokenCount = tokenCount
 
         // Status bar for the new version
         const updatedCtx = getSimulationContext()!
-        const statusRequest = buildStatusBarUpdateRequest(updatedCtx, statusBarConfig, playerAction, simulatorOutput)
+        const statusRequest = buildStatusBarUpdateRequest(updatedCtx, statusBarConfig, playerAction, simulatorContent)
         const statusRequestBody = { api_url: apiUrl.value, api_key: apiKey.value, openai_request: statusRequest }
         const statusResponse = await sendRequest(statusRequestBody)
 
-        const statusBar = ('content' in statusResponse) ? (statusResponse as MangekyouSuccessResponse).content : ''
-        const statusBarTokenCount2 = ('token_usage' in statusResponse) ? (statusResponse as MangekyouSuccessResponse).token_usage ?? 0 : 0
-
-        const version: SimulatorMessageVersion = {
-            content: simulatorOutput,
-            summarize: [],
-            statusBar,
-            tokenCount,
-            statusBarTokenCount: statusBarTokenCount2
+        if ('content' in statusResponse) {
+            simMsg.versions[versionIdx]!!.statusBar = (statusResponse as MangekyouSuccessResponse).content
+            simMsg.versions[versionIdx]!!.statusBarTokenCount = (statusResponse as MangekyouSuccessResponse).token_usage ?? 0
         }
 
-        const simMsg = messages.value[lastSimIdx] as SimulatorMessage
-        simMsg.versions.push(version)
-        simMsg.currentVersionIndex = simMsg.versions.length - 1
         streamingContent.value = ''
     } finally {
         isSending.value = false

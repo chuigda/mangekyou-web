@@ -9,7 +9,7 @@ export interface SimulatorMessage extends MessageBase<'simulator'> {
 
 export interface SimulatorMessageVersion {
     content: string
-    summarize: string[]
+    summarize: string
     statusBar: string
 
     tokenCount: number

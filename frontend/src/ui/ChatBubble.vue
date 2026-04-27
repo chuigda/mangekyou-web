@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import type { Message, SimulatorMessage } from '../llm/chat_message'
+import EditableText from '../component/EditableText.vue'
+import { computed } from 'vue'
 
-const { message } = defineProps<{ message: Message }>()
+const props = defineProps<{ message: Message }>()
 
 function switchVersion(msg: SimulatorMessage, delta: number) {
     const next = msg.currentVersionIndex + delta
@@ -9,6 +11,32 @@ function switchVersion(msg: SimulatorMessage, delta: number) {
         msg.currentVersionIndex = next
     }
 }
+
+const simulatorContent = computed({
+    get() {
+        const msg = props.message
+        if (msg.$k !== 'simulator') return ''
+        return msg.versions[msg.currentVersionIndex]!!.content
+    },
+    set(value: string) {
+        const msg = props.message
+        if (msg.$k !== 'simulator') return
+        msg.versions[msg.currentVersionIndex]!!.content = value
+    }
+})
+
+const playerContent = computed({
+    get() {
+        const msg = props.message
+        if (msg.$k !== 'player') return ''
+        return msg.content
+    },
+    set(value: string) {
+        const msg = props.message
+        if (msg.$k !== 'player') return
+        ;(msg as { content: string }).content = value
+    }
+})
 </script>
 
 <template>
@@ -30,10 +58,10 @@ function switchVersion(msg: SimulatorMessage, delta: number) {
             </div>
             <div class="bubble-content">
                 <template v-if="message.$k === 'simulator'">
-                    {{ message.versions[message.currentVersionIndex]!!.content }}
+                    <EditableText v-model="simulatorContent" />
                 </template>
                 <template v-else>
-                    {{ message.content }}
+                    <EditableText v-model="playerContent" />
                 </template>
             </div>
             <div v-if="message.$k === 'simulator'" class="bubble-footer tooltip">

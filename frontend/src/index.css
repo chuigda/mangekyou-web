@@ -134,3 +134,7 @@ button:active:not(:disabled) {
 .red-tooltip {
     color: #cd0000
 }
+
+pre {
+    text-wrap: auto;
+}
