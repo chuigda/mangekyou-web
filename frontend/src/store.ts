@@ -152,8 +152,6 @@ function getSimulationContext(): SimulationContext | undefined {
         additionalCHR: additionalCHRs.value,
         compressedAdditionalCHR: compressedAdditionalCHR.value,
         userAdditionalCHR: userAdditionalCHR.value,
-        coarseMemory: coarseMemory.value,
-        preciseMemory: activePrecise,
         messages: messages.value
     }
 }
@@ -170,6 +168,9 @@ export async function sendPlayerMessage(playerAction: string) {
     workStatus.value = { $k: 'waiting' }
 
     try {
+        const lastSimIdx = messages.value.findLastIndex(m => m.$k === 'simulator')
+        const lastSimMessage = lastSimIdx >= 0 ? messages.value[lastSimIdx]!! as SimulatorMessage : undefined
+
         // Step 1: Simulation request (streaming)
         const request = buildSimulationRequest(ctx, chatConfig, outputBudget.value, playerAction)
         const requestBody = { api_url: apiUrl.value, api_key: apiKey.value, openai_request: request }
@@ -216,7 +217,7 @@ export async function sendPlayerMessage(playerAction: string) {
             summarize,
             statusBar,
             coarseMemory: coarseMemory.value,
-            activePreciseMemory: preciseMemory.value.length,
+            activePreciseMemory: preciseMemory.value.length + (lastSimMessage?.activePreciseMemory ?? 0),
             promptTokens,
             completionTokens,
         }

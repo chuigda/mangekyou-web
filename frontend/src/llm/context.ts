@@ -1,5 +1,5 @@
 import type { SimulatorCHR, PlayerCHR, AdditionalCHR } from './chr_file'
-import type { Message } from './chat_message'
+import type { Message, SimulatorMessage } from './chat_message'
 import type { ChatCompletionRequest } from '../protocol/openai'
 import {
     buildMemorySummarizerSystemPrompt,
@@ -17,8 +17,6 @@ export interface SimulationContext {
     compressedAdditionalCHR: AdditionalCHR
     userAdditionalCHR: AdditionalCHR
 
-    coarseMemory: string
-    preciseMemory: string[]
     messages: Message[]
 }
 
@@ -53,8 +51,8 @@ export function buildSimulationRequest(
     const userPrompt = buildSimulatorUserPrompt(
         ctx.simulatorCHR,
         ctx.playerCHR,
-        ctx.coarseMemory,
-        ctx.preciseMemory.join('\n'),
+        lastSimulatorMessage?.coarseMemory ?? '',
+        computePreciseMemoryInUse(ctx.messages).join('\n'),
         ctx.messages,
         statusBar,
         playerAction
@@ -103,8 +101,8 @@ export function buildStatusBarUpdateRequest(
     const lastSimulatorOutput = lastSimulatorMessage?.$k === 'simulator' ? lastSimulatorMessage.content : ''
 
     const userPrompt = buildStatusBarUpdaterUserPrompt(
-        ctx.coarseMemory,
-        ctx.preciseMemory.join('\n'),
+        lastSimulatorMessage?.coarseMemory ?? '',
+        computePreciseMemoryInUse(ctx.messages).join('\n'),
         lastSimulatorOutput,
         prevStatusBar,
         playerAction,
@@ -145,9 +143,11 @@ export function buildMemorySummarizeRequest(
         [ctx.compressedAdditionalCHR, ctx.userAdditionalCHR]
     )
 
+    const lastSimulatorMessage = ctx.messages.findLast(m => m.$k === 'simulator') as SimulatorMessage | undefined
+
     const userPrompt = buildMemorySummarizerUserPrompt(
-        ctx.coarseMemory,
-        ctx.preciseMemory.join('\n')
+        lastSimulatorMessage?.coarseMemory ?? '',
+        computePreciseMemoryInUse(ctx.messages).join('\n')
     )
 
     return {
@@ -173,4 +173,28 @@ export function buildMemorySummarizeRequest(
             }
         ]
     }
+}
+
+export function computePreciseMemoryInUse(messages: Message[]): string[] {
+    const lastSimulatorMessage = messages.findLast(m => m.$k === 'simulator') as SimulatorMessage
+    if (!lastSimulatorMessage) {
+        return []
+    }
+
+    const preciseMemoryInUse = []
+    let restCount = lastSimulatorMessage.activePreciseMemory
+    for (let i = messages.length - 1; i >= 0; i--) {
+        const msg = messages[i]
+        if (msg?.$k === 'simulator') {
+            const simMsg = msg as SimulatorMessage
+            restCount -= simMsg.activePreciseMemory
+            preciseMemoryInUse.push(...simMsg.summarize)
+
+            if (restCount <= 0) {
+                break
+            }
+        }
+    }
+
+    return preciseMemoryInUse.reverse()
 }

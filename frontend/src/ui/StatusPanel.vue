@@ -22,6 +22,21 @@ const preciseMemoryEntries = computed(() =>
         .filter(m => m.$k === 'simulator')
         .flatMap(m => (m as { summarize: string[] }).summarize)
 )
+
+const activeCount = computed(() => {
+    const last = messages.value.findLast(m => m.$k === 'simulator') as { activePreciseMemory: number } | undefined
+    return last?.activePreciseMemory ?? preciseMemoryEntries.value.length
+})
+
+const inactiveEntries = computed(() =>
+    preciseMemoryEntries.value.slice(0, -activeCount.value || undefined)
+)
+
+const activeEntries = computed(() =>
+    activeCount.value > 0
+        ? preciseMemoryEntries.value.slice(-activeCount.value)
+        : []
+)
 </script>
 
 <template>
@@ -39,7 +54,13 @@ const preciseMemoryEntries = computed(() =>
         <hr />
         <h3>精细记忆</h3>
         <div v-if="preciseMemoryEntries.length === 0" class="tooltip">暂无条目</div>
-        <div v-for="(entry, index) in preciseMemoryEntries" :key="index" class="precise-entry">
+        <details v-if="inactiveEntries.length > 0" class="inactive-memories">
+            <summary class="tooltip">非活动记忆 ({{ inactiveEntries.length }})</summary>
+            <div v-for="(entry, index) in inactiveEntries" :key="'i-' + index" class="precise-entry inactive">
+                <div class="precise-entry-text">{{ entry }}</div>
+            </div>
+        </details>
+        <div v-for="(entry, index) in activeEntries" :key="'a-' + index" class="precise-entry">
             <div class="precise-entry-text">{{ entry }}</div>
         </div>
     </div>
@@ -101,6 +122,19 @@ const preciseMemoryEntries = computed(() =>
 
 .precise-entry textarea {
     width: 100%;
+}
+
+.inactive-memories {
+    color: gray;
+}
+
+.inactive-memories summary {
+    cursor: pointer;
+    user-select: none;
+}
+
+.precise-entry.inactive .precise-entry-text {
+    color: gray;
 }
 
 .stats {
