@@ -62,6 +62,18 @@ export const isSending = ref(false)
 export const streamingContent = ref('')
 export const dialogError = ref('')
 
+export type WorkStatus =
+    | { $k: 'idle' }
+    | { $k: 'waiting' }
+    | { $k: 'streaming'; chars: number }
+    | { $k: 'status-bar' }
+    | { $k: 'compressing' }
+    | { $k: 'error-main' }
+    | { $k: 'error-status-bar' }
+    | { $k: 'error-compress' }
+
+export const workStatus = ref<WorkStatus>({ $k: 'idle' })
+
 // ── Actions ──
 
 export async function connectWs(): Promise<boolean> {
@@ -155,6 +167,7 @@ export async function sendPlayerMessage(playerAction: string) {
 
     isSending.value = true
     streamingContent.value = ''
+    workStatus.value = { $k: 'waiting' }
 
     try {
         // Step 1: Simulation request (streaming)
@@ -165,12 +178,14 @@ export async function sendPlayerMessage(playerAction: string) {
         const response = await sendRequest(requestBody, (delta: string) => {
             accumulated += delta
             streamingContent.value = accumulated
+            workStatus.value = { $k: 'streaming', chars: accumulated.length }
         })
 
         if ('error' in response) {
             messages.value.push({ $k: 'error', content: response.error as string })
             streamingContent.value = ''
             isSending.value = false
+            workStatus.value = { $k: 'error-main' }
             return
         }
 
@@ -180,14 +195,21 @@ export async function sendPlayerMessage(playerAction: string) {
         const { content: simulatorContent, summarize } = splitSimulatorOutput(rawOutput)
 
         // Step 2: Status bar update (non-streaming)
-        const updatedCtx = getSimulationContext()!
-        const statusRequest = buildStatusBarUpdateRequest(updatedCtx, statusBarConfig, playerAction, simulatorContent)
+        workStatus.value = { $k: 'status-bar' }
+        let statusBar = ctx.messages.findLast(m => m.$k === 'simulator')?.statusBar ?? ''
+        const statusRequest = buildStatusBarUpdateRequest(ctx, statusBarConfig, playerAction, simulatorContent)
         const statusRequestBody = { api_url: apiUrl.value, api_key: apiKey.value, openai_request: statusRequest }
         const statusResponse = await sendRequest(statusRequestBody)
 
-        const statusBar = ('content' in statusResponse) ? (statusResponse as MangekyouSuccessResponse).content : ''
+        if ('content' in statusResponse) {
+            statusBar = (statusResponse as MangekyouSuccessResponse).content
+        } else {
+            workStatus.value = { $k: 'error-status-bar' }
+            isSending.value = false
+            return
+        }
 
-        // Add simulator message
+        // Add simulator message immediately with empty status bar
         const simMsg: SimulatorMessage = {
             $k: 'simulator',
             content: simulatorContent,
@@ -199,13 +221,23 @@ export async function sendPlayerMessage(playerAction: string) {
             completionTokens,
         }
         messages.value.push(simMsg)
+        streamingContent.value = ''
 
         // Compress precise memory if over limit
-        await maybeCompressPreciseMemory()
-
-        streamingContent.value = ''
+        workStatus.value = { $k: 'compressing' }
+        const compressOk = await maybeCompressPreciseMemory()
+        if (!compressOk) {
+            workStatus.value = { $k: 'error-compress' }
+            isSending.value = false
+            return
+        }
     } finally {
         isSending.value = false
+        if (workStatus.value.$k !== 'error-main'
+            && workStatus.value.$k !== 'error-status-bar'
+            && workStatus.value.$k !== 'error-compress') {
+            workStatus.value = { $k: 'idle' }
+        }
     }
 }
 
@@ -218,13 +250,14 @@ function findPlayerActionBefore(simMsgIndex: number): string {
     return ''
 }
 
-/** Compress oldest precise memory lines into coarse memory when over limit */
-async function maybeCompressPreciseMemory() {
+/** Compress oldest precise memory lines into coarse memory when over limit.
+ *  Returns false if compression was needed but failed. */
+async function maybeCompressPreciseMemory(): Promise<boolean> {
     const allLines = preciseMemory.value
-    if (allLines.length <= preciseMemoryLimit.value) return
+    if (allLines.length <= preciseMemoryLimit.value) return true
 
     const ctx = getSimulationContext()
-    if (!ctx) return
+    if (!ctx) return true
 
     const linesToCompress = allLines.slice(0, compressPerTime.value)
 
@@ -256,7 +289,9 @@ async function maybeCompressPreciseMemory() {
                 remaining -= take
             }
         }
+        return true
     }
+    return false
 }
 
 export function deleteMessage(index: number) {

@@ -7,7 +7,7 @@
     </memory>
 
     <simulator comment="Output before player's action">
-        {$SIMULATOR_OUTPUT_BEFORE_USER_ACTION}
+        {$SIMULATOR_OUTPUT_BEFORE_PLAYER_ACTION}
     </simulator>
     <status comment="Previous status bar (may be empty on first input)">
         {$PREVIOUS_STATUS_BAR}
@@ -18,6 +18,6 @@
     </player>
 
     <simulator comment="Output after player's action">
-        {$SIMULATOR_OUTPUT_AFTER_USER_ACTION}
+        {$SIMULATOR_OUTPUT_AFTER_PLAYER_ACTION}
     </simulator>
 </input>

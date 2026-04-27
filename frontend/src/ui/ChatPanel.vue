@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, nextTick, watch, computed } from 'vue'
-import { messages, isSending, streamingContent, isConnected, simulatorCHR, playerCHR, sendPlayerMessage, regenerateSimulatorMessage, regenerateStatusBar, deleteMessage } from '../store'
+import { messages, isSending, streamingContent, isConnected, simulatorCHR, playerCHR, sendPlayerMessage, regenerateSimulatorMessage, regenerateStatusBar, deleteMessage, workStatus } from '../store'
 import ChatBubble from './ChatBubble.vue'
 
 const playerInput = ref('')
@@ -51,6 +51,22 @@ const canRegenerate = computed(() =>
     && !isSending.value
     && messages.value.some(m => m.$k === 'simulator')
 )
+
+const statusText = computed(() => {
+    const s = workStatus.value
+    switch (s.$k) {
+        case 'idle': return '就绪'
+        case 'waiting': return '消息已发出，等待远程端点响应'
+        case 'streaming': return `远程端点已响应，已生成 ${s.chars} 字符`
+        case 'status-bar': return '主要内容生成完毕，正在更新状态栏'
+        case 'compressing': return '正在压缩记忆'
+        case 'error-main': return '主要内容生成失败'
+        case 'error-status-bar': return '主要内容已生成，但状态栏更新遇到错误'
+        case 'error-compress': return '记忆压缩遇到错误'
+    }
+})
+
+const statusIsError = computed(() => workStatus.value.$k.startsWith('error'))
 </script>
 
 <template>
@@ -91,6 +107,8 @@ const canRegenerate = computed(() =>
                 </button>
             </div>
         </div>
+
+        <span class="tooltip">{{ statusText }}</span>
     </div>
 </template>
 
@@ -162,5 +180,16 @@ const canRegenerate = computed(() =>
 
 .input-buttons button {
     min-width: 8em;
+}
+
+.status-bar-tooltip {
+    padding: 0.25em 0.5em;
+    font-size: 0.85em;
+    border-top: 1px solid var(--border-color);
+    color: var(--snippet-text-color);
+}
+
+.status-bar-tooltip.error {
+    color: var(--error-color, #e74c3c);
 }
 </style>
