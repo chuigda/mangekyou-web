@@ -1,27 +1,20 @@
 <script setup lang="ts">
-import type { Message, SimulatorMessage } from '../llm/chat_message'
+import type { Message } from '../llm/chat_message'
 import EditableText from '../component/EditableText.vue'
 import { computed } from 'vue'
 
 const props = defineProps<{ message: Message }>()
 
-function switchVersion(msg: SimulatorMessage, delta: number) {
-    const next = msg.currentVersionIndex + delta
-    if (next >= 0 && next < msg.versions.length) {
-        msg.currentVersionIndex = next
-    }
-}
-
 const simulatorContent = computed({
     get() {
         const msg = props.message
         if (msg.$k !== 'simulator') return ''
-        return msg.versions[msg.currentVersionIndex]!!.content
+        return msg.content
     },
     set(value: string) {
         const msg = props.message
         if (msg.$k !== 'simulator') return
-        msg.versions[msg.currentVersionIndex]!!.content = value
+        ;(msg as { content: string }).content = value
     }
 })
 
@@ -50,11 +43,6 @@ const playerContent = computed({
         <template v-else>
             <div class="bubble-header">
                 <span class="role">{{ message.$k === 'simulator' ? '模拟器' : '玩家' }}</span>
-                <span v-if="message.$k === 'simulator' && message.versions.length > 1" class="version-switcher">
-                    <button @click="switchVersion(message, -1)" :disabled="message.currentVersionIndex === 0">&lt;</button>
-                    <span class="tooltip">{{ message.currentVersionIndex + 1 }}/{{ message.versions.length }}</span>
-                    <button @click="switchVersion(message, 1)" :disabled="message.currentVersionIndex === message.versions.length - 1">&gt;</button>
-                </span>
             </div>
             <div class="bubble-content">
                 <template v-if="message.$k === 'simulator'">
@@ -65,7 +53,7 @@ const playerContent = computed({
                 </template>
             </div>
             <div v-if="message.$k === 'simulator'" class="bubble-footer tooltip">
-                {{ message.versions[message.currentVersionIndex]!!.tokenCount }} tokens
+                {{ message.tokenCount }} tokens
             </div>
         </template>
     </div>

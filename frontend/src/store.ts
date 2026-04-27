@@ -1,6 +1,6 @@
 import { reactive, ref } from 'vue'
 import type { SimulatorCHR, PlayerCHR, AdditionalCHR } from './llm/chr_file'
-import type { Message, SimulatorMessage, SimulatorMessageVersion } from './llm/chat_message'
+import type { Message, SimulatorMessage } from './llm/chat_message'
 import type { LLMConfig, SimulationContext } from './llm/context'
 import { buildSimulationRequest, buildStatusBarUpdateRequest, buildMemorySummarizeRequest } from './llm/context'
 import { initWebsocket, sendRequest, disconnectWebsocket } from './protocol/ws'
@@ -154,18 +154,13 @@ export async function sendPlayerMessage(playerAction: string) {
         const statusBarTokenCount = ('token_usage' in statusResponse) ? (statusResponse as MangekyouSuccessResponse).token_usage ?? 0 : 0
 
         // Add simulator message
-        const version: SimulatorMessageVersion = {
+        const simMsg: SimulatorMessage = {
+            $k: 'simulator',
             content: simulatorContent,
             summarize,
             statusBar,
             tokenCount,
             statusBarTokenCount
-        }
-
-        const simMsg: SimulatorMessage = {
-            $k: 'simulator',
-            versions: [version],
-            currentVersionIndex: 0
         }
         messages.value.push(simMsg)
         streamingContent.value = ''
@@ -183,73 +178,23 @@ function findPlayerActionBefore(simMsgIndex: number): string {
     return ''
 }
 
-/** Regenerate: add a new version to the last simulator message */
+/** Regenerate: remove the last simulator message and resend */
 export async function regenerateSimulatorMessage() {
-    const ctx = getSimulationContext()
-    if (!ctx) return
-
     const lastSimIdx = messages.value.findLastIndex(m => m.$k === 'simulator')
     if (lastSimIdx < 0) return
 
     const playerAction = findPlayerActionBefore(lastSimIdx)
-    const simMsg = messages.value[lastSimIdx] as SimulatorMessage
 
-    // 1. Create empty version and switch to it immediately
-    const emptyVersion: SimulatorMessageVersion = {
-        content: '',
-        summarize: '',
-        statusBar: '',
-        tokenCount: 0,
-        statusBarTokenCount: 0
+    // Remove everything from the last simulator message onward (including trailing errors)
+    messages.value.splice(lastSimIdx)
+
+    // Also remove the player message that triggered it, since sendPlayerMessage will re-add it
+    const lastPlayerIdx = messages.value.findLastIndex(m => m.$k === 'player')
+    if (lastPlayerIdx >= 0) {
+        messages.value.splice(lastPlayerIdx, 1)
     }
-    simMsg.versions.push(emptyVersion)
-    simMsg.currentVersionIndex = simMsg.versions.length - 1
-    const versionIdx = simMsg.currentVersionIndex
 
-    isSending.value = true
-    streamingContent.value = ''
-
-    try {
-        const request = buildSimulationRequest(ctx, chatConfig, outputBudget.value, playerAction)
-        const requestBody = { api_url: apiUrl.value, api_key: apiKey.value, openai_request: request }
-
-        let accumulated = ''
-        const response = await sendRequest(requestBody, (delta: string) => {
-            accumulated += delta
-            streamingContent.value = accumulated
-        })
-
-        if ('error' in response) {
-            messages.value.push({ $k: 'error', content: response.error as string })
-            streamingContent.value = ''
-            isSending.value = false
-            return
-        }
-
-        const rawOutput = accumulated || (response as MangekyouSuccessResponse).content
-        const tokenCount = (response as MangekyouSuccessResponse).token_usage ?? 0
-        const { content: simulatorContent, summarize } = splitSimulatorOutput(rawOutput)
-
-        // 3. Fill content into the version
-        simMsg.versions[versionIdx]!!.content = simulatorContent
-        simMsg.versions[versionIdx]!!.summarize = summarize
-        simMsg.versions[versionIdx]!!.tokenCount = tokenCount
-
-        // Status bar for the new version
-        const updatedCtx = getSimulationContext()!
-        const statusRequest = buildStatusBarUpdateRequest(updatedCtx, statusBarConfig, playerAction, simulatorContent)
-        const statusRequestBody = { api_url: apiUrl.value, api_key: apiKey.value, openai_request: statusRequest }
-        const statusResponse = await sendRequest(statusRequestBody)
-
-        if ('content' in statusResponse) {
-            simMsg.versions[versionIdx]!!.statusBar = (statusResponse as MangekyouSuccessResponse).content
-            simMsg.versions[versionIdx]!!.statusBarTokenCount = (statusResponse as MangekyouSuccessResponse).token_usage ?? 0
-        }
-
-        streamingContent.value = ''
-    } finally {
-        isSending.value = false
-    }
+    await sendPlayerMessage(playerAction)
 }
 
 // ── Save / Load Context ──
@@ -331,19 +276,18 @@ export async function regenerateStatusBar() {
     if (lastSimIdx < 0) return
 
     const simMsg = messages.value[lastSimIdx] as SimulatorMessage
-    const currentVersion = simMsg.versions[simMsg.currentVersionIndex]!!
     const playerAction = findPlayerActionBefore(lastSimIdx)
 
     isSending.value = true
 
     try {
-        const statusRequest = buildStatusBarUpdateRequest(ctx, statusBarConfig, playerAction, currentVersion.content)
+        const statusRequest = buildStatusBarUpdateRequest(ctx, statusBarConfig, playerAction, simMsg.content)
         const statusRequestBody = { api_url: apiUrl.value, api_key: apiKey.value, openai_request: statusRequest }
         const statusResponse = await sendRequest(statusRequestBody)
 
         if ('content' in statusResponse) {
-            currentVersion.statusBar = (statusResponse as MangekyouSuccessResponse).content
-            currentVersion.statusBarTokenCount = (statusResponse as MangekyouSuccessResponse).token_usage ?? 0
+            simMsg.statusBar = (statusResponse as MangekyouSuccessResponse).content
+            simMsg.statusBarTokenCount = (statusResponse as MangekyouSuccessResponse).token_usage ?? 0
         }
     } finally {
         isSending.value = false

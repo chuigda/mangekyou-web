@@ -103,7 +103,7 @@ export function buildSimulatorUserPrompt(
         if (msg.$k === 'player') {
             r += `<${msg.$k}>\n${sanitize(msg.content)}</${msg.$k}>\n`
         } else if (msg.$k === 'simulator') {
-            r += `<${msg.$k}>\n${sanitize(msg.versions[msg.currentVersionIndex]!!.content)}</${msg.$k}>\n`
+            r += `<${msg.$k}>\n${sanitize(msg.content)}</${msg.$k}>\n`
         }
     }
     if (messages.length > 0) {

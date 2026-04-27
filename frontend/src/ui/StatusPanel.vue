@@ -1,19 +1,18 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { messages, coarseMemory, preciseMemory } from '../store'
-import type { SimulatorMessage } from '../llm/chat_message'
 import EditableText from '../component/EditableText.vue'
 
 const latestStatusBar = computed({
     get() {
         const last = messages.value.findLast(m => m.$k === 'simulator')
         if (!last || last.$k !== 'simulator') return ''
-        return last.versions[last.currentVersionIndex]!!.statusBar
+        return last.statusBar
     },
     set(value: string) {
         const last = messages.value.findLast(m => m.$k === 'simulator')
         if (!last || last.$k !== 'simulator') return
-        ;(last as SimulatorMessage).versions[last.currentVersionIndex]!!.statusBar = value
+        last.statusBar = value
     }
 })
 
@@ -21,8 +20,7 @@ const totalTokens = computed(() => {
     let total = 0
     for (const msg of messages.value) {
         if (msg.$k === 'simulator') {
-            const v = msg.versions[msg.currentVersionIndex]!!
-            total += v.tokenCount + v.statusBarTokenCount
+            total += msg.tokenCount + msg.statusBarTokenCount
         }
     }
     return total

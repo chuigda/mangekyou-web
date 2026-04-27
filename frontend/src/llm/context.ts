@@ -9,7 +9,6 @@ import {
     buildStatusBarUpdaterSystemPrompt,
     buildStatusBarUpdaterUserPrompt
 } from './prompt_builder'
-import { isDefined } from '../util'
 
 export interface SimulationContext {
     simulatorCHR: SimulatorCHR
@@ -49,10 +48,7 @@ export function buildSimulationRequest(
     )
 
     const lastSimulatorMessage = ctx.messages.findLast(m => m.$k === 'simulator')
-    const lastSimulatorMessageVersion = isDefined(lastSimulatorMessage)
-        ? lastSimulatorMessage.versions[lastSimulatorMessage.currentVersionIndex]
-        : undefined
-    const statusBar = lastSimulatorMessageVersion?.statusBar ?? ''
+    const statusBar = lastSimulatorMessage?.$k === 'simulator' ? lastSimulatorMessage.statusBar : ''
 
     const userPrompt = buildSimulatorUserPrompt(
         ctx.simulatorCHR,
@@ -103,11 +99,8 @@ export function buildStatusBarUpdateRequest(
     )
 
     const lastSimulatorMessage = ctx.messages.findLast(m => m.$k === 'simulator')
-    const lastSimulatorMessageVersion = isDefined(lastSimulatorMessage)
-        ? lastSimulatorMessage.versions[lastSimulatorMessage.currentVersionIndex]
-        : undefined
-    const prevStatusBar = lastSimulatorMessageVersion?.statusBar ?? ''
-    const lastSimulatorOutput = lastSimulatorMessageVersion?.content ?? ''
+    const prevStatusBar = lastSimulatorMessage?.$k === 'simulator' ? lastSimulatorMessage.statusBar : ''
+    const lastSimulatorOutput = lastSimulatorMessage?.$k === 'simulator' ? lastSimulatorMessage.content : ''
 
     const userPrompt = buildStatusBarUpdaterUserPrompt(
         ctx.coarseMemory,

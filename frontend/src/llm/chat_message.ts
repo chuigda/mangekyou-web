@@ -3,11 +3,6 @@ export interface MessageBase<K extends string> {
 }
 
 export interface SimulatorMessage extends MessageBase<'simulator'> {
-    versions: SimulatorMessageVersion[]
-    currentVersionIndex: number
-}
-
-export interface SimulatorMessageVersion {
     content: string
     summarize: string
     statusBar: string
