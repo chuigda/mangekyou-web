@@ -60,18 +60,18 @@ const playerContent = computed({
             </div>
             <div class="bubble-content">
                 <template v-if="message.$k === 'simulator'">
-                    <EditableMarkdown v-model="simulatorContent" />
+                    <EditableMarkdown v-model="simulatorContent" :editing-rows="15" />
                     <div v-if="simulatorSummarize || true" class="bubble-summary">
                         <span class="summary-label tooltip">摘要</span>
-                        <EditableText v-model="simulatorSummarize" />
+                        <EditableText v-model="simulatorSummarize" :editing-rows="5"/>
                     </div>
                 </template>
                 <template v-else>
-                    <EditableMarkdown v-model="playerContent" />
+                    <EditableMarkdown v-model="playerContent" :editing-rows="5" />
                 </template>
             </div>
             <div v-if="message.$k === 'simulator'" class="bubble-footer tooltip">
-                {{ message.promptTokens }}+{{ message.completionTokens }} tokens
+                ↑{{ message.promptTokens }} ↓{{ message.completionTokens }} tokens
             </div>
         </template>
     </div>

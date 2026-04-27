@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { messages, coarseMemory } from '../store'
 import EditableText from '../component/EditableText.vue'
+import EditableMarkdown from '../component/EditableMarkdown.vue'
 
 const latestStatusBar = computed({
     get() {
@@ -27,7 +28,7 @@ const preciseMemoryEntries = computed(() =>
     <div class="status-panel panel">
         <h3>状态栏</h3>
         <div class="status-bar-content">
-            <EditableText v-if="latestStatusBar || messages.some(m => m.$k === 'simulator')" v-model="latestStatusBar" />
+            <EditableMarkdown v-if="latestStatusBar || messages.some(m => m.$k === 'simulator')" v-model="latestStatusBar" :editing-rows="15" />
             <span v-else class="tooltip">暂无状态</span>
         </div>
 

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, nextTick } from 'vue'
 
+const props = withDefaults(defineProps<{ editingRows?: number }>(), { editingRows: 4 })
 const model = defineModel<string>({ default: '' })
 
 const editing = ref(false)
@@ -36,7 +37,7 @@ function cancel() {
                 <div class="button" role="button" @click="save" title="保存">✓</div>
                 <div class="button" role="button" @click="cancel" title="取消">✗</div>
             </div>
-            <textarea ref="textareaRef" v-model="draft" />
+            <textarea ref="textareaRef" v-model="draft" :rows="props.editingRows" />
         </div>
     </div>
 </template>
