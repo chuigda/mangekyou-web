@@ -62,16 +62,31 @@ export function disconnectWs() {
 }
 
 export async function uploadSimulatorCHR(text: string) {
-    simulatorCHR.value = await parseSimulator(text)
+    // simulatorCHR.value = await parseSimulator(text)
+    const result = await parseSimulator(text)
+    if (typeof result === 'string') {
+        alert(`Simulator CHR parse error:\n${result}`)
+    } else {
+        simulatorCHR.value = result
+    }
 }
 
 export async function uploadPlayerCHR(text: string) {
-    playerCHR.value = await parsePlayer(text)
+    const result = await parsePlayer(text)
+    if (typeof result === 'string') {
+        alert(`Player CHR parse error:\n${result}`)
+    } else {
+        playerCHR.value = result
+    }
 }
 
 export async function uploadAdditionalCHR(text: string) {
-    const chr = await parseAdditional(text)
-    additionalCHRs.value.push(chr)
+    const result = await parseAdditional(text)
+    if (typeof result === 'string') {
+        alert(`Additional CHR parse error:\n${result}`)
+    } else {
+        additionalCHRs.value.push(result)
+    }
 }
 
 function getSimulationContext(): SimulationContext | undefined {

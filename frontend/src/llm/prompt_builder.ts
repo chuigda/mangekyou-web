@@ -26,7 +26,7 @@ export function buildSimulatorSystemPrompt(
     additionalCHRs: AdditionalCHR[],
     outputBudget: number
 ): string {
-    const { name: languageName, wordUnit } = LanguageConfigs[simulatorCHR.language]
+    const { name: languageName, wordUnit } = LanguageConfigs[simulatorCHR.language] ?? LanguageConfigs.zh_CN
     const lengthIndicator = `${outputBudget} ${wordUnit}`
 
     let additionalTasks
