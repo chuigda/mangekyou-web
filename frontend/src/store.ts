@@ -84,6 +84,18 @@ export async function uploadSimulatorCHR(text: string) {
         dialogError.value = `Simulator CHR 解析失败:\n${result}`
     } else {
         simulatorCHR.value = result
+        if (messages.value.length === 0 && result.prologue) {
+            messages.value.push({
+                $k: 'simulator',
+                content: result.prologue,
+                summarize: [],
+                statusBar: '',
+                coarseMemory: '',
+                activePreciseMemory: 0,
+                promptTokens: 0,
+                completionTokens: 0,
+            })
+        }
     }
 }
 
@@ -263,10 +275,11 @@ export async function regenerateSimulatorMessage() {
     // Remove everything from the last simulator message onward (including trailing errors)
     messages.value.splice(lastSimIdx)
 
-    // Also remove the player message that triggered it, since sendPlayerMessage will re-add it
-    const lastPlayerIdx = messages.value.findLastIndex(m => m.$k === 'player')
-    if (lastPlayerIdx >= 0) {
-        messages.value.splice(lastPlayerIdx, 1)
+    // Remove the player message that triggered it only if it's the last message,
+    // since sendPlayerMessage will re-add it
+    const last = messages.value.at(-1)
+    if (last && last.$k === 'player') {
+        messages.value.pop()
     }
 
     await sendPlayerMessage(playerAction)
