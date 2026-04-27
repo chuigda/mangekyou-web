@@ -70,6 +70,9 @@ const playerContent = computed({
                     <EditableMarkdown v-model="playerContent" />
                 </template>
             </div>
+            <div v-if="message.$k === 'simulator'" class="bubble-footer tooltip">
+                {{ message.promptTokens }}+{{ message.completionTokens }} tokens
+            </div>
         </template>
     </div>
 </template>

@@ -1,4 +1,4 @@
-import { reactive, ref } from 'vue'
+import { reactive, ref, computed } from 'vue'
 import type { SimulatorCHR, PlayerCHR, AdditionalCHR } from './llm/chr_file'
 import type { Message, SimulatorMessage } from './llm/chat_message'
 import type { LLMConfig, SimulationContext } from './llm/context'
@@ -39,7 +39,11 @@ export const userAdditionalCHR = ref<AdditionalCHR>({})
 // ── Simulation Context ──
 export const messages = ref<Message[]>([])
 export const coarseMemory = ref('')
-export const preciseMemory = ref<string[]>([])
+export const preciseMemory = computed(() =>
+    messages.value
+        .filter(m => m.$k === 'simulator' && m.summarize)
+        .map(m => (m as SimulatorMessage).summarize)
+)
 
 // ── UI State ──
 export const outputBudget = ref(400)
@@ -152,8 +156,6 @@ export async function sendPlayerMessage(playerAction: string) {
         const statusResponse = await sendRequest(statusRequestBody)
 
         const statusBar = ('content' in statusResponse) ? (statusResponse as MangekyouSuccessResponse).content : ''
-        const statusBarPromptTokens = ('prompt_tokens' in statusResponse) ? (statusResponse as MangekyouSuccessResponse).prompt_tokens ?? 0 : 0
-        const statusBarCompletionTokens = ('completion_tokens' in statusResponse) ? (statusResponse as MangekyouSuccessResponse).completion_tokens ?? 0 : 0
 
         // Add simulator message
         const simMsg: SimulatorMessage = {
@@ -163,8 +165,6 @@ export async function sendPlayerMessage(playerAction: string) {
             statusBar,
             promptTokens,
             completionTokens,
-            statusBarPromptTokens,
-            statusBarCompletionTokens
         }
         messages.value.push(simMsg)
         streamingContent.value = ''
@@ -218,7 +218,6 @@ interface SavedContext {
     userAdditionalCHR: AdditionalCHR
     messages: Message[]
     coarseMemory: string
-    preciseMemory: string[]
 }
 
 export function saveContext() {
@@ -237,7 +236,6 @@ export function saveContext() {
         userAdditionalCHR: userAdditionalCHR.value,
         messages: messages.value,
         coarseMemory: coarseMemory.value,
-        preciseMemory: preciseMemory.value,
     }
     const json = JSON.stringify(data, null, 2)
     const blob = new Blob([json], { type: 'application/json' })
@@ -268,7 +266,6 @@ export function loadContext(json: string) {
     userAdditionalCHR.value = data.userAdditionalCHR
     messages.value = data.messages
     coarseMemory.value = data.coarseMemory
-    preciseMemory.value = data.preciseMemory
 }
 
 // ── Save / Load API & Model Config ──
@@ -337,8 +334,6 @@ export async function regenerateStatusBar() {
 
         if ('content' in statusResponse) {
             simMsg.statusBar = (statusResponse as MangekyouSuccessResponse).content
-            simMsg.statusBarPromptTokens = (statusResponse as MangekyouSuccessResponse).prompt_tokens ?? 0
-            simMsg.statusBarCompletionTokens = (statusResponse as MangekyouSuccessResponse).completion_tokens ?? 0
         }
     } finally {
         isSending.value = false
