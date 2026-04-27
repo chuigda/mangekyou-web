@@ -99,7 +99,7 @@ async function handleLoadApiConfig(event: Event) {
             <input v-model="chatConfig.model" type="text" />
         </Row>
         <Row>
-            <label>Temperature</label>
+            <label>温度</label>
             <input v-model.number="chatConfig.temperature" type="number" class="short" step="0.1" min="0" max="2" />
         </Row>
         <Row>
@@ -111,11 +111,11 @@ async function handleLoadApiConfig(event: Event) {
             <input v-model.number="chatConfig.n" type="number" class="short" step="1" min="1" />
         </Row>
         <Row>
-            <label>Presence Penalty</label>
+            <label>出现抑制</label>
             <input v-model.number="chatConfig.presencePenalty" type="number" class="short" step="0.1" min="-2" max="2" />
         </Row>
         <Row>
-            <label>Frequency Penalty</label>
+            <label>频率抑制</label>
             <input v-model.number="chatConfig.frequencyPenalty" type="number" class="short" step="0.1" min="-2" max="2" />
         </Row>
 

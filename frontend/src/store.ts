@@ -16,8 +16,19 @@ export const isConnected = ref(false)
 // ── LLM Configs (per-task) ──
 function defaultLLMConfig(): LLMConfig {
     return {
-        model: 'gpt-4o',
-        temperature: 0.7,
+        model: 'claude-opus-4-6',
+        temperature: 0.5,
+        topP: 1,
+        n: 1,
+        presencePenalty: 0,
+        frequencyPenalty: 0
+    }
+}
+
+function defaultLightWeightLLMConfig(): LLMConfig {
+    return {
+        model: 'gemini-3.1-flash-lite-preview',
+        temperature: 0.05,
         topP: 1,
         n: 1,
         presencePenalty: 0,
@@ -56,8 +67,8 @@ export const preciseMemory = computed(() =>
 )
 
 // ── UI State ──
-export const outputBudget = ref(400)
-export const preciseMemoryLimit = ref(10)
+export const outputBudget = ref(1024)
+export const preciseMemoryLimit = ref(20)
 export const compressPerTime = ref(5)
 export const isSending = ref(false)
 export const streamingContent = ref('')
@@ -206,7 +217,7 @@ export async function sendPlayerMessage(playerAction: string) {
         } else {
             workStatus.value = { $k: 'error-status-bar' }
             isSending.value = false
-            return
+            // status bar failed to update, but do not cancel other operations
         }
 
         // Add simulator message immediately with empty status bar
