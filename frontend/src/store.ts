@@ -70,6 +70,7 @@ export const preciseMemory = computed(() =>
 export const outputBudget = ref(1024)
 export const preciseMemoryLimit = ref(20)
 export const compressPerTime = ref(5)
+export const inlineMessageLimit = ref(5)
 export const isSending = ref(false)
 export const streamingContent = ref('')
 export const dialogError = ref('')
@@ -179,7 +180,7 @@ export async function sendPlayerMessage(playerAction: string) {
         const lastSimMessage = lastSimIdx >= 0 ? messages.value[lastSimIdx]!! as SimulatorMessage : undefined
 
         // Step 1: Simulation request (streaming)
-        const request = buildSimulationRequest(ctx, chatConfig, outputBudget.value, playerAction)
+        const request = buildSimulationRequest(ctx, chatConfig, outputBudget.value, playerAction, inlineMessageLimit.value)
         const requestBody = { api_url: apiUrl.value, api_key: apiKey.value, openai_request: request }
 
         // Add player message
@@ -328,6 +329,7 @@ interface SavedContext {
     statusBarConfig: LLMConfig
     memoryConfig: LLMConfig
     outputBudget: number
+    inlineMessageLimit?: number
     simulatorCHR: SimulatorCHR | undefined
     playerCHR: PlayerCHR | undefined
     additionalCHRs: AdditionalCHR[]
@@ -345,6 +347,7 @@ export function saveContext() {
         statusBarConfig: { ...statusBarConfig },
         memoryConfig: { ...memoryConfig },
         outputBudget: outputBudget.value,
+        inlineMessageLimit: inlineMessageLimit.value,
         simulatorCHR: simulatorCHR.value,
         playerCHR: playerCHR.value,
         additionalCHRs: additionalCHRs.value,
@@ -374,6 +377,7 @@ export function loadContext(json: string) {
     Object.assign(memoryConfig, data.memoryConfig)
 
     outputBudget.value = data.outputBudget
+    if (data.inlineMessageLimit !== undefined) inlineMessageLimit.value = data.inlineMessageLimit
     simulatorCHR.value = data.simulatorCHR
     playerCHR.value = data.playerCHR
     additionalCHRs.value = data.additionalCHRs
@@ -392,6 +396,7 @@ interface SavedApiConfig {
     statusBarConfig: LLMConfig
     memoryConfig: LLMConfig
     outputBudget: number
+    inlineMessageLimit?: number
 }
 
 export function saveApiConfig() {
@@ -403,6 +408,7 @@ export function saveApiConfig() {
         statusBarConfig: { ...statusBarConfig },
         memoryConfig: { ...memoryConfig },
         outputBudget: outputBudget.value,
+        inlineMessageLimit: inlineMessageLimit.value,
     }
     const json = JSON.stringify(data, null, 2)
     const blob = new Blob([json], { type: 'application/json' })
@@ -426,6 +432,7 @@ export function loadApiConfig(json: string) {
     Object.assign(memoryConfig, data.memoryConfig)
 
     outputBudget.value = data.outputBudget
+    if (data.inlineMessageLimit !== undefined) inlineMessageLimit.value = data.inlineMessageLimit
 }
 
 /** Regenerate only the status bar for the current version of the last simulator message */

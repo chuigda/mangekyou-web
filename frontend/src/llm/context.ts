@@ -33,7 +33,8 @@ export function buildSimulationRequest(
     ctx: SimulationContext,
     llmConfig: LLMConfig,
     outputBudget: number,
-    playerAction: string
+    playerAction: string,
+    inlineMessageLimit: number
 ): ChatCompletionRequest {
     // assume 2 words = 3 tokens, and add 1536 tokens for thinking budget
     const maxTokens = Math.ceil(outputBudget * 1.5 + 1536)
@@ -48,12 +49,14 @@ export function buildSimulationRequest(
     const lastSimulatorMessage = ctx.messages.findLast(m => m.$k === 'simulator')
     const statusBar = lastSimulatorMessage?.$k === 'simulator' ? lastSimulatorMessage.statusBar : ''
 
+    const inlineMessages = sliceInlineMessages(ctx.messages, inlineMessageLimit)
+
     const userPrompt = buildSimulatorUserPrompt(
         ctx.simulatorCHR,
         ctx.playerCHR,
         lastSimulatorMessage?.coarseMemory ?? '',
         computePreciseMemoryInUse(ctx.messages).join('\n'),
-        ctx.messages,
+        inlineMessages,
         statusBar,
         playerAction
     )
@@ -199,4 +202,34 @@ export function computePreciseMemoryInUse(messages: Message[]): string[] {
     }
 
     return preciseMemoryInUse.reverse()
+}
+
+/**
+ * Returns at most `limit` most recent player + simulator message groups, in original order.
+ * A "group" is counted by simulator messages; the player message immediately preceding each
+ * kept simulator message is also included. Non-player/simulator messages within the kept
+ * range are dropped (the simulator user prompt only inlines player/simulator messages).
+ *
+ * If `limit <= 0`, returns an empty array.
+ */
+export function sliceInlineMessages(messages: Message[], limit: number): Message[] {
+    if (limit <= 0) return []
+
+    let simCount = 0
+    let startIdx = 0
+    for (let i = messages.length - 1; i >= 0; i--) {
+        if (messages[i]?.$k === 'simulator') {
+            simCount += 1
+            if (simCount >= limit) {
+                startIdx = i
+                // also include an immediately preceding player message, if any
+                if (i - 1 >= 0 && messages[i - 1]?.$k === 'player') {
+                    startIdx = i - 1
+                }
+                break
+            }
+        }
+    }
+
+    return messages.slice(startIdx)
 }
