@@ -13,7 +13,7 @@ const totalTokens = computed(() => {
     let total = 0
     for (const msg of messages.value) {
         if (msg.$k === 'simulator') {
-            const v = msg.versions[msg.currentVersionIndex]
+            const v = msg.versions[msg.currentVersionIndex]!!
             total += v.tokenCount + v.statusBarTokenCount
         }
     }
@@ -35,22 +35,22 @@ function updatePreciseMemory(index: number, value: string) {
 
 <template>
     <div class="status-panel panel">
-        <h3>Status Bar</h3>
+        <h3>状态栏</h3>
         <div class="status-bar-content">
             <pre v-if="latestStatusBar">{{ latestStatusBar }}</pre>
-            <span v-else class="tooltip">No status yet</span>
+            <span v-else class="tooltip">暂无状态</span>
         </div>
 
         <hr />
-        <h3>Coarse Memory</h3>
+        <h3>粗粒度记忆</h3>
         <EditableText v-model="coarseMemory" />
 
         <hr />
         <div class="memory-header">
-            <h3>Precise Memory</h3>
+            <h3>精细记忆</h3>
             <button @click="addPreciseMemory">+</button>
         </div>
-        <div v-if="preciseMemory.length === 0" class="tooltip">No entries</div>
+        <div v-if="preciseMemory.length === 0" class="tooltip">暂无条目</div>
         <div v-for="(entry, index) in preciseMemory" :key="index" class="precise-entry">
             <div class="precise-entry-header">
                 <span class="tooltip">#{{ index + 1 }}</span>
@@ -64,18 +64,18 @@ function updatePreciseMemory(index: number, value: string) {
         </div>
 
         <hr />
-        <h3>Statistics</h3>
+        <h3>统计</h3>
         <div class="stats">
-            <span class="tooltip">Messages: {{ messages.length }}</span>
-            <span class="tooltip">Total tokens: {{ totalTokens }}</span>
+            <span class="tooltip">消息数: {{ messages.length }}</span>
+            <span class="tooltip">总 Token 数: {{ totalTokens }}</span>
         </div>
     </div>
 </template>
 
 <style scoped>
 .status-panel {
-    width: 300px;
-    min-width: 260px;
+    flex: 1;
+    min-width: 0;
     overflow-y: auto;
     display: flex;
     flex-direction: column;

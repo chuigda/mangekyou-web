@@ -60,14 +60,14 @@ const canRegenerate = computed(() =>
 
             <div v-if="streamingContent" class="chat-bubble simulator streaming">
                 <div class="bubble-header">
-                    <span class="role">Simulator</span>
-                    <span class="tooltip">streaming...</span>
+                    <span class="role">模拟器</span>
+                    <span class="tooltip">生成中...</span>
                 </div>
                 <div class="bubble-content">{{ streamingContent }}</div>
             </div>
 
             <div v-if="messages.length === 0 && !streamingContent" class="empty-state">
-                <span class="tooltip">Upload CHR files and send a message to begin</span>
+                <span class="tooltip">上传 CHR 文件并发送消息以开始</span>
             </div>
         </div>
 
@@ -76,18 +76,18 @@ const canRegenerate = computed(() =>
                 v-model="playerInput"
                 @keydown="handleKeydown"
                 :disabled="isSending"
-                placeholder="Enter player action..."
+                placeholder="输入玩家行动..."
                 rows="3"
             />
             <div class="input-buttons">
                 <button @click="handleSend" :disabled="!canSend">
-                    {{ isSending ? 'Sending...' : 'Send' }}
+                    {{ isSending ? '发送中...' : '发送' }}
                 </button>
                 <button @click="regenerateSimulatorMessage" :disabled="!canRegenerate">
-                    Regenerate
+                    重新生成
                 </button>
                 <button @click="regenerateStatusBar" :disabled="!canRegenerate">
-                    Regen Status Bar
+                    重新生成状态栏
                 </button>
             </div>
         </div>

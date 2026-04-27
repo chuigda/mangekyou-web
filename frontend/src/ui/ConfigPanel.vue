@@ -32,16 +32,16 @@ function removeAdditionalCHR(index: number) {
 
 <template>
     <div class="config-panel panel">
-        <h3>Connection</h3>
+        <h3>连接</h3>
         <Row>
-            <label>WS URL</label>
+            <label>WS 地址</label>
             <input v-model="wsUrl" type="text" placeholder="ws://localhost:3000/ws" />
         </Row>
         <Row>
-            <button v-if="!isConnected" @click="connectWs">Connect</button>
-            <button v-else @click="disconnectWs">Disconnect</button>
+            <button v-if="!isConnected" @click="connectWs">连接</button>
+            <button v-else @click="disconnectWs">断开</button>
             <span :class="isConnected ? 'tooltip' : 'red-tooltip'">
-                {{ isConnected ? 'Connected' : 'Disconnected' }}
+                {{ isConnected ? '已连接' : '未连接' }}
             </span>
         </Row>
 
@@ -57,9 +57,9 @@ function removeAdditionalCHR(index: number) {
         </Row>
 
         <hr />
-        <h3>Chat Model</h3>
+        <h3>聊天模型</h3>
         <Row>
-            <label>Model</label>
+            <label>模型</label>
             <input v-model="chatConfig.model" type="text" />
         </Row>
         <Row>
@@ -84,43 +84,43 @@ function removeAdditionalCHR(index: number) {
         </Row>
 
         <hr />
-        <h3>Status Bar Model</h3>
+        <h3>状态栏模型</h3>
         <Row>
-            <label>Model</label>
+            <label>模型</label>
             <input v-model="statusBarConfig.model" type="text" />
         </Row>
         <Row>
-            <label>Temperature</label>
+            <label>温度</label>
             <input v-model.number="statusBarConfig.temperature" type="number" class="short" step="0.1" min="0" max="2" />
         </Row>
 
         <hr />
-        <h3>Memory Model</h3>
+        <h3>记忆模型</h3>
         <Row>
-            <label>Model</label>
+            <label>模型</label>
             <input v-model="memoryConfig.model" type="text" />
         </Row>
         <Row>
-            <label>Temperature</label>
+            <label>温度</label>
             <input v-model.number="memoryConfig.temperature" type="number" class="short" step="0.1" min="0" max="2" />
         </Row>
 
         <hr />
-        <h3>Output Budget</h3>
+        <h3>输出预算</h3>
         <Row>
-            <label>Words</label>
+            <label>字数</label>
             <input v-model.number="outputBudget" type="number" class="short" step="50" min="50" />
         </Row>
 
         <hr />
-        <h3>CHR Files</h3>
+        <h3>CHR 文件</h3>
 
         <div class="chr-section">
             <Row>
-                <label>Simulator</label>
-                <button @click="simulatorFileInput?.click()">Upload</button>
+                <label>模拟器</label>
+                <button @click="simulatorFileInput?.click()">上传</button>
                 <span v-if="simulatorCHR" class="tooltip">{{ simulatorCHR.universeName }}</span>
-                <span v-else class="red-tooltip">Not loaded</span>
+                <span v-else class="red-tooltip">未加载</span>
             </Row>
             <input ref="simulatorFileInput" type="file" accept=".toml,.chr" hidden
                    @change="handleFileUpload($event, uploadSimulatorCHR)" />
@@ -128,10 +128,10 @@ function removeAdditionalCHR(index: number) {
 
         <div class="chr-section">
             <Row>
-                <label>Player</label>
-                <button @click="playerFileInput?.click()">Upload</button>
+                <label>玩家</label>
+                <button @click="playerFileInput?.click()">上传</button>
                 <span v-if="playerCHR" class="tooltip">{{ playerCHR.playerName }}</span>
-                <span v-else class="red-tooltip">Not loaded</span>
+                <span v-else class="red-tooltip">未加载</span>
             </Row>
             <input ref="playerFileInput" type="file" accept=".toml,.chr" hidden
                    @change="handleFileUpload($event, uploadPlayerCHR)" />
@@ -139,18 +139,18 @@ function removeAdditionalCHR(index: number) {
 
         <div class="chr-section">
             <Row>
-                <label>Additional</label>
-                <button @click="additionalFileInput?.click()">Add</button>
+                <label>附加</label>
+                <button @click="additionalFileInput?.click()">添加</button>
             </Row>
             <input ref="additionalFileInput" type="file" accept=".toml,.chr" hidden
                    @change="handleFileUpload($event, uploadAdditionalCHR)" />
             <div v-for="(_, index) in additionalCHRs" :key="index" class="chr-item">
                 <Row>
-                    <span class="tooltip">Additional #{{ index + 1 }}</span>
+                    <span class="tooltip">附加 #{{ index + 1 }}</span>
                     <button @click="removeAdditionalCHR(index)">✗</button>
                 </Row>
             </div>
-            <span v-if="additionalCHRs.length === 0" class="tooltip">None</span>
+            <span v-if="additionalCHRs.length === 0" class="tooltip">无</span>
         </div>
     </div>
 </template>

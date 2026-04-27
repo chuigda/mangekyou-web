@@ -14,7 +14,7 @@ function switchVersion(msg: SimulatorMessage, delta: number) {
 <template>
     <div class="chat-bubble" :class="message.$k">
         <div class="bubble-header">
-            <span class="role">{{ message.$k === 'simulator' ? 'Simulator' : 'Player' }}</span>
+            <span class="role">{{ message.$k === 'simulator' ? '模拟器' : '玩家' }}</span>
             <span v-if="message.$k === 'simulator' && message.versions.length > 1" class="version-switcher">
                 <button @click="switchVersion(message, -1)" :disabled="message.currentVersionIndex === 0">&lt;</button>
                 <span class="tooltip">{{ message.currentVersionIndex + 1 }}/{{ message.versions.length }}</span>
