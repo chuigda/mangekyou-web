@@ -6,11 +6,6 @@ export interface SimulatorMessage extends MessageBase<'simulator'> {
     content: string
     summarize: string
     statusBar: string
-
-    promptTokens: number
-    completionTokens: number
-    statusBarPromptTokens: number
-    statusBarCompletionTokens: number
 }
 
 export interface PlayerMessage extends MessageBase<'player'> {
