@@ -35,12 +35,12 @@ pub fn load_tokenizers() -> Result<HashMap<String, Arc<Tokenizer>>, Box<dyn std:
 
         match Tokenizer::from_file(&path) {
             Ok(tokenizer) => { m.insert(key, Arc::new(tokenizer)); },
-            Err(e) => { tracing::warn!("Failed to load tokenizer from {:?}: {}", path, e); }    
+            Err(e) => { tracing::warn!("Failed to load tokenizer from {:?}: {}", path, e); }
         }
     }
 
     if m.is_empty() {
-        return Err("Directory 'modele' is empty or contains no valid tokenizers".into());
+        tracing::info!("Directory 'modele' is empty or contains no valid tokenizers");
     }
 
     tracing::info!("Loaded {} tokenizers", m.len());
