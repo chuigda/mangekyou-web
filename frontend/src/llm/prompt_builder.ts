@@ -95,18 +95,22 @@ export function buildSimulatorUserPrompt(
     preciseMemory = sanitize(preciseMemory)
 
     let r = '<input>\n'
-    r += `<memory type="coarse" comment="Summarize of previous events">\n${coarseMemory}</memory>\n`
-    r += `<memory type="precise" comment="Important details from previous events">\n${preciseMemory}</memory>\n`
+    r += `<memory type="coarse" comment="Summary of previous events">\n${coarseMemory}</memory>\n`
+    r += `<memory type="precise" comment="Summary of recent events">\n${preciseMemory}</memory>\n`
     r += '\n'
 
     for (const msg of messages) {
-        r += `<${msg.$k}>\n${sanitize(msg.content)}</${msg.$k}>\n`
+        if (msg.$k === 'player') {
+            r += `<${msg.$k}>\n${sanitize(msg.content)}</${msg.$k}>\n`
+        } else if (msg.$k === 'simulator') {
+            r += `<${msg.$k}>\n${sanitize(msg.versions[msg.currentVersionIndex]!!.content)}</${msg.$k}>\n`
+        }
     }
     if (messages.length > 0) {
         r += '\n'
     }
 
-    r += `<status comment="The most up-to-date world state">\n${sanitize(statusBar)}</status>\n`
+    r += `<status comment="Most up-to-date world state">\n${sanitize(statusBar)}</status>\n`
     r += '\n'
 
     r += `<player>\n${sanitize(playerAction)}</player>\n`
