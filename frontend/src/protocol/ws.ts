@@ -84,6 +84,13 @@ export function initWebsocket(url: string, onDisconnect?: () => void): Promise<b
     })
 }
 
+export function disconnectWebsocket() {
+    if (websocketConnection) {
+        websocketConnection.close()
+        websocketConnection = null
+    }
+}
+
 export function sendRequest(requestBody: MangekyouRequestBody, onDelta?: DeltaFn): Promise<MangekyouResponse> {
     return new Promise(resolve => {
         const id = nextRequestId++
