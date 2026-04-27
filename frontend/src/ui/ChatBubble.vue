@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Message } from '../llm/chat_message'
-import EditableText from '../component/EditableText.vue'
+import EditableMarkdown from '../component/EditableMarkdown.vue'
 import { computed } from 'vue'
 
 const props = defineProps<{ message: Message }>()
@@ -46,14 +46,14 @@ const playerContent = computed({
             </div>
             <div class="bubble-content">
                 <template v-if="message.$k === 'simulator'">
-                    <EditableText v-model="simulatorContent" />
+                    <EditableMarkdown v-model="simulatorContent" />
                 </template>
                 <template v-else>
-                    <EditableText v-model="playerContent" />
+                    <EditableMarkdown v-model="playerContent" />
                 </template>
             </div>
             <div v-if="message.$k === 'simulator'" class="bubble-footer tooltip">
-                {{ message.tokenCount }} tokens
+                {{ message.tokenCount}} tokens
             </div>
         </template>
     </div>
@@ -116,7 +116,6 @@ const playerContent = computed({
 }
 
 .bubble-content {
-    white-space: pre-wrap;
     word-break: break-word;
     line-height: 1.6;
 }
