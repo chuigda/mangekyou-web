@@ -435,16 +435,24 @@ export async function regenerateStatusBar() {
     const ctx = getSimulationContext()
     if (!ctx) return
 
-    const lastSimIdx = messages.value.findLastIndex(m => m.$k === 'simulator')
-    if (lastSimIdx < 0) return
+    const lastPlayerIdx = messages.value.findLastIndex(m => m.$k === 'player')
+    if (lastPlayerIdx < 0 || lastPlayerIdx === messages.value.length - 1) {
+        // No player message or last message is player message, use empty action
+        return
+    }
+    const playerAction = messages.value[lastPlayerIdx]!!.content
+    const simMsg = messages.value[lastPlayerIdx + 1]!! as SimulatorMessage
 
-    const simMsg = messages.value[lastSimIdx] as SimulatorMessage
-    const playerAction = findPlayerActionBefore(lastSimIdx)
+    const slicedMessages = messages.value.slice(0, lastPlayerIdx + 1)
+    const forkedCtx = {
+        ...ctx,
+        messages: slicedMessages,
+    }
 
     isSending.value = true
 
     try {
-        const statusRequest = buildStatusBarUpdateRequest(ctx, statusBarConfig, playerAction, simMsg.content)
+        const statusRequest = buildStatusBarUpdateRequest(forkedCtx, statusBarConfig, playerAction, simMsg.content)
         const statusRequestBody = { api_url: apiUrl.value, api_key: apiKey.value, openai_request: statusRequest }
         const statusResponse = await sendRequest(statusRequestBody)
 
