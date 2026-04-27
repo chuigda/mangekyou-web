@@ -20,7 +20,7 @@ export interface AdditionalCHR extends CHRBase {
     memory?: MemorySummarizerConfig
 }
 
-export interface PlayerCHR extends CHRBase{
+export interface PlayerCHR extends CHRBase {
     playerName: string
     settings?: string
 }
