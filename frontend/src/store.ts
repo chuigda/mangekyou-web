@@ -247,6 +247,12 @@ async function maybeCompressPreciseMemory() {
     }
 }
 
+export function deleteMessage(index: number) {
+    if (index >= 0 && index < messages.value.length) {
+        messages.value.splice(index, 1)
+    }
+}
+
 /** Regenerate: remove the last simulator message and resend */
 export async function regenerateSimulatorMessage() {
     const lastSimIdx = messages.value.findLastIndex(m => m.$k === 'simulator')

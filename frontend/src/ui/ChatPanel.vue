@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, nextTick, watch, computed } from 'vue'
-import { messages, isSending, streamingContent, isConnected, simulatorCHR, playerCHR, sendPlayerMessage, regenerateSimulatorMessage, regenerateStatusBar } from '../store'
+import { messages, isSending, streamingContent, isConnected, simulatorCHR, playerCHR, sendPlayerMessage, regenerateSimulatorMessage, regenerateStatusBar, deleteMessage } from '../store'
 import ChatBubble from './ChatBubble.vue'
 
 const playerInput = ref('')
@@ -56,7 +56,7 @@ const canRegenerate = computed(() =>
 <template>
     <div class="chat-panel panel">
         <div ref="messagesContainer" class="messages-container">
-            <ChatBubble v-for="(msg, index) in messages" :key="index" :message="msg" />
+            <ChatBubble v-for="(msg, index) in messages" :key="index" :message="msg" @delete="deleteMessage(index)" />
 
             <div v-if="streamingContent" class="chat-bubble simulator streaming">
                 <div class="bubble-header">

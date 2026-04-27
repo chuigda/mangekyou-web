@@ -2,9 +2,24 @@
 import type { Message, SimulatorMessage } from '../llm/chat_message'
 import EditableMarkdown from '../component/EditableMarkdown.vue'
 import EditableText from '../component/EditableText.vue'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 const props = defineProps<{ message: Message }>()
+const emit = defineEmits<{ delete: [] }>()
+
+const confirmingDelete = ref(false)
+let confirmTimer: ReturnType<typeof setTimeout> | undefined
+
+function handleDelete() {
+    if (!confirmingDelete.value) {
+        confirmingDelete.value = true
+        confirmTimer = setTimeout(() => { confirmingDelete.value = false }, 2000)
+    } else {
+        clearTimeout(confirmTimer)
+        confirmingDelete.value = false
+        emit('delete')
+    }
+}
 
 const simulatorContent = computed({
     get() {
@@ -57,6 +72,7 @@ const playerContent = computed({
         <template v-else>
             <div class="bubble-header">
                 <span class="role">{{ message.$k === 'simulator' ? '模拟器' : '玩家' }}</span>
+                <button class="delete-btn" :class="{ confirming: confirmingDelete }" @click="handleDelete" title="删除消息">{{ confirmingDelete ? '确认?' : '✕' }}</button>
             </div>
             <div class="bubble-content">
                 <template v-if="message.$k === 'simulator'">
@@ -151,5 +167,30 @@ const playerContent = computed({
 .bubble-footer {
     text-align: right;
     font-size: 0.8em;
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    color: var(--snippet-text-color);
+    cursor: pointer;
+    font-size: 0.8em;
+    padding: 0 0.3em;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.chat-bubble:hover .delete-btn {
+    opacity: 0.6;
+}
+
+.delete-btn:hover {
+    opacity: 1 !important;
+    color: #e55;
+}
+
+.delete-btn.confirming {
+    opacity: 1;
+    color: #e55;
 }
 </style>
