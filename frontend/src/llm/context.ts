@@ -136,7 +136,8 @@ export function buildStatusBarUpdateRequest(
 
 export function buildMemorySummarizeRequest(
     ctx: SimulationContext,
-    llmConfig: LLMConfig
+    llmConfig: LLMConfig,
+    compressCount: number
 ): ChatCompletionRequest {
     const systemPrompt = buildMemorySummarizerSystemPrompt(
         ctx.simulatorCHR,
@@ -147,7 +148,7 @@ export function buildMemorySummarizeRequest(
 
     const userPrompt = buildMemorySummarizerUserPrompt(
         lastSimulatorMessage?.coarseMemory ?? '',
-        computePreciseMemoryInUse(ctx.messages).join('\n')
+        computePreciseMemoryInUse(ctx.messages).slice(0, compressCount).join('\n')
     )
 
     return {

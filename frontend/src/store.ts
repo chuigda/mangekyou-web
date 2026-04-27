@@ -251,45 +251,32 @@ function findPlayerActionBefore(simMsgIndex: number): string {
     return ''
 }
 
-/** Compress oldest precise memory lines into coarse memory when over limit.
+/** Compress oldest active precise memory lines into coarse memory when over limit.
  *  Returns false if compression was needed but failed. */
 async function maybeCompressPreciseMemory(): Promise<boolean> {
+    const lastSim = messages.value.findLast(m => m.$k === 'simulator') as SimulatorMessage | undefined
+    if (!lastSim) return true
+
     const allLines = preciseMemory.value
-    if (allLines.length <= preciseMemoryLimit.value) return true
+    const activeCount = lastSim.activePreciseMemory ?? allLines.length
+    const activeLines = allLines.slice(-activeCount)
+    if (activeLines.length <= preciseMemoryLimit.value) return true
 
     const ctx = getSimulationContext()
     if (!ctx) return true
 
-    const linesToCompress = allLines.slice(0, compressPerTime.value)
-
     // Build a context with only the lines to compress
-    const compressCtx: SimulationContext = {
-        ...ctx,
-        coarseMemory: coarseMemory.value,
-        preciseMemory: linesToCompress,
-    }
-    const request = buildMemorySummarizeRequest(compressCtx, memoryConfig)
+    const request = buildMemorySummarizeRequest(ctx, memoryConfig, compressPerTime.value)
     const requestBody = { api_url: apiUrl.value, api_key: apiKey.value, openai_request: request }
     const response = await sendRequest(requestBody)
 
     if ('content' in response) {
         const newCoarse = (response as MangekyouSuccessResponse).content
-        // Update coarseMemory on the last simulator message
-        const lastSim = messages.value.findLast(m => m.$k === 'simulator') as SimulatorMessage | undefined
-        if (lastSim) lastSim.coarseMemory = newCoarse
+        lastSim.coarseMemory = newCoarse
 
-        // Remove compressed lines from their source messages
-        let remaining = compressPerTime.value
-        for (const msg of messages.value) {
-            if (remaining <= 0) break
-            if (msg.$k !== 'simulator') continue
-            const sim = msg as SimulatorMessage
-            const take = Math.min(sim.summarize.length, remaining)
-            if (take > 0) {
-                sim.summarize.splice(0, take)
-                remaining -= take
-            }
-        }
+        // Lazily "remove" compressed lines by shrinking activePreciseMemory
+        const compressed = Math.min(compressPerTime.value, activeLines.length)
+        lastSim.activePreciseMemory = activeCount - compressed
         return true
     }
     return false
