@@ -19,8 +19,17 @@ export interface MangekyouSuccessResponse extends MangekyouResponseBase {
     token_usage: number
 }
 
+export interface MangekyouStreamChunk extends MangekyouResponseBase {
+    delta: string
+}
+
+export interface MangekyouStreamEnd extends MangekyouResponseBase {
+    done: boolean
+    token_usage?: number
+}
+
 export interface MangekyouErrorResponse extends MangekyouResponseBase {
     error: string
 }
 
-export type MangekyouResponse = MangekyouSuccessResponse | MangekyouErrorResponse
+export type MangekyouResponse = MangekyouSuccessResponse | MangekyouErrorResponse | MangekyouStreamChunk | MangekyouStreamEnd

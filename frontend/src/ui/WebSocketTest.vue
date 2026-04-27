@@ -1,7 +1,7 @@
 <template>
   <div class="ws-test">
     <h2>WebSocket Test</h2>
-    
+
     <div class="section">
       <h3>Connection</h3>
       <div class="input-group">
@@ -31,9 +31,18 @@
         <input v-model="model" type="text" />
       </div>
       <div class="input-group">
+        <label>Stream:</label>
+        <input v-model="stream" type="checkbox" />
+      </div>
+      <div class="input-group">
         <textarea v-model="userMessage" rows="4" placeholder="Enter your message here..."></textarea>
       </div>
-      <button @click="send" :disabled="!isConnected">Send Request</button>
+      <button @click="send" :disabled="!isConnected || isSending">{{ isSending ? 'Sending...' : 'Send Request' }}</button>
+    </div>
+
+    <div v-if="streamingContent" class="section">
+      <h3>Streaming Output</h3>
+      <div class="streaming-output">{{ streamingContent }}</div>
     </div>
 
     <div class="section">
@@ -57,8 +66,11 @@ const apiUrl = ref('https://api.openai.com/v1/chat/completions')
 const apiKey = ref('')
 const model = ref('gpt-3.5-turbo')
 const userMessage = ref('Hello!')
+const stream = ref(false)
 const logs = ref<string[]>([])
 const isConnected = ref(false)
+const isSending = ref(false)
+const streamingContent = ref('')
 
 const connectionStatus = computed(() => isConnected.value ? 'Connected' : 'Disconnected')
 
@@ -100,7 +112,7 @@ async function send() {
       temperature: 0.7,
       top_p: 1,
       n: 1,
-      stream: false,
+      stream: stream.value,
       stop: [],
       max_completion_tokens: 1000,
       presence_penalty: 0,
@@ -108,12 +120,22 @@ async function send() {
     }
   }
 
-  addLog(`Sending request: ${JSON.stringify(requestBody, null, 2)}`)
+  addLog(`Sending request (stream=${stream.value}): ${JSON.stringify(requestBody, null, 2)}`)
+  isSending.value = true
+  streamingContent.value = ''
+
   try {
-    const response = await sendRequest(requestBody)
-    addLog(`Response received: ${JSON.stringify(response, null, 2)}`)
+    const response = await sendRequest(requestBody, (delta) => {
+      streamingContent.value += delta
+    })
+    if (stream.value) {
+      addLog(`Stream complete. Final content:\n${streamingContent.value}`)
+    }
+    addLog(`Response: ${JSON.stringify(response, null, 2)}`)
   } catch (e) {
     addLog(`Error sending request: ${e}`)
+  } finally {
+    isSending.value = false
   }
 }
 </script>
@@ -162,5 +184,16 @@ async function send() {
 .log-entry {
   margin-bottom: 5px;
   border-bottom: 1px solid #eee;
+}
+
+.streaming-output {
+  background: #f5f5f5;
+  padding: 10px;
+  min-height: 60px;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  font-family: monospace;
+  white-space: pre-wrap;
 }
 </style>

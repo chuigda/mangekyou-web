@@ -49,7 +49,7 @@ export function buildSimulationRequest(
     )
 
     const lastSimulatorMessage = ctx.messages.findLast(m => m.$k === 'simulator')
-    const lastSimulatorMessageVersion = isDefined(lastSimulatorMessage) 
+    const lastSimulatorMessageVersion = isDefined(lastSimulatorMessage)
         ? lastSimulatorMessage.versions[lastSimulatorMessage.currentVersionIndex]
         : undefined
     const statusBar = lastSimulatorMessageVersion?.statusBar ?? ''
@@ -71,10 +71,10 @@ export function buildSimulationRequest(
         n: llmConfig.n,
         presence_penalty: llmConfig.presencePenalty,
         frequency_penalty: llmConfig.frequencyPenalty,
-    
+
         max_completion_tokens: maxTokens,
 
-        stream: false,
+        stream: true,
         stop: [],
 
         messages: [
@@ -103,7 +103,7 @@ export function buildStatusBarUpdateRequest(
     )
 
     const lastSimulatorMessage = ctx.messages.findLast(m => m.$k === 'simulator')
-    const lastSimulatorMessageVersion = isDefined(lastSimulatorMessage) 
+    const lastSimulatorMessageVersion = isDefined(lastSimulatorMessage)
         ? lastSimulatorMessage.versions[lastSimulatorMessage.currentVersionIndex]
         : undefined
     const prevStatusBar = lastSimulatorMessageVersion?.statusBar ?? ''
@@ -125,7 +125,7 @@ export function buildStatusBarUpdateRequest(
         n: 1,
         presence_penalty: llmConfig.presencePenalty,
         frequency_penalty: llmConfig.frequencyPenalty,
-            
+
         max_completion_tokens: 4096,
         stream: false,
         stop: [],
@@ -164,7 +164,7 @@ export function buildMemorySummarizeRequest(
         n: 1,
         presence_penalty: llmConfig.presencePenalty,
         frequency_penalty: llmConfig.frequencyPenalty,
-            
+
         max_completion_tokens: 4096,
         stream: false,
         stop: [],

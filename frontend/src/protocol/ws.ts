@@ -1,11 +1,17 @@
-import type { MangekyouRequest, MangekyouRequestBody, MangekyouResponse } from './mangekyou'
+import type { MangekyouRequest, MangekyouRequestBody, MangekyouResponse, MangekyouStreamChunk, MangekyouStreamEnd } from './mangekyou'
 
 type ResolveFn = (value: MangekyouResponse) => void
+type DeltaFn = (delta: string) => void
+
+interface PendingRequest {
+    resolve: ResolveFn
+    onDelta?: DeltaFn
+}
 
 let websocketConnection: WebSocket | null = null
 let nextRequestId = 1
 
-const pendingRequests = new Map<number, ResolveFn>()
+const pendingRequests = new Map<number, PendingRequest>()
 let onDisconnectCallback: (() => void) | null = null
 
 export function initWebsocket(url: string, onDisconnect?: () => void): Promise<boolean> {
@@ -27,13 +33,29 @@ export function initWebsocket(url: string, onDisconnect?: () => void): Promise<b
 
         websocketConnection.onmessage = event => {
             try {
-                const response: MangekyouResponse = JSON.parse(event.data)
+                const response = JSON.parse(event.data)
                 const { id } = response
-                const resolveFn = pendingRequests.get(id)
-                if (resolveFn) {
-                    resolveFn(response)
-                    pendingRequests.delete(id)
+                const pending = pendingRequests.get(id)
+                if (!pending) return
+
+                // streaming chunk
+                if ('delta' in response) {
+                    const chunk = response as MangekyouStreamChunk
+                    pending.onDelta?.(chunk.delta)
+                    return
                 }
+
+                // streaming end
+                if ('done' in response) {
+                    const end = response as MangekyouStreamEnd
+                    pending.resolve({ id: end.id, content: '', token_usage: end.token_usage ?? 0 } as MangekyouResponse)
+                    pendingRequests.delete(id)
+                    return
+                }
+
+                // non-streaming or error
+                pending.resolve(response as MangekyouResponse)
+                pendingRequests.delete(id)
             } catch (e) {
                 console.error('Failed to parse websocket message', e)
             }
@@ -42,8 +64,8 @@ export function initWebsocket(url: string, onDisconnect?: () => void): Promise<b
         websocketConnection.onclose = () => {
             console.log('WebSocket disconnected')
             websocketConnection = null
-            for (const [id, resolveFn] of pendingRequests.entries()) {
-                resolveFn({
+            for (const [id, pending] of pendingRequests.entries()) {
+                pending.resolve({
                     id: id,
                     error: 'WebSocket disconnected'
                 })
@@ -62,7 +84,7 @@ export function initWebsocket(url: string, onDisconnect?: () => void): Promise<b
     })
 }
 
-export function sendRequest(requestBody: MangekyouRequestBody): Promise<MangekyouResponse> {
+export function sendRequest(requestBody: MangekyouRequestBody, onDelta?: DeltaFn): Promise<MangekyouResponse> {
     return new Promise(resolve => {
         const id = nextRequestId++
 
@@ -77,7 +99,7 @@ export function sendRequest(requestBody: MangekyouRequestBody): Promise<Mangekyo
             id
         }
 
-        pendingRequests.set(id, resolve)
+        pendingRequests.set(id, { resolve, onDelta })
 
         try {
             websocketConnection.send(JSON.stringify(request))

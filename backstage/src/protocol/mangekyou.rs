@@ -21,6 +21,19 @@ pub struct MangekyouSuccessResponse {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct MangekyouStreamChunk {
+    pub id: u32,
+    pub delta: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct MangekyouStreamEnd {
+    pub id: u32,
+    pub done: bool,
+    pub token_usage: Option<u32>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MangekyouErrorResponse {
     pub id: u32,
     pub error: String

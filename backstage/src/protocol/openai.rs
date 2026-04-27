@@ -52,3 +52,31 @@ pub struct ChatCompletionResponse {
     pub choices: Vec<Choice>,
     pub usage: Usage
 }
+
+// SSE streaming types
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ChunkDelta {
+    #[serde(default)]
+    pub role: Option<ChatRole>,
+    #[serde(default)]
+    pub content: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ChunkChoice {
+    pub index: u32,
+    pub delta: ChunkDelta,
+    pub finish_reason: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ChatCompletionChunk {
+    pub id: String,
+    pub object: String,
+    pub created: u64,
+    pub model: String,
+    pub choices: Vec<ChunkChoice>,
+    #[serde(default)]
+    pub usage: Option<Usage>,
+}
