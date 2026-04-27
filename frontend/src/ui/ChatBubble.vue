@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Message } from '../llm/chat_message'
 import EditableMarkdown from '../component/EditableMarkdown.vue'
+import EditableText from '../component/EditableText.vue'
 import { computed } from 'vue'
 
 const props = defineProps<{ message: Message }>()
@@ -15,6 +16,19 @@ const simulatorContent = computed({
         const msg = props.message
         if (msg.$k !== 'simulator') return
         ;(msg as { content: string }).content = value
+    }
+})
+
+const simulatorSummarize = computed({
+    get() {
+        const msg = props.message
+        if (msg.$k !== 'simulator') return ''
+        return msg.summarize
+    },
+    set(value: string) {
+        const msg = props.message
+        if (msg.$k !== 'simulator') return
+        ;(msg as { summarize: string }).summarize = value
     }
 })
 
@@ -47,13 +61,14 @@ const playerContent = computed({
             <div class="bubble-content">
                 <template v-if="message.$k === 'simulator'">
                     <EditableMarkdown v-model="simulatorContent" />
+                    <div v-if="simulatorSummarize || true" class="bubble-summary">
+                        <span class="summary-label tooltip">摘要</span>
+                        <EditableText v-model="simulatorSummarize" />
+                    </div>
                 </template>
                 <template v-else>
                     <EditableMarkdown v-model="playerContent" />
                 </template>
-            </div>
-            <div v-if="message.$k === 'simulator'" class="bubble-footer tooltip">
-                {{ message.promptTokens }}+{{ message.completionTokens }} tokens
             </div>
         </template>
     </div>
@@ -118,6 +133,16 @@ const playerContent = computed({
 .bubble-content {
     word-break: break-word;
     line-height: 1.6;
+}
+
+.bubble-summary {
+    margin-top: 0.5em;
+    padding-top: 0.5em;
+    border-top: 1px dashed var(--border-color);
+}
+
+.summary-label {
+    font-size: 0.8em;
 }
 
 .bubble-footer {

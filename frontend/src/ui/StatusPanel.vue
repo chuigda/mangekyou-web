@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { messages, coarseMemory, preciseMemory } from '../store'
+import { messages, coarseMemory } from '../store'
 import EditableText from '../component/EditableText.vue'
 
 const latestStatusBar = computed({
@@ -16,27 +16,11 @@ const latestStatusBar = computed({
     }
 })
 
-const totalTokens = computed(() => {
-    let total = 0
-    for (const msg of messages.value) {
-        if (msg.$k === 'simulator') {
-            total += msg.promptTokens + msg.completionTokens + msg.statusBarPromptTokens + msg.statusBarCompletionTokens
-        }
-    }
-    return total
-})
-
-function addPreciseMemory() {
-    preciseMemory.value.push('')
-}
-
-function removePreciseMemory(index: number) {
-    preciseMemory.value.splice(index, 1)
-}
-
-function updatePreciseMemory(index: number, value: string) {
-    preciseMemory.value[index] = value
-}
+const preciseMemoryEntries = computed(() =>
+    messages.value
+        .filter(m => m.$k === 'simulator' && m.summarize)
+        .map(m => (m as { summarize: string }).summarize)
+)
 </script>
 
 <template>
@@ -52,28 +36,10 @@ function updatePreciseMemory(index: number, value: string) {
         <EditableText v-model="coarseMemory" />
 
         <hr />
-        <div class="memory-header">
-            <h3>精细记忆</h3>
-            <button @click="addPreciseMemory">+</button>
-        </div>
-        <div v-if="preciseMemory.length === 0" class="tooltip">暂无条目</div>
-        <div v-for="(entry, index) in preciseMemory" :key="index" class="precise-entry">
-            <div class="precise-entry-header">
-                <span class="tooltip">#{{ index + 1 }}</span>
-                <button @click="removePreciseMemory(index)">✗</button>
-            </div>
-            <textarea
-                :value="entry"
-                @input="updatePreciseMemory(index, ($event.target as HTMLTextAreaElement).value)"
-                rows="2"
-            />
-        </div>
-
-        <hr />
-        <h3>统计</h3>
-        <div class="stats">
-            <span class="tooltip">消息数: {{ messages.length }}</span>
-            <span class="tooltip">总 Token 数: {{ totalTokens }}</span>
+        <h3>精细记忆</h3>
+        <div v-if="preciseMemoryEntries.length === 0" class="tooltip">暂无条目</div>
+        <div v-for="(entry, index) in preciseMemoryEntries" :key="index" class="precise-entry">
+            <div class="precise-entry-text">{{ entry }}</div>
         </div>
     </div>
 </template>
