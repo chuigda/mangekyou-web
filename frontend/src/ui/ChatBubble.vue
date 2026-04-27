@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Message } from '../llm/chat_message'
+import type { Message, SimulatorMessage } from '../llm/chat_message'
 import EditableMarkdown from '../component/EditableMarkdown.vue'
 import EditableText from '../component/EditableText.vue'
 import { computed } from 'vue'
@@ -23,12 +23,12 @@ const simulatorSummarize = computed({
     get() {
         const msg = props.message
         if (msg.$k !== 'simulator') return ''
-        return msg.summarize
+        return msg.summarize.join('\n')
     },
     set(value: string) {
         const msg = props.message
         if (msg.$k !== 'simulator') return
-        ;(msg as { summarize: string }).summarize = value
+        ;(msg as SimulatorMessage).summarize = value.split('\n').filter(l => l.trim())
     }
 })
 

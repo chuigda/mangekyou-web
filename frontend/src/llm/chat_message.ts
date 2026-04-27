@@ -4,8 +4,10 @@ export interface MessageBase<K extends string> {
 
 export interface SimulatorMessage extends MessageBase<'simulator'> {
     content: string
-    summarize: string
+    summarize: string[]
     statusBar: string
+    coarseMemory: string
+    activePreciseMemory: number
 
     promptTokens: number
     completionTokens: number

@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import {
     wsUrl, apiUrl, apiKey, isConnected,
     chatConfig, statusBarConfig, memoryConfig, outputBudget,
+    preciseMemoryLimit, compressPerTime,
     simulatorCHR, playerCHR, additionalCHRs,
     connectWs, disconnectWs,
     uploadSimulatorCHR, uploadPlayerCHR, uploadAdditionalCHR,
@@ -145,6 +146,17 @@ async function handleLoadApiConfig(event: Event) {
         <Row>
             <label>字数</label>
             <input v-model.number="outputBudget" type="number" class="short" step="50" min="50" />
+        </Row>
+
+        <hr />
+        <h3>记忆压缩</h3>
+        <Row>
+            <label>精细记忆限制</label>
+            <input v-model.number="preciseMemoryLimit" type="number" class="short" step="1" min="1" />
+        </Row>
+        <Row>
+            <label>每次压缩</label>
+            <input v-model.number="compressPerTime" type="number" class="short" step="1" min="1" />
         </Row>
 
         <hr />

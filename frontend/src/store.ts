@@ -38,15 +38,26 @@ export const userAdditionalCHR = ref<AdditionalCHR>({})
 
 // ── Simulation Context ──
 export const messages = ref<Message[]>([])
-export const coarseMemory = ref('')
+export const coarseMemory = computed({
+    get() {
+        const last = messages.value.findLast(m => m.$k === 'simulator')
+        return (last && last.$k === 'simulator') ? last.coarseMemory : ''
+    },
+    set(value: string) {
+        const last = messages.value.findLast(m => m.$k === 'simulator')
+        if (last && last.$k === 'simulator') last.coarseMemory = value
+    }
+})
 export const preciseMemory = computed(() =>
     messages.value
-        .filter(m => m.$k === 'simulator' && m.summarize)
-        .map(m => (m as SimulatorMessage).summarize)
+        .filter(m => m.$k === 'simulator')
+        .flatMap(m => (m as SimulatorMessage).summarize)
 )
 
 // ── UI State ──
 export const outputBudget = ref(400)
+export const preciseMemoryLimit = ref(10)
+export const compressPerTime = ref(5)
 export const isSending = ref(false)
 export const streamingContent = ref('')
 export const dialogError = ref('')
@@ -94,16 +105,23 @@ export async function uploadAdditionalCHR(text: string) {
     }
 }
 
-function splitSimulatorOutput(raw: string): { content: string; summarize: string } {
+function splitSimulatorOutput(raw: string): { content: string; summarize: string[] } {
     const parts = raw.split('------SPLIT------')
     if (parts.length >= 2) {
-        return { content: parts[0]!!.trim(), summarize: parts.slice(1).join('').trim() }
+        const lines = parts.slice(1).join('').trim().split('\n').filter(l => l.trim())
+        return { content: parts[0]!!.trim(), summarize: lines }
     }
-    return { content: raw, summarize: '' }
+    return { content: raw, summarize: [] }
 }
 
 function getSimulationContext(): SimulationContext | undefined {
     if (!simulatorCHR.value || !playerCHR.value) return undefined
+
+    // Use activePreciseMemory from last simulator message to limit precise memory
+    const lastSim = messages.value.findLast(m => m.$k === 'simulator') as SimulatorMessage | undefined
+    const activeCount = lastSim?.activePreciseMemory ?? preciseMemory.value.length
+    const activePrecise = preciseMemory.value.slice(-activeCount)
+
     return {
         simulatorCHR: simulatorCHR.value,
         playerCHR: playerCHR.value,
@@ -111,7 +129,7 @@ function getSimulationContext(): SimulationContext | undefined {
         compressedAdditionalCHR: compressedAdditionalCHR.value,
         userAdditionalCHR: userAdditionalCHR.value,
         coarseMemory: coarseMemory.value,
-        preciseMemory: preciseMemory.value,
+        preciseMemory: activePrecise,
         messages: messages.value
     }
 }
@@ -163,10 +181,16 @@ export async function sendPlayerMessage(playerAction: string) {
             content: simulatorContent,
             summarize,
             statusBar,
+            coarseMemory: coarseMemory.value,
+            activePreciseMemory: preciseMemory.value.length,
             promptTokens,
             completionTokens,
         }
         messages.value.push(simMsg)
+
+        // Compress precise memory if over limit
+        await maybeCompressPreciseMemory()
+
         streamingContent.value = ''
     } finally {
         isSending.value = false
@@ -180,6 +204,47 @@ function findPlayerActionBefore(simMsgIndex: number): string {
         if (m.$k === 'player') return m.content
     }
     return ''
+}
+
+/** Compress oldest precise memory lines into coarse memory when over limit */
+async function maybeCompressPreciseMemory() {
+    const allLines = preciseMemory.value
+    if (allLines.length <= preciseMemoryLimit.value) return
+
+    const ctx = getSimulationContext()
+    if (!ctx) return
+
+    const linesToCompress = allLines.slice(0, compressPerTime.value)
+
+    // Build a context with only the lines to compress
+    const compressCtx: SimulationContext = {
+        ...ctx,
+        coarseMemory: coarseMemory.value,
+        preciseMemory: linesToCompress,
+    }
+    const request = buildMemorySummarizeRequest(compressCtx, memoryConfig)
+    const requestBody = { api_url: apiUrl.value, api_key: apiKey.value, openai_request: request }
+    const response = await sendRequest(requestBody)
+
+    if ('content' in response) {
+        const newCoarse = (response as MangekyouSuccessResponse).content
+        // Update coarseMemory on the last simulator message
+        const lastSim = messages.value.findLast(m => m.$k === 'simulator') as SimulatorMessage | undefined
+        if (lastSim) lastSim.coarseMemory = newCoarse
+
+        // Remove compressed lines from their source messages
+        let remaining = compressPerTime.value
+        for (const msg of messages.value) {
+            if (remaining <= 0) break
+            if (msg.$k !== 'simulator') continue
+            const sim = msg as SimulatorMessage
+            const take = Math.min(sim.summarize.length, remaining)
+            if (take > 0) {
+                sim.summarize.splice(0, take)
+                remaining -= take
+            }
+        }
+    }
 }
 
 /** Regenerate: remove the last simulator message and resend */
@@ -217,7 +282,6 @@ interface SavedContext {
     compressedAdditionalCHR: AdditionalCHR
     userAdditionalCHR: AdditionalCHR
     messages: Message[]
-    coarseMemory: string
 }
 
 export function saveContext() {
@@ -235,7 +299,6 @@ export function saveContext() {
         compressedAdditionalCHR: compressedAdditionalCHR.value,
         userAdditionalCHR: userAdditionalCHR.value,
         messages: messages.value,
-        coarseMemory: coarseMemory.value,
     }
     const json = JSON.stringify(data, null, 2)
     const blob = new Blob([json], { type: 'application/json' })
@@ -265,7 +328,6 @@ export function loadContext(json: string) {
     compressedAdditionalCHR.value = data.compressedAdditionalCHR
     userAdditionalCHR.value = data.userAdditionalCHR
     messages.value = data.messages
-    coarseMemory.value = data.coarseMemory
 }
 
 // ── Save / Load API & Model Config ──

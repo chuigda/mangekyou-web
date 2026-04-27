@@ -19,8 +19,8 @@ const latestStatusBar = computed({
 
 const preciseMemoryEntries = computed(() =>
     messages.value
-        .filter(m => m.$k === 'simulator' && m.summarize)
-        .map(m => (m as { summarize: string }).summarize)
+        .filter(m => m.$k === 'simulator')
+        .flatMap(m => (m as { summarize: string[] }).summarize)
 )
 </script>
 
