@@ -452,12 +452,17 @@ export async function regenerateStatusBar() {
     isSending.value = true
 
     try {
+        workStatus.value = { $k: 'status-bar' }
+
         const statusRequest = buildStatusBarUpdateRequest(forkedCtx, statusBarConfig, playerAction, simMsg.content)
         const statusRequestBody = { api_url: apiUrl.value, api_key: apiKey.value, openai_request: statusRequest }
         const statusResponse = await sendRequest(statusRequestBody)
 
         if ('content' in statusResponse) {
             simMsg.statusBar = (statusResponse as MangekyouSuccessResponse).content
+            workStatus.value = { $k: 'idle' }
+        } else {
+            workStatus.value = { $k: 'error-status-bar' }
         }
     } finally {
         isSending.value = false
