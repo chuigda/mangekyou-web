@@ -13,25 +13,33 @@ function switchVersion(msg: SimulatorMessage, delta: number) {
 
 <template>
     <div class="chat-bubble" :class="message.$k">
-        <div class="bubble-header">
-            <span class="role">{{ message.$k === 'simulator' ? '模拟器' : '玩家' }}</span>
-            <span v-if="message.$k === 'simulator' && message.versions.length > 1" class="version-switcher">
-                <button @click="switchVersion(message, -1)" :disabled="message.currentVersionIndex === 0">&lt;</button>
-                <span class="tooltip">{{ message.currentVersionIndex + 1 }}/{{ message.versions.length }}</span>
-                <button @click="switchVersion(message, 1)" :disabled="message.currentVersionIndex === message.versions.length - 1">&gt;</button>
-            </span>
-        </div>
-        <div class="bubble-content">
-            <template v-if="message.$k === 'simulator'">
-                {{ message.versions[message.currentVersionIndex]!!.content }}
-            </template>
-            <template v-else>
-                {{ message.content }}
-            </template>
-        </div>
-        <div v-if="message.$k === 'simulator'" class="bubble-footer tooltip">
-            {{ message.versions[message.currentVersionIndex]!!.tokenCount }} tokens
-        </div>
+        <template v-if="message.$k === 'error'">
+            <div class="bubble-header">
+                <span class="role error-role">错误</span>
+            </div>
+            <div class="bubble-content error-content">{{ message.content }}</div>
+        </template>
+        <template v-else>
+            <div class="bubble-header">
+                <span class="role">{{ message.$k === 'simulator' ? '模拟器' : '玩家' }}</span>
+                <span v-if="message.$k === 'simulator' && message.versions.length > 1" class="version-switcher">
+                    <button @click="switchVersion(message, -1)" :disabled="message.currentVersionIndex === 0">&lt;</button>
+                    <span class="tooltip">{{ message.currentVersionIndex + 1 }}/{{ message.versions.length }}</span>
+                    <button @click="switchVersion(message, 1)" :disabled="message.currentVersionIndex === message.versions.length - 1">&gt;</button>
+                </span>
+            </div>
+            <div class="bubble-content">
+                <template v-if="message.$k === 'simulator'">
+                    {{ message.versions[message.currentVersionIndex]!!.content }}
+                </template>
+                <template v-else>
+                    {{ message.content }}
+                </template>
+            </div>
+            <div v-if="message.$k === 'simulator'" class="bubble-footer tooltip">
+                {{ message.versions[message.currentVersionIndex]!!.tokenCount }} tokens
+            </div>
+        </template>
     </div>
 </template>
 
@@ -52,6 +60,19 @@ function switchVersion(msg: SimulatorMessage, delta: number) {
 
 .chat-bubble.simulator {
     margin-right: 3em;
+}
+
+.chat-bubble.error {
+    border-color: #c44;
+    background-color: #2a1010;
+}
+
+.error-role {
+    color: #e55 !important;
+}
+
+.error-content {
+    color: #e88;
 }
 
 .bubble-header {

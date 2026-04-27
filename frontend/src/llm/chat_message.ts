@@ -20,4 +20,8 @@ export interface PlayerMessage extends MessageBase<'player'> {
     content: string
 }
 
-export type Message = SimulatorMessage | PlayerMessage
+export interface ErrorMessage extends MessageBase<'error'> {
+    content: string
+}
+
+export type Message = SimulatorMessage | PlayerMessage | ErrorMessage

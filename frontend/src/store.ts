@@ -45,6 +45,7 @@ export const preciseMemory = ref<string[]>([])
 export const outputBudget = ref(400)
 export const isSending = ref(false)
 export const streamingContent = ref('')
+export const dialogError = ref('')
 
 // ── Actions ──
 
@@ -65,7 +66,7 @@ export async function uploadSimulatorCHR(text: string) {
     // simulatorCHR.value = await parseSimulator(text)
     const result = await parseSimulator(text)
     if (typeof result === 'string') {
-        alert(`Simulator CHR parse error:\n${result}`)
+        dialogError.value = `Simulator CHR 解析失败:\n${result}`
     } else {
         simulatorCHR.value = result
     }
@@ -74,7 +75,7 @@ export async function uploadSimulatorCHR(text: string) {
 export async function uploadPlayerCHR(text: string) {
     const result = await parsePlayer(text)
     if (typeof result === 'string') {
-        alert(`Player CHR parse error:\n${result}`)
+        dialogError.value = `Player CHR 解析失败:\n${result}`
     } else {
         playerCHR.value = result
     }
@@ -83,7 +84,7 @@ export async function uploadPlayerCHR(text: string) {
 export async function uploadAdditionalCHR(text: string) {
     const result = await parseAdditional(text)
     if (typeof result === 'string') {
-        alert(`Additional CHR parse error:\n${result}`)
+        dialogError.value = `Additional CHR 解析失败:\n${result}`
     } else {
         additionalCHRs.value.push(result)
     }
@@ -125,7 +126,8 @@ export async function sendPlayerMessage(playerAction: string) {
         })
 
         if ('error' in response) {
-            streamingContent.value = `Error: ${response.error}`
+            messages.value.push({ $k: 'error', content: response.error as string })
+            streamingContent.value = ''
             isSending.value = false
             return
         }
@@ -196,7 +198,8 @@ export async function regenerateSimulatorMessage() {
         })
 
         if ('error' in response) {
-            streamingContent.value = `Error: ${response.error}`
+            messages.value.push({ $k: 'error', content: response.error as string })
+            streamingContent.value = ''
             isSending.value = false
             return
         }
