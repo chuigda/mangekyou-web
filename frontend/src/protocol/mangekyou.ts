@@ -16,7 +16,8 @@ export interface MangekyouResponseBase {
 
 export interface MangekyouSuccessResponse extends MangekyouResponseBase {
     content: string
-    token_usage: number
+    prompt_tokens: number
+    completion_tokens: number
 }
 
 export interface MangekyouStreamChunk extends MangekyouResponseBase {
@@ -25,7 +26,8 @@ export interface MangekyouStreamChunk extends MangekyouResponseBase {
 
 export interface MangekyouStreamEnd extends MangekyouResponseBase {
     done: boolean
-    token_usage?: number
+    prompt_tokens?: number
+    completion_tokens?: number
 }
 
 export interface MangekyouErrorResponse extends MangekyouResponseBase {

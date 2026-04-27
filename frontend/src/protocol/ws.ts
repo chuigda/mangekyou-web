@@ -48,7 +48,7 @@ export function initWebsocket(url: string, onDisconnect?: () => void): Promise<b
                 // streaming end
                 if ('done' in response) {
                     const end = response as MangekyouStreamEnd
-                    pending.resolve({ id: end.id, content: '', token_usage: end.token_usage ?? 0 } as MangekyouResponse)
+                    pending.resolve({ id: end.id, content: '', prompt_tokens: end.prompt_tokens ?? 0, completion_tokens: end.completion_tokens ?? 0 } as MangekyouResponse)
                     pendingRequests.delete(id)
                     return
                 }

@@ -53,7 +53,7 @@ const playerContent = computed({
                 </template>
             </div>
             <div v-if="message.$k === 'simulator'" class="bubble-footer tooltip">
-                {{ message.tokenCount}} tokens
+                {{ message.promptTokens }}+{{ message.completionTokens }} tokens
             </div>
         </template>
     </div>

@@ -141,7 +141,8 @@ export async function sendPlayerMessage(playerAction: string) {
         }
 
         const rawOutput = accumulated || (response as MangekyouSuccessResponse).content
-        const tokenCount = (response as MangekyouSuccessResponse).token_usage ?? 0
+        const promptTokens = (response as MangekyouSuccessResponse).prompt_tokens ?? 0
+        const completionTokens = (response as MangekyouSuccessResponse).completion_tokens ?? 0
         const { content: simulatorContent, summarize } = splitSimulatorOutput(rawOutput)
 
         // Step 2: Status bar update (non-streaming)
@@ -151,7 +152,8 @@ export async function sendPlayerMessage(playerAction: string) {
         const statusResponse = await sendRequest(statusRequestBody)
 
         const statusBar = ('content' in statusResponse) ? (statusResponse as MangekyouSuccessResponse).content : ''
-        const statusBarTokenCount = ('token_usage' in statusResponse) ? (statusResponse as MangekyouSuccessResponse).token_usage ?? 0 : 0
+        const statusBarPromptTokens = ('prompt_tokens' in statusResponse) ? (statusResponse as MangekyouSuccessResponse).prompt_tokens ?? 0 : 0
+        const statusBarCompletionTokens = ('completion_tokens' in statusResponse) ? (statusResponse as MangekyouSuccessResponse).completion_tokens ?? 0 : 0
 
         // Add simulator message
         const simMsg: SimulatorMessage = {
@@ -159,8 +161,10 @@ export async function sendPlayerMessage(playerAction: string) {
             content: simulatorContent,
             summarize,
             statusBar,
-            tokenCount,
-            statusBarTokenCount
+            promptTokens,
+            completionTokens,
+            statusBarPromptTokens,
+            statusBarCompletionTokens
         }
         messages.value.push(simMsg)
         streamingContent.value = ''
@@ -333,7 +337,8 @@ export async function regenerateStatusBar() {
 
         if ('content' in statusResponse) {
             simMsg.statusBar = (statusResponse as MangekyouSuccessResponse).content
-            simMsg.statusBarTokenCount = (statusResponse as MangekyouSuccessResponse).token_usage ?? 0
+            simMsg.statusBarPromptTokens = (statusResponse as MangekyouSuccessResponse).prompt_tokens ?? 0
+            simMsg.statusBarCompletionTokens = (statusResponse as MangekyouSuccessResponse).completion_tokens ?? 0
         }
     } finally {
         isSending.value = false

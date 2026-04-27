@@ -17,7 +17,8 @@ pub struct MangekyouSuccessResponse {
     pub id: u32,
 
     pub content: String,
-    pub token_usage: u32
+    pub prompt_tokens: u32,
+    pub completion_tokens: u32,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -30,7 +31,8 @@ pub struct MangekyouStreamChunk {
 pub struct MangekyouStreamEnd {
     pub id: u32,
     pub done: bool,
-    pub token_usage: Option<u32>,
+    pub prompt_tokens: Option<u32>,
+    pub completion_tokens: Option<u32>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

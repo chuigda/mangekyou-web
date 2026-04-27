@@ -20,7 +20,7 @@ const totalTokens = computed(() => {
     let total = 0
     for (const msg of messages.value) {
         if (msg.$k === 'simulator') {
-            total += msg.tokenCount + msg.statusBarTokenCount
+            total += msg.promptTokens + msg.completionTokens + msg.statusBarPromptTokens + msg.statusBarCompletionTokens
         }
     }
     return total

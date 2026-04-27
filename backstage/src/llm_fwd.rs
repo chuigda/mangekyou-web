@@ -92,7 +92,7 @@ async fn forward_streaming(
 
     let mut stream = response.bytes_stream();
     let mut buffer = String::new();
-    let mut last_usage = None;
+    let mut last_usage: Option<(u32, u32)> = None;
 
     while let Some(chunk_result) = stream.next().await {
         let bytes = match chunk_result {
@@ -121,7 +121,7 @@ async fn forward_streaming(
             };
 
             if let Some(usage) = &chunk.usage {
-                last_usage = Some(usage.total_tokens);
+                last_usage = Some((usage.prompt_tokens, usage.completion_tokens));
             }
 
             if let Some(choice) = chunk.choices.first() {
@@ -134,7 +134,7 @@ async fn forward_streaming(
         }
     }
 
-    send_ws(&sender, &MangekyouStreamEnd { id, done: true, token_usage: last_usage }).await;
+    send_ws(&sender, &MangekyouStreamEnd { id, done: true, prompt_tokens: last_usage.map(|u| u.0), completion_tokens: last_usage.map(|u| u.1) }).await;
 }
 
 async fn forward_non_streaming(
@@ -177,6 +177,7 @@ async fn forward_non_streaming(
     Ok(MangekyouSuccessResponse {
         id: mangekyou_request.id,
         content: choice.message.content.clone(),
-        token_usage: chat_response.usage.total_tokens,
+        prompt_tokens: chat_response.usage.prompt_tokens,
+        completion_tokens: chat_response.usage.completion_tokens,
     })
 }
