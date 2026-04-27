@@ -8,6 +8,8 @@ mod state;
 use std::sync::Arc;
 
 use axum::Router;
+use axum::http::header;
+use axum::response::IntoResponse;
 use axum::routing::{any, post, get};
 use tokio::net::TcpListener;
 use tower_http::cors::CorsLayer;
@@ -28,6 +30,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 }
 
+const HTML_FILE: &'static str = include_str!("../../frontend/dist/index.html");
+const JS_FILE: &'static str = include_str!("../../frontend/dist/assets/index.js");
+const CSS_FILE: &'static str = include_str!("../../frontend/dist/assets/index.css");
+
 async fn application_start() -> Result<(), Box<dyn std::error::Error>> {
     tracing::info!("Pre-initializing tokenizers");
     let tokenizers = llm_tok::load_tokenizers()?;
@@ -39,7 +45,15 @@ async fn application_start() -> Result<(), Box<dyn std::error::Error>> {
     };
 
     let app = Router::new()
-        .route("/", get(|| async { "Zdravstvuyte, mir!" }))
+        .route("/", get(|| async {
+            ([(header::CONTENT_TYPE, "text/html; charset=utf-8")], HTML_FILE).into_response()
+        }))
+        .route("/assets/index.js", get(|| async {
+            ([(header::CONTENT_TYPE, "application/javascript; charset=utf-8")], JS_FILE).into_response()
+        }))
+        .route("/assets/index.css", get(|| async {
+            ([(header::CONTENT_TYPE, "text/css; charset=utf-8")], CSS_FILE).into_response()
+        }))
         .route("/ws", any(llm_fwd::websocket_handler))
         .route("/chr/parse/simulator", post(chr::parse_simulator))
         .route("/chr/parse/additional", post(chr::parse_additional))

@@ -65,8 +65,6 @@ const statusText = computed(() => {
         case 'error-compress': return '记忆压缩遇到错误'
     }
 })
-
-const statusIsError = computed(() => workStatus.value.$k.startsWith('error'))
 </script>
 
 <template>

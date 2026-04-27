@@ -3,6 +3,20 @@ import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
   plugins: [vue()],
+  build: {
+    rollupOptions: {
+      output: {
+        entryFileNames: 'assets/index.js',
+        chunkFileNames: 'assets/index.js',
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.names && assetInfo.names.find(it => it.endsWith('.css'))) {
+            return 'assets/index.css'
+          }
+          return 'assets/[name][extname]'
+        },
+      },
+    },
+  },
   server: {
     proxy: {
       '/ws': {
