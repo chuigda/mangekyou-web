@@ -51,7 +51,8 @@ export const coarseMemory = computed({
 export const preciseMemory = computed(() =>
     messages.value
         .filter(m => m.$k === 'simulator')
-        .flatMap(m => (m as SimulatorMessage).summarize)
+        .map(m => (m as SimulatorMessage).summarize)
+        .filter(s => s)
 )
 
 // ── UI State ──
@@ -100,7 +101,7 @@ export async function uploadSimulatorCHR(text: string) {
             messages.value.push({
                 $k: 'simulator',
                 content: result.prologue,
-                summarize: [],
+                summarize: '',
                 statusBar: '',
                 coarseMemory: '',
                 activePreciseMemory: 0,
@@ -129,13 +130,12 @@ export async function uploadAdditionalCHR(text: string) {
     }
 }
 
-function splitSimulatorOutput(raw: string): { content: string; summarize: string[] } {
+function splitSimulatorOutput(raw: string): { content: string; summarize: string } {
     const parts = raw.split('------SPLIT------')
     if (parts.length >= 2) {
-        const lines = parts.slice(1).join('').trim().split('\n').filter(l => l.trim())
-        return { content: parts[0]!!.trim(), summarize: lines }
+        return { content: parts[0]!!.trim(), summarize: parts.slice(1).join('').trim() }
     }
-    return { content: raw, summarize: [] }
+    return { content: raw, summarize: '' }
 }
 
 function getSimulationContext(): SimulationContext | undefined {

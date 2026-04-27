@@ -38,12 +38,12 @@ const simulatorSummarize = computed({
     get() {
         const msg = props.message
         if (msg.$k !== 'simulator') return ''
-        return msg.summarize.join('\n')
+        return msg.summarize
     },
     set(value: string) {
         const msg = props.message
         if (msg.$k !== 'simulator') return
-        ;(msg as SimulatorMessage).summarize = value.split('\n').filter(l => l.trim())
+        ;(msg as SimulatorMessage).summarize = value
     }
 })
 

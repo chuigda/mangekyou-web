@@ -188,9 +188,10 @@ export function computePreciseMemoryInUse(messages: Message[]): string[] {
         const msg = messages[i]
         if (msg?.$k === 'simulator') {
             const simMsg = msg as SimulatorMessage
-            restCount -= simMsg.activePreciseMemory
-            preciseMemoryInUse.push(...simMsg.summarize)
-
+            if (simMsg.summarize) {
+                restCount -= 1
+                preciseMemoryInUse.push(simMsg.summarize)
+            }
             if (restCount <= 0) {
                 break
             }
