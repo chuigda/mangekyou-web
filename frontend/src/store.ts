@@ -144,7 +144,6 @@ function getSimulationContext(): SimulationContext | undefined {
     // Use activePreciseMemory from last simulator message to limit precise memory
     const lastSim = messages.value.findLast(m => m.$k === 'simulator') as SimulatorMessage | undefined
     const activeCount = lastSim?.activePreciseMemory ?? preciseMemory.value.length
-    const activePrecise = preciseMemory.value.slice(-activeCount)
 
     return {
         simulatorCHR: simulatorCHR.value,
@@ -160,9 +159,6 @@ export async function sendPlayerMessage(playerAction: string) {
     const ctx = getSimulationContext()
     if (!ctx) return
 
-    // Add player message
-    messages.value.push({ $k: 'player', content: playerAction })
-
     isSending.value = true
     streamingContent.value = ''
     workStatus.value = { $k: 'waiting' }
@@ -174,6 +170,9 @@ export async function sendPlayerMessage(playerAction: string) {
         // Step 1: Simulation request (streaming)
         const request = buildSimulationRequest(ctx, chatConfig, outputBudget.value, playerAction)
         const requestBody = { api_url: apiUrl.value, api_key: apiKey.value, openai_request: request }
+
+        // Add player message
+        messages.value.push({ $k: 'player', content: playerAction })
 
         let accumulated = ''
         const response = await sendRequest(requestBody, (delta: string) => {

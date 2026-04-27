@@ -21,6 +21,7 @@ const preciseMemoryEntries = computed(() =>
     messages.value
         .filter(m => m.$k === 'simulator')
         .map(m => m.summarize)
+        .filter(s => s.trim().length > 0)
 )
 
 const activeCount = computed(() => {
