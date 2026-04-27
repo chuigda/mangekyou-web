@@ -217,7 +217,7 @@ export async function sendPlayerMessage(playerAction: string) {
             summarize,
             statusBar,
             coarseMemory: coarseMemory.value,
-            activePreciseMemory: preciseMemory.value.length + (lastSimMessage?.activePreciseMemory ?? 0),
+            activePreciseMemory: (lastSimMessage?.activePreciseMemory ?? 0) + (summarize ? 1 : 0),
             promptTokens,
             completionTokens,
         }
