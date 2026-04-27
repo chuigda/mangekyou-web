@@ -37,8 +37,8 @@ function defaultLightWeightLLMConfig(): LLMConfig {
 }
 
 export const chatConfig = reactive<LLMConfig>(defaultLLMConfig())
-export const statusBarConfig = reactive<LLMConfig>(defaultLLMConfig())
-export const memoryConfig = reactive<LLMConfig>(defaultLLMConfig())
+export const statusBarConfig = reactive<LLMConfig>(defaultLightWeightLLMConfig())
+export const memoryConfig = reactive<LLMConfig>(defaultLightWeightLLMConfig())
 
 // ── CHR Files ──
 export const simulatorCHR = ref<SimulatorCHR | undefined>(undefined)
