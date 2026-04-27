@@ -267,6 +267,52 @@ export function loadContext(json: string) {
     preciseMemory.value = data.preciseMemory
 }
 
+// ── Save / Load API & Model Config ──
+
+interface SavedApiConfig {
+    apiUrl: string
+    apiKey: string
+    wsUrl: string
+    chatConfig: LLMConfig
+    statusBarConfig: LLMConfig
+    memoryConfig: LLMConfig
+    outputBudget: number
+}
+
+export function saveApiConfig() {
+    const data: SavedApiConfig = {
+        apiUrl: apiUrl.value,
+        apiKey: apiKey.value,
+        wsUrl: wsUrl.value,
+        chatConfig: { ...chatConfig },
+        statusBarConfig: { ...statusBarConfig },
+        memoryConfig: { ...memoryConfig },
+        outputBudget: outputBudget.value,
+    }
+    const json = JSON.stringify(data, null, 2)
+    const blob = new Blob([json], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `mangekyou-api-config-${Date.now()}.json`
+    a.click()
+    URL.revokeObjectURL(url)
+}
+
+export function loadApiConfig(json: string) {
+    const data: SavedApiConfig = JSON.parse(json)
+
+    apiUrl.value = data.apiUrl
+    apiKey.value = data.apiKey
+    wsUrl.value = data.wsUrl
+
+    Object.assign(chatConfig, data.chatConfig)
+    Object.assign(statusBarConfig, data.statusBarConfig)
+    Object.assign(memoryConfig, data.memoryConfig)
+
+    outputBudget.value = data.outputBudget
+}
+
 /** Regenerate only the status bar for the current version of the last simulator message */
 export async function regenerateStatusBar() {
     const ctx = getSimulationContext()

@@ -6,7 +6,8 @@ import {
     simulatorCHR, playerCHR, additionalCHRs,
     connectWs, disconnectWs,
     uploadSimulatorCHR, uploadPlayerCHR, uploadAdditionalCHR,
-    saveContext, loadContext
+    saveContext, loadContext,
+    saveApiConfig, loadApiConfig
 } from '../store'
 import Row from '../component/Row.vue'
 
@@ -14,6 +15,7 @@ const simulatorFileInput = ref<HTMLInputElement>()
 const playerFileInput = ref<HTMLInputElement>()
 const additionalFileInput = ref<HTMLInputElement>()
 const contextFileInput = ref<HTMLInputElement>()
+const apiConfigFileInput = ref<HTMLInputElement>()
 
 async function handleFileUpload(
     event: Event,
@@ -39,6 +41,15 @@ async function handleLoadContext(event: Event) {
     loadContext(text)
     input.value = ''
 }
+
+async function handleLoadApiConfig(event: Event) {
+    const input = event.target as HTMLInputElement
+    const file = input.files?.[0]
+    if (!file) return
+    const text = await file.text()
+    loadApiConfig(text)
+    input.value = ''
+}
 </script>
 
 <template>
@@ -47,9 +58,13 @@ async function handleLoadContext(event: Event) {
         <Row>
             <button @click="saveContext">保存</button>
             <button @click="contextFileInput?.click()">加载</button>
+            <button @click="saveApiConfig">保存配置</button>
+            <button @click="apiConfigFileInput?.click()">加载配置</button>
         </Row>
         <input ref="contextFileInput" type="file" accept=".json" hidden
                @change="handleLoadContext" />
+        <input ref="apiConfigFileInput" type="file" accept=".json" hidden
+               @change="handleLoadApiConfig" />
         <hr />
 
         <h3>连接</h3>
