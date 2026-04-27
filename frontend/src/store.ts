@@ -153,10 +153,6 @@ function splitSimulatorOutput(raw: string): { content: string; summarize: string
 function getSimulationContext(): SimulationContext | undefined {
     if (!simulatorCHR.value || !playerCHR.value) return undefined
 
-    // Use activePreciseMemory from last simulator message to limit precise memory
-    const lastSim = messages.value.findLast(m => m.$k === 'simulator') as SimulatorMessage | undefined
-    const activeCount = lastSim?.activePreciseMemory ?? preciseMemory.value.length
-
     return {
         simulatorCHR: simulatorCHR.value,
         playerCHR: playerCHR.value,
