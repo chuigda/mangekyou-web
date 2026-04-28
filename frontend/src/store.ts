@@ -167,6 +167,8 @@ export async function sendPlayerMessage(playerAction: string) {
     const ctx = getSimulationContext()
     if (!ctx) return
 
+    messages.value = messages.value.filter(m => m.$k !== 'error')
+
     isSending.value = true
     streamingContent.value = ''
     workStatus.value = { $k: 'waiting' }
@@ -297,6 +299,8 @@ export function deleteMessage(index: number) {
 
 /** Regenerate: remove the last simulator message and resend */
 export async function regenerateSimulatorMessage() {
+    messages.value = messages.value.filter(m => m.$k !== 'error')
+
     const lastSimIdx = messages.value.findLastIndex(m => m.$k === 'simulator')
     if (lastSimIdx < 0) return
 
