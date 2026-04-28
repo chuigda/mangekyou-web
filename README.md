@@ -1,6 +1,6 @@
 # Mangekyou - 万華鏡
 
-基于 LLM 的交互式角色扮演模拟器，支持自定义世界观、角色和规则。
+这天，从类脑社区归来的 Chuigda Whitegive，带来了比 [9M68](https://github.com/chuigda/9M68) 更富有威力的~~美少女~~万华镜。
 
 ## 特性
 
