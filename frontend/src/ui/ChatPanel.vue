@@ -57,7 +57,12 @@ const statusText = computed(() => {
     switch (s.$k) {
         case 'idle': return '就绪'
         case 'waiting': return '消息已发出，等待远程端点响应'
-        case 'streaming': return `远程端点已响应，已生成 ${s.chars} 字符`
+        case 'streaming': {
+            const parts = [`远程端点已响应，已生成 ${s.chars} 字符`]
+            if (s.ttft > 0) parts.push(`TTFT ${(s.ttft / 1000).toFixed(2)}s`)
+            if (s.tps > 0) parts.push(`TPS ${s.tps.toFixed(1)}`)
+            return parts.join('　')
+        }
         case 'status-bar': return '主要内容生成完毕，正在更新状态栏'
         case 'compressing': return '正在压缩记忆'
         case 'error-main': return '主要内容生成失败'

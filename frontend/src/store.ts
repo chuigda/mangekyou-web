@@ -77,7 +77,7 @@ export const dialogError = ref('')
 export type WorkStatus =
     | { $k: 'idle' }
     | { $k: 'waiting' }
-    | { $k: 'streaming'; chars: number }
+    | { $k: 'streaming'; chars: number; ttft: number; tps: number }
     | { $k: 'status-bar' }
     | { $k: 'compressing' }
     | { $k: 'error-main' }
@@ -183,10 +183,18 @@ export async function sendPlayerMessage(playerAction: string) {
         messages.value.push({ $k: 'player', content: playerAction })
 
         let accumulated = ''
+        const streamStart = Date.now()
+        let firstTokenTime = 0
+        let chunkCount = 0
         const response = await sendRequest(requestBody, (delta: string) => {
+            chunkCount++
+            if (chunkCount === 1) firstTokenTime = Date.now()
             accumulated += delta
             streamingContent.value = accumulated
-            workStatus.value = { $k: 'streaming', chars: accumulated.length }
+            const ttft = firstTokenTime ? firstTokenTime - streamStart : 0
+            const elapsed = (Date.now() - firstTokenTime) / 1000
+            const tps = elapsed > 0 ? (chunkCount - 1) / elapsed : 0
+            workStatus.value = { $k: 'streaming', chars: accumulated.length, ttft, tps }
         })
 
         if ('error' in response) {
