@@ -68,6 +68,8 @@ async fn forward_streaming(
     client: reqwest::Client,
     sender: WsSender,
 ) {
+    tracing::info!("Forwarding streaming request ID: {}, request: {:#?}", req.id, req.openai_request);
+
     let id = req.id;
 
     let response = match client.post(&req.api_url)
