@@ -68,7 +68,7 @@ async fn forward_streaming(
     client: reqwest::Client,
     sender: WsSender,
 ) {
-    tracing::info!("Forwarding streaming request ID: {}, request: {:#?}", req.id, req.openai_request);
+    tracing::debug!("Forwarding streaming request ID: {}, request: {:#?}", req.id, req.openai_request);
 
     let id = req.id;
 
