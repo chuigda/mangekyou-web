@@ -14,7 +14,6 @@ export interface SimulationContext {
     simulatorCHR: SimulatorCHR
     playerCHR: PlayerCHR
     additionalCHR: AdditionalCHR[]
-    compressedAdditionalCHR: AdditionalCHR
     userAdditionalCHR: AdditionalCHR
 
     messages: Message[]
@@ -42,7 +41,7 @@ export function buildSimulationRequest(
     const systemPrompt = buildSimulatorSystemPrompt(
         ctx.simulatorCHR,
         ctx.playerCHR,
-        [ctx.compressedAdditionalCHR, ctx.userAdditionalCHR],
+        [...ctx.additionalCHR, ctx.userAdditionalCHR],
         outputBudget
     )
 
@@ -96,7 +95,7 @@ export function buildStatusBarUpdateRequest(
     const systemPrompt = buildStatusBarUpdaterSystemPrompt(
         ctx.simulatorCHR,
         ctx.playerCHR,
-        ctx.additionalCHR
+        [...ctx.additionalCHR, ctx.userAdditionalCHR]
     )
 
     const lastSimulatorMessage = ctx.messages.findLast(m => m.$k === 'simulator')
@@ -144,7 +143,7 @@ export function buildMemorySummarizeRequest(
 ): ChatCompletionRequest {
     const systemPrompt = buildMemorySummarizerSystemPrompt(
         ctx.simulatorCHR,
-        [ctx.compressedAdditionalCHR, ctx.userAdditionalCHR]
+        [...ctx.additionalCHR, ctx.userAdditionalCHR]
     )
 
     const lastSimulatorMessage = ctx.messages.findLast(m => m.$k === 'simulator') as SimulatorMessage | undefined

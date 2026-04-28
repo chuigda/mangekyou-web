@@ -44,7 +44,6 @@ export const memoryConfig = reactive<LLMConfig>(defaultLightWeightLLMConfig())
 export const simulatorCHR = ref<SimulatorCHR | undefined>(undefined)
 export const playerCHR = ref<PlayerCHR | undefined>(undefined)
 export const additionalCHRs = ref<AdditionalCHR[]>([])
-export const compressedAdditionalCHR = ref<AdditionalCHR>({})
 export const userAdditionalCHR = ref<AdditionalCHR>({})
 
 // ── Simulation Context ──
@@ -157,7 +156,6 @@ function getSimulationContext(): SimulationContext | undefined {
         simulatorCHR: simulatorCHR.value,
         playerCHR: playerCHR.value,
         additionalCHR: additionalCHRs.value,
-        compressedAdditionalCHR: compressedAdditionalCHR.value,
         userAdditionalCHR: userAdditionalCHR.value,
         messages: messages.value
     }
@@ -333,7 +331,6 @@ interface SavedContext {
     simulatorCHR: SimulatorCHR | undefined
     playerCHR: PlayerCHR | undefined
     additionalCHRs: AdditionalCHR[]
-    compressedAdditionalCHR: AdditionalCHR
     userAdditionalCHR: AdditionalCHR
     messages: Message[]
 }
@@ -351,7 +348,6 @@ export function saveContext() {
         simulatorCHR: simulatorCHR.value,
         playerCHR: playerCHR.value,
         additionalCHRs: additionalCHRs.value,
-        compressedAdditionalCHR: compressedAdditionalCHR.value,
         userAdditionalCHR: userAdditionalCHR.value,
         messages: messages.value,
     }
@@ -380,9 +376,8 @@ export function loadContext(json: string) {
     if (data.inlineMessageLimit !== undefined) inlineMessageLimit.value = data.inlineMessageLimit
     simulatorCHR.value = data.simulatorCHR
     playerCHR.value = data.playerCHR
-    additionalCHRs.value = data.additionalCHRs
-    compressedAdditionalCHR.value = data.compressedAdditionalCHR
-    userAdditionalCHR.value = data.userAdditionalCHR
+    additionalCHRs.value = data.additionalCHRs ?? []
+    userAdditionalCHR.value = data.userAdditionalCHR ?? {}
     messages.value = data.messages
 }
 
