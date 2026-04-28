@@ -106,7 +106,7 @@ const statusText = computed(() => {
             </div>
         </div>
 
-        <span class="tooltip">{{ statusText }}</span>
+        <span class="tooltip" :class="{ error: workStatus.$k.startsWith('error') }">{{ statusText }}</span>
     </div>
 </template>
 
@@ -180,14 +180,7 @@ const statusText = computed(() => {
     min-width: 8em;
 }
 
-.status-bar-tooltip {
-    padding: 0.25em 0.5em;
-    font-size: 0.85em;
-    border-top: 1px solid var(--border-color);
-    color: var(--snippet-text-color);
-}
-
-.status-bar-tooltip.error {
-    color: var(--error-color, #e74c3c);
+.tooltip.error {
+    color: #e74c3c;
 }
 </style>
