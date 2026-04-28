@@ -5,26 +5,23 @@ world = """
 <addon id="islamic">
 Perso-Arabic and Islamic magical traditions. The following systems are canonical.
 
-Sihr (سِحْر): Sorcery/black magic. Referenced in ~66 Quranic verses; real but forbidden. Per Q.2:102, angels Harut & Marut descended to Babylon teaching sorcery with the caveat "We are only a trial." Sihr causes marital separation, illness, madness — but only by God's leave. Practitioners (sahir) are condemned. Core distinction: licit magic (ruhaniyya) invokes God's names/Quran; illicit (sihr) relies on pleasing demons through sin.
+Core distinction: licit magic (ruhaniyya) invokes God's names/Quran; illicit magic (sihr, سِحْر) relies on pleasing demons through sin. Sihr causes marital separation, illness, madness — but only by God's leave.
 
-Harut & Marut (هاروت وماروت, 哈鲁特和马鲁特): Two angels sent to test humanity. They fell for a woman (Zohra/Venus), sinned, killed a witness. Chose earthly punishment — suspended upside-down in a Babylonian well, teaching magic to seekers while warning it is a test. Names from Zoroastrian Amesha Spenta (Haurvatat, Ameretat).
-
-Jinn (جِنّ): Beings of "smokeless fire" (nar al-samum, 无烟之火); invisible, rational, morally accountable (Muslim or kafir). Shapeshift into snakes/scorpions/lizards. Organized in tribes; can possess humans, cause illness, or love humans. Fear iron; repelled by God's names. Inhabit ruins and desolate places. Some serve as familiars (muwakkal) to sorcerers.
+Jinn (جِنّ): Beings of "smokeless fire" (无烟之火); invisible, rational, morally accountable. Shapeshift into snakes/scorpions/lizards. Can possess humans, cause illness. Fear iron; repelled by God's names. Inhabit ruins and desolate places. Some serve as familiars (muwakkal) to sorcerers.
 - Hierarchy: ordinary jinn, ifrit (powerful/cunning), marid (rebellious giants), silat (shapeshifting females). Qareen = personal jinn companion from birth.
-- Seven Kings of the Jinn: celestial spirits tied to 7 weekdays and 7 planets. Invoked for magic squares/talismans. Depicted in Kitab al-Bulhan (14th c.): Red King (Tuesday/Mars), Gold King, White King, etc.
+- Seven Kings of the Jinn: tied to 7 weekdays and 7 planets. Invoked for magic squares/talismans.
 
-Talismanic Magic (Ilm al-Tilasm) — most common licit magic:
+Talismanic Magic (Ilm al-Tilasm):
 - 99 Names of God (al-Asma al-Husna): each has esoteric properties; inscribed/recited for healing, protection, love, authority.
-- Magic Squares (wafq/awfaq): numerical grids summing equally in all directions; each tied to a planet. The 3×3 Saturn square (wafq al-buduh, بدوح) is the most famous protective formula.
-- Talismanic Shirts (qamis al-tilasm): garments inscribed with Quran, divine names, squares, astrology. Ottoman Sultan Murad III commissioned several; grant battle invulnerability.
-- Seal of Solomon (Khatam Sulayman, 素莱曼之印): hexagram/pentagram for dominion over jinn. Solomon commanded jinn armies, controlled winds, spoke to animals. Found on Seljuk tiles, Ayyubid forts, amulets.
+- Magic Squares (wafq/awfaq): numerical grids summing equally in all directions; each tied to a planet.
+- Talismanic Shirts (qamis al-tilasm): garments inscribed with Quran, divine names, squares, astrology; grant invulnerability.
+- Seal of Solomon (Khatam Sulayman, 素莱曼之印): hexagram/pentagram for dominion over jinn.
 - Tawiz (تعويذ): leather-enclosed Quranic inscriptions with separated letters for enhanced potency.
 
 Divination (Ilm al-Ghayb):
-- Astrology (ilm al-nujum/al-falak): celestial influences; Abu Mashar al-Balkhi (787–886) founded Neoplatonic astrological magic.
+- Astrology (ilm al-nujum): celestial influences on earthly events.
 - Geomancy (ilm al-raml): sand-pattern divination producing 16 interpretive figures.
-- Letter-number mysticism (ilm al-huruf/jafr): Arabic letters = numbers; used for prophecy, talismans, Quranic hidden meanings.
-- Physiognomy (ilm al-firasa): reading fate from features.
+- Letter-number mysticism (ilm al-huruf/jafr): Arabic letters = numbers; used for prophecy, talismans.
 - Bibliomancy (istikhara): random Quran opening for guidance.
 - Spirit summoning (istinzal): conjuring celestial spirits.
 
@@ -33,33 +30,20 @@ Occult Sciences (al-Ulum al-Ghayba):
 - Limiya: illusion magic — sensory deception without altering reality.
 - Himiya: subjugation of celestial spirits and planetary intelligences.
 - Rimiya: sleight of hand — lowest form.
-- Kimiya (Alchemy): transmutation of metals + spiritual purification. Jabir ibn Hayyan (c. 721–815) developed elemental balance theory and the elixir of life.
+- Kimiya (Alchemy): transmutation of metals + spiritual purification; elemental balance theory and elixir of life.
 - Taskhirat: commanding/subjugating jinn and spirits.
 
-Key Grimoires:
-- Shams al-Maarif (شمس المعارف): by Ahmad al-Buni (13th c.). Most famous Arabic grimoire — magic squares, divine names, jinn conjuration, talismans. Banned in Saudi Arabia.
-- Ghayat al-Hakim (غاية الحكيم / Picatrix): 10th–11th c. compendium of astrological magic; Hermetic + Sabian + Neoplatonic + Islamic synthesis. Planetary invocations, talisman creation. Latin translation (13th c.) influenced European occultism.
-- Kitab al-Fihrist: Ibn al-Nadim (10th c.) catalogues magical literature; 70 afarit led by chief Fuqtus.
-- Manba Usul al-Hikma: companion to Shams al-Maarif.
+Ruqyah (رقية) — licit counter-magic/exorcism: healing via Quranic recitation and God's names. Key verses: Ayat al-Kursi, Surat al-Falaq, Surat al-Nas. Process: tazeem (negotiating with possessing spirit), commanding it to curse Satan (satanic spirits refuse), converting jinn to Islam. May employ muwakkal (allied good jinn).
 
-Ruqyah (رقية) — licit counter-magic/exorcism: healing via Quranic recitation and God's names. Performed by a raqi (pious Muslim). Key verses: Ayat al-Kursi, Surat al-Falaq, Surat al-Nas. Process: tazeem (negotiating with possessing spirit), commanding it to curse Satan (satanic spirits refuse), converting jinn to Islam. May employ muwakkal (allied good jinn). Documented 41-verse incantation.
+Barakah (بركة): divine blessing flowing through saints, Sufi masters, sacred objects/places. Enables miracles (karamat) — distinct from sihr because karamat come from God.
 
-Barakah (بركة): divine blessing flowing through saints (awliya), dervishes, Sufi masters, sacred objects/places. Enables miracles (karamat) — distinct from sihr because karamat come from God.
+Evil Eye (al-Ayn/Nazar): caused by envious gazes; brings illness/misfortune/death. Protection: Quranic recitation, blue eye amulets (nazar boncugu), Hand of Fatima (Khamsa), divine name inscriptions.
 
-Evil Eye (al-Ayn/Nazar): caused by envious gazes; brings illness/misfortune/death. Protection: Quranic recitation (al-Muawwidhatayn), blue eye amulets (nazar boncugu), Hand of Fatima (Khamsa), divine name inscriptions.
-
-Sufi Mystical Practices: Dhikr (chanting divine names for altered consciousness), Khalwa (isolation retreat), Muraqaba (meditation), Hadra (trance dance), dream interpretation (tabir al-ruya — dreams as divine communication).
-
-Regional Variations:
-- Persia/Iran: jinn lore merged with Zoroastrian demonology (dew/div); Shahname heroes battle divs.
-- Arabia: Saudi Anti-Witchcraft Unit investigates sorcery; Bedouin seek jinn refuge when travelling at nightfall.
-- Afghanistan: nuri (light beings, benevolent) vs. nari (fire beings, malevolent).
-- Ottoman Empire: talismanic shirts, court astrologers, Seljuk jinn imagery on palace tiles (Seal of Solomon at Kubad Abad).
-- Al-Andalus: birthplace of Picatrix; synthesis of Islamic, Jewish, and Christian magical traditions.
+Sufi Practices: Dhikr (chanting divine names for altered consciousness), Khalwa (isolation retreat), Muraqaba (meditation), Hadra (trance dance), dream interpretation (tabir al-ruya).
 
 Licit vs. Illicit:
 - Halal: ruqyah, Quranic talismans, barakah, istikhara — power from God.
-- Haram: sihr, conjuring devils, fortune-telling (kahana), magic requiring sin or shirk. Punishment can include death.
-- Disputed: astrology, geomancy, some talismanic magic. Ibn Sina/al-Razi classed some as natural philosophy. Ibn Khaldun distinguished "real" (spiritual forces) from "illusory" (tricks) magic.
+- Haram: sihr, conjuring devils, fortune-telling (kahana), magic requiring sin or shirk.
+- Disputed: astrology, geomancy, some talismanic magic.
 </addon>
 """
