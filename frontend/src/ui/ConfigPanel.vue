@@ -5,6 +5,7 @@ import {
     chatConfig, statusBarConfig, memoryConfig, outputBudget,
     preciseMemoryLimit, compressPerTime, inlineMessageLimit,
     simulatorCHR, playerCHR, additionalCHRs,
+    statusBarApiUrl, statusBarApiKey, memoryApiUrl, memoryApiKey,
     connectWs, disconnectWs,
     uploadSimulatorCHR, uploadPlayerCHR, uploadAdditionalCHR,
     saveContext, loadContext,
@@ -129,6 +130,14 @@ async function handleLoadApiConfig(event: Event) {
             <label>温度</label>
             <input v-model.number="statusBarConfig.temperature" type="number" class="short" step="0.1" min="0" max="2" />
         </Row>
+        <Row>
+            <label>API URL</label>
+            <input v-model="statusBarApiUrl" type="text" placeholder="留空则使用默认" />
+        </Row>
+        <Row>
+            <label>API Key</label>
+            <input v-model="statusBarApiKey" type="password" placeholder="留空则使用默认" />
+        </Row>
 
         <hr />
         <h3>记忆模型</h3>
@@ -139,6 +148,14 @@ async function handleLoadApiConfig(event: Event) {
         <Row>
             <label>温度</label>
             <input v-model.number="memoryConfig.temperature" type="number" class="short" step="0.1" min="0" max="2" />
+        </Row>
+        <Row>
+            <label>API URL</label>
+            <input v-model="memoryApiUrl" type="text" placeholder="留空则使用默认" />
+        </Row>
+        <Row>
+            <label>API Key</label>
+            <input v-model="memoryApiKey" type="password" placeholder="留空则使用默认" />
         </Row>
 
         <hr />

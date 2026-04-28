@@ -13,6 +13,19 @@ export const apiUrl = ref('https://api.openai.com/v1/chat/completions')
 export const apiKey = ref('')
 export const isConnected = ref(false)
 
+// ── Per-task API overrides (空字符串表示使用默认主服务商) ──
+export const statusBarApiUrl = ref('')
+export const statusBarApiKey = ref('')
+export const memoryApiUrl = ref('')
+export const memoryApiKey = ref('')
+
+function resolveApi(overrideUrl: string, overrideKey: string): { url: string; key: string } {
+    return {
+        url: overrideUrl.trim() ? overrideUrl : apiUrl.value,
+        key: overrideKey.trim() ? overrideKey : apiKey.value,
+    }
+}
+
 // ── LLM Configs (per-task) ──
 function defaultLLMConfig(): LLMConfig {
     return {
@@ -214,7 +227,8 @@ export async function sendPlayerMessage(playerAction: string) {
         workStatus.value = { $k: 'status-bar' }
         let statusBar = ctx.messages.findLast(m => m.$k === 'simulator')?.statusBar ?? ''
         const statusRequest = buildStatusBarUpdateRequest(ctx, statusBarConfig, playerAction, simulatorContent)
-        const statusRequestBody = { api_url: apiUrl.value, api_key: apiKey.value, openai_request: statusRequest }
+        const statusApi = resolveApi(statusBarApiUrl.value, statusBarApiKey.value)
+        const statusRequestBody = { api_url: statusApi.url, api_key: statusApi.key, openai_request: statusRequest }
         const statusResponse = await sendRequest(statusRequestBody)
 
         if ('content' in statusResponse) {
@@ -282,7 +296,8 @@ async function maybeCompressPreciseMemory(): Promise<boolean> {
 
     // Build a context with only the lines to compress
     const request = buildMemorySummarizeRequest(ctx, memoryConfig, compressPerTime.value)
-    const requestBody = { api_url: apiUrl.value, api_key: apiKey.value, openai_request: request }
+    const memApi = resolveApi(memoryApiUrl.value, memoryApiKey.value)
+    const requestBody = { api_url: memApi.url, api_key: memApi.key, openai_request: request }
     const response = await sendRequest(requestBody)
 
     if ('content' in response) {
@@ -408,6 +423,10 @@ interface SavedApiConfig {
     memoryConfig: LLMConfig
     outputBudget: number
     inlineMessageLimit?: number
+    statusBarApiUrl?: string
+    statusBarApiKey?: string
+    memoryApiUrl?: string
+    memoryApiKey?: string
 }
 
 export function saveApiConfig() {
@@ -420,6 +439,10 @@ export function saveApiConfig() {
         memoryConfig: { ...memoryConfig },
         outputBudget: outputBudget.value,
         inlineMessageLimit: inlineMessageLimit.value,
+        statusBarApiUrl: statusBarApiUrl.value,
+        statusBarApiKey: statusBarApiKey.value,
+        memoryApiUrl: memoryApiUrl.value,
+        memoryApiKey: memoryApiKey.value,
     }
     const json = JSON.stringify(data, null, 2)
     const blob = new Blob([json], { type: 'application/json' })
@@ -444,6 +467,10 @@ export function loadApiConfig(json: string) {
 
     outputBudget.value = data.outputBudget
     if (data.inlineMessageLimit !== undefined) inlineMessageLimit.value = data.inlineMessageLimit
+    statusBarApiUrl.value = data.statusBarApiUrl ?? ''
+    statusBarApiKey.value = data.statusBarApiKey ?? ''
+    memoryApiUrl.value = data.memoryApiUrl ?? ''
+    memoryApiKey.value = data.memoryApiKey ?? ''
 }
 
 /** Regenerate only the status bar for the current version of the last simulator message */
@@ -471,7 +498,8 @@ export async function regenerateStatusBar() {
         workStatus.value = { $k: 'status-bar' }
 
         const statusRequest = buildStatusBarUpdateRequest(forkedCtx, statusBarConfig, playerAction, simMsg.content)
-        const statusRequestBody = { api_url: apiUrl.value, api_key: apiKey.value, openai_request: statusRequest }
+        const statusApi = resolveApi(statusBarApiUrl.value, statusBarApiKey.value)
+        const statusRequestBody = { api_url: statusApi.url, api_key: statusApi.key, openai_request: statusRequest }
         const statusResponse = await sendRequest(statusRequestBody)
 
         if ('content' in statusResponse) {
