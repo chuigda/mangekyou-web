@@ -35,6 +35,9 @@ CHR 文件分为三类：`simulator`（世界本体）、`player`（玩家角色
 - **非破坏性叠加**：addon 仅追加内容，不会污染主世界 CHR，便于分享与复用
 - **社区友好**：每个 addon 是单一 TOML 文件，复制粘贴即可分发
 
+空白 CHR 文件：[frontend/src/assets/tomls/example](frontend/src/assets/tomls/example)
+示例：[frontend/src/assets/tomls/harry-potter](frontend/src/assets/tomls/harry-potter)
+
 ### 四层记忆解构
 
 为了在有限上下文里塞下尽可能丰富的世界状态，Mangekyou 把"记忆"拆分为四个层次，由不同机制维护：
