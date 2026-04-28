@@ -299,6 +299,14 @@ export function deleteMessage(index: number) {
 export async function regenerateSimulatorMessage() {
     messages.value = messages.value.filter(m => m.$k !== 'error')
 
+    const last0 = messages.value.at(-1)
+    if (last0 && last0.$k === 'player') {
+        // If the last message is a player message, just remove and resend it to trigger the same simulator response again
+        messages.value.pop()
+        await sendPlayerMessage(last0.content)
+        return
+    }
+
     const lastSimIdx = messages.value.findLastIndex(m => m.$k === 'simulator')
     if (lastSimIdx < 0) return
 
