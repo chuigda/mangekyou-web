@@ -1,4 +1,4 @@
-# Mangekyou - 万华镜
+# Mangekyou - 万華鏡
 
 基于 LLM 的交互式角色扮演模拟器，支持自定义世界观、角色和规则。
 
@@ -38,7 +38,7 @@ CHR 文件分为三类：`simulator`（世界本体）、`player`（玩家角色
 空白 CHR 文件：[frontend/src/assets/tomls/example](frontend/src/assets/tomls/example)
 示例：[frontend/src/assets/tomls/harry-potter](frontend/src/assets/tomls/harry-potter)
 
-### 四层记忆解构
+### 四层记忆结构
 
 为了在有限上下文里塞下尽可能丰富的世界状态，Mangekyou 把"记忆"拆分为四个层次，由不同机制维护：
 
