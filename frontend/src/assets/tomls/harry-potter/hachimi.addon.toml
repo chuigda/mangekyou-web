@@ -1,4 +1,5 @@
 # type: addon
+name = "哈基米喔南北绿豆"
 
 [simulator]
 commands = """

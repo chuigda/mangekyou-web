@@ -26,6 +26,7 @@ pub struct PlayerCHR {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AdditionalCHR {
+    pub name: Option<String>,
     pub status_bar: Option<StatusBarConfig>,
     pub simulator: Option<SimulatorConfig>,
     pub memory: Option<MemorySummarizerConfig>,

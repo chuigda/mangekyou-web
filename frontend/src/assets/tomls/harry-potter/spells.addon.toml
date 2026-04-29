@@ -1,6 +1,8 @@
 # type: addon
 #
 # This addon en-strengthens the Harry Potter universe by adding a comprehensive list of spells, helping LLMs without large world knowledge to understand and use Harry Potter spells correctly in the narrative, also helps anchoring the professors in MoE LLM models.
+name = "咒语大全"
+
 [simulator]
 database = """
 <spells comment="Harry Potter spells">

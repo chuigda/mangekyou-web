@@ -1,4 +1,5 @@
 # type: addon
+name = "学院杯"
 
 [simulator]
 world = """

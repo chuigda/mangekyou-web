@@ -1,4 +1,5 @@
 # type: addon
+name = "烦人的考试"
 
 [simulator]
 world = """

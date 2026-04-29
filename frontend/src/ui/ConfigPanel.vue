@@ -212,9 +212,9 @@ async function handleLoadApiConfig(event: Event) {
             </Row>
             <input ref="additionalFileInput" type="file" accept=".toml,.chr" hidden
                    @change="handleFileUpload($event, uploadAdditionalCHR)" />
-            <div v-for="(_, index) in additionalCHRs" :key="index" class="chr-item">
+            <div v-for="(chr, index) in additionalCHRs" :key="index" class="chr-item">
                 <Row>
-                    <span class="tooltip">附加 #{{ index + 1 }}</span>
+                    <span class="tooltip">{{ chr.name || `附加 #${index + 1}` }}</span>
                     <button @click="removeAdditionalCHR(index)">✗</button>
                 </Row>
             </div>

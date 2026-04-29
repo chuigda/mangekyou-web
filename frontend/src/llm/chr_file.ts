@@ -15,6 +15,7 @@ export interface SimulatorCHR extends CHRBase {
 }
 
 export interface AdditionalCHR extends CHRBase {
+    name?: string
     statusBar?: StatusBarConfig
     simulator?: SimulatorConfig
     memory?: MemorySummarizerConfig
