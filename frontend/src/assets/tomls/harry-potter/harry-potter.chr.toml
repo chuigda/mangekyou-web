@@ -2,7 +2,7 @@
 universeName = "Harry Potter universe"
 literalWorkName = "Harry Potter series"
 prologue = """
-## 欢迎来到 哈利·波特与霍格沃茨大世界模拟器
+## 欢迎来到哈利·波特与霍格沃茨大世界模拟器
 
 ---
 
@@ -49,6 +49,8 @@ prologue = """
 ```
 
 留空的部分则会随机生成。
+
+**在开局完成之后，建议直接删除这条消息和你发送的开局消息，以节省上下文。**
 
 <!--
 
