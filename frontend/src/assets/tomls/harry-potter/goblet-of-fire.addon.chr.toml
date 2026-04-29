@@ -23,10 +23,9 @@ Triwizard Tournament / 三强争霸赛 (1994–1995)
 
 [statusBar]
 format = """
-
+<optional if="Triwizard Tournament active">
 ---
 
-<optional if="Triwizard Tournament active">
 ### 🔥 三强争霸赛 🔥
 
 | 项目 | 霍格沃茨 | 德姆斯特朗 | 布斯巴顿 |
