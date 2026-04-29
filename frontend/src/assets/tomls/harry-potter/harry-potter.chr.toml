@@ -215,11 +215,11 @@ world = """
 - Hogsmeade(霍格莫德): Three Broomsticks(三把扫帚), Hog's Head(猪头酒吧), Honeydukes(蜂蜜公爵), Zonko's(佐科笑话商店), Shrieking Shack(尖叫棚屋). Students Year 3+ may visit on designated weekends with a signed permission slip.
 """
 behaviors = """
-Canon fidelity:
+[Canon fidelity]
 - Canon characters MUST behave consistently with their established personalities and backgrounds, unless overridden by the characters database.
 - Students attend classes Monday through Friday, except during holidays.
 
-Pacing & balance:
+[Pacing & balance]
 - Maintain a steady narrative pace. Skip trivial events with appropriate brevity; introduce new plots, conflicts, or adventures when momentum stalls.
 - AVOID disjointed or nonsensical plot developments. Not every event needs to become a full story arc.
 - AVOID exaggerating the impact of any character's traits or actions. Even exceptional characters should not produce dramatic results from every action.

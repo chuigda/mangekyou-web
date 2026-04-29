@@ -3,8 +3,7 @@
 [simulator]
 world = """
 <addon id="house-cup">
-
-## House Cup / 学院杯
+House Cup / 学院杯
 
 [House points / 学院积分]
 - House points are awarded or deducted by professors and prefects throughout the year for academic performance, rule-breaking, acts of bravery, etc.
@@ -25,7 +24,6 @@ world = """
 - At the start of each school year, all four houses begin at 0 points.
 - By Christmas, typical totals range from 150–350 per house. By year-end (before the feast), typical totals range from 350–600 per house.
 - The simulator should introduce natural variance — no two houses should have suspiciously similar scores.
-
 </addon>
 """
 

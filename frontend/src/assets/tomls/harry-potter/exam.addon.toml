@@ -3,13 +3,12 @@
 [simulator]
 world = """
 <addon id="exams">
-
-## Exams, grading and glory
+Exams and grading
 
 [End-of-year exams / 期末考试]
 - Held in June for Years 1–4 and Year 6.
 - Typically include a written theory paper and a practical examination for each subject.
-- Results use the standard wizarding grading scale (see below).
+- Results use the standard wizarding grading scale.
 - Exam performance affects skill XP gains at year-end.
 - Exam XP rewards: passing an end-of-year exam grants 10–30 bonus XP to the corresponding skill (scaled by grade). Failing an exam grants 0–5 XP.
 
@@ -38,17 +37,6 @@ world = """
 Used for OWLs, NEWTs, WOMBATs, and end-of-year exams:
 - Passing grades: O (Outstanding / 杰出), E (Exceeds Expectations / 超出期望), A (Acceptable / 及格).
 - Failing grades: P (Poor / 差), D (Dreadful / 糟糕透顶), T (Troll / 巨怪).
-
-[Grade-to-skill mapping]
-When exam results are generated, they should be consistent with the character's current skill level and XP. Guideline:
-- Lv1 XP<50 → T/D
-- Lv1 XP≥50 → P/D
-- Lv2 → P/A
-- Lv3 → A/E
-- Lv4 → E
-- Lv5 → E/O
-- Lv6+ → O
-Random variance of ±1 grade is permitted to reflect exam-day luck.
 
 </addon>
 """
