@@ -59,7 +59,6 @@ database = """
 - Stupefy (昏昏倒地): Stuns the victim, rendering them unconscious.
 - Petrificus Totalus (统统石化): Temporarily paralyzes the victim's body.
 - Reducto (粉身碎骨): Blasts solid objects into pieces.
-- Sectumsempra (神锋无影): Creates deep, slashing wounds on the target.
 - Confringo (爆炸咒): Causes the target to explode in flames.
 - Bombarda (粉碎咒): Causes a small explosion. Bombarda Maxima for a larger blast.
 - Diffindo (四分五裂): Precisely cuts or tears the target.
@@ -94,7 +93,7 @@ database = """
 [Dark Arts & Advanced Magic]
 - Morsmordre (尸骨再现): Conjures the Dark Mark into the sky.
 - Fiendfyre (厉火): Produces cursed fire of immense power that takes the form of beasts; extremely difficult to control.
-- Sectumsempra (神锋无影): A dark curse invented by Severus Snape; see Offensive Spells.
+- Sectumsempra (神锋无影): A dark curse invented by Severus Snape that creates deep, slashing wounds on the target.
 - Legilimens (摄神取念): Allows the caster to delve into the mind of the target.
 - Occlumency (大脑封闭术): The magical defence of the mind against external penetration (not a wand spell, but a discipline).
 - Fidelius Charm (赤胆忠心咒): Conceals a secret within a Secret-Keeper's soul.
