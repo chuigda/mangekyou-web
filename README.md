@@ -29,9 +29,9 @@ CHR 文件分为三类：`simulator`（世界本体）、`player`（玩家角色
 - **非破坏性叠加**：addon 仅追加内容，不会污染主世界 CHR，便于分享与复用
 - **社区友好**：每个 addon 是单一 TOML 文件，复制粘贴即可分发
 
-CHR文件使用 TOML 编写，完整字段说明与可直接运行的示例，请直接参考示例文件夹：
+CHR 文件使用 TOML 编写，完整字段说明与可直接运行的示例，请直接参考示例文件夹：
 
-- 通用示例：[frontend/src/assets/tomls/example](frontend/src/assets/tomls/example)
+- 空白模板：[frontend/src/assets/tomls/blank](frontend/src/assets/tomls/blank)
 - 完整世界示例：[frontend/src/assets/tomls/harry-potter](frontend/src/assets/tomls/harry-potter)
 
 ### 四层记忆结构
