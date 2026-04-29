@@ -6,143 +6,109 @@ world = """
 <addon id="psychotropics">
 Muggle psychotropic medications and their interactions with magical ability. These effects are canonical in this simulation.
 
-Core principle: Muggle psychotropic drugs alter the neurochemical substrate that wizards rely on for intent, focus, and emotional channelling — the three pillars of spellcasting. The magical community is largely ignorant of these substances; Muggle-born or half-blood wizards occasionally encounter them through Muggle relatives or Muggle-side healthcare.
+Core principle: Muggle psychotropics alter the neurochemical substrate wizards rely on for intent, focus, and emotional channelling — the three pillars of spellcasting. The magical community is largely ignorant of these substances. The Ministry classifies them as "Muggle Artefacts of Cognitive Concern" — not banned, but not understood.
 
-The Ministry classifies psychotropic medications as "Muggle Artefacts of Cognitive Concern" — not banned, but not understood. St Mungo's has no department for them. Madam Pomfrey will frown and refer you to a Muggle doctor.
-
-[SSRIs — Selective Serotonin Reuptake Inhibitors / 选择性5-羟色胺再摄取抑制剂]
+[SSRIs / 选择性5-羟色胺再摄取抑制剂]
 Examples: fluoxetine (百忧解), sertraline (舍曲林), escitalopram (艾司西酞普兰).
-Mechanism: Increase serotonin availability in synaptic clefts.
-Magical effects:
-- Emotional blunting reduces the intensity of Patronus casting. A wizard on SSRIs may produce a dimmer, less corporeal Patronus — not from lack of happy memories, but from dampened emotional access to them.
-- Jinxes and hexes that rely on aggressive intent (Stinging Jinx, Bat-Bogey Hex) lose 10–30% potency.
-- Defensive magic (Protego, Shield Charm) is largely unaffected — these rely more on focus than emotion.
-- Onset: effects manifest 2–4 weeks after starting, mirroring Muggle pharmacokinetics.
-- Withdrawal: abrupt cessation causes "brain zaps" that can trigger involuntary spell discharge — wands may spark or emit random minor jinxes.
+- Emotional blunting → Patronus dimmer/less corporeal; aggressive-intent jinxes/hexes lose 10–30% potency.
+- Defensive magic (Protego) largely unaffected (focus-based, not emotion-based).
+- Onset: 2–4 weeks. Withdrawal: "brain zaps" trigger involuntary spell discharge.
 
-[MAOIs — Monoamine Oxidase Inhibitors / 单胺氧化酶抑制剂]
-Examples: phenelzine (苯乙肼), tranylcypromine (反苯环丙胺), selegiline (司来吉兰, MAO-B selective).
-Mechanism: Irreversibly inhibit monoamine oxidase, preventing breakdown of serotonin, norepinephrine, and dopamine simultaneously. The oldest class of antidepressants — crude, powerful, and dangerous.
-Magical effects:
-- The triple-monoamine flood produces a unique "wide-spectrum" magical amplification. Unlike SSRIs (emotion-dampening) or stimulants (focus-sharpening), MAOIs raise the entire baseline — the wizard feels more, thinks faster, and reacts quicker, all at once.
-- Spellcasting becomes more powerful but less predictable. A Patronus under MAOI influence is vivid and intense, but may act erratically — charging at shadows, circling the caster, or refusing to dissipate.
-- Emotional spells (Riddikulus, Expecto Patronum, even Crucio) gain raw potency but lose fine control. The wizard's emotional state bleeds into every cast — anger colours even benign charms with a hostile edge.
-- The infamous dietary restriction (tyramine interaction) applies magically: aged cheeses, cured meats, fermented foods, and — critically — Butterbeer (which contains trace tyramine from fermentation) can trigger hypertensive crisis. A wizard on MAOIs who drinks Butterbeer at the Three Broomsticks risks a sudden spike in blood pressure AND magical output — uncontrolled accidental magic, nosebleeds, and potential stroke.
-- Potion interactions are catastrophic. Any potion containing fermented ingredients (most do) is potentially lethal. Polyjuice Potion is especially dangerous — the transformation process combined with MAOI-induced monoamine surge can cause "identity storm": the wizard's personality oscillates violently between their own and the target's for hours.
-- Switching from MAOIs to SSRIs (or vice versa) requires a 2-week washout period. During washout, the wizard's magical ability fluctuates wildly — one hour they can barely cast Lumos, the next they accidentally Vanish a desk.
+[MAOIs / 单胺氧化酶抑制剂]
+Examples: phenelzine (苯乙肼), tranylcypromine (反苯环丙胺), selegiline (司来吉兰).
+- Wide-spectrum magical amplification: more powerful but less predictable casting. Patronus vivid but erratic.
+- Emotional spells gain potency, lose fine control; emotional state bleeds into all casts.
+- Tyramine interaction applies: Butterbeer (fermented, trace tyramine) can trigger hypertensive crisis + uncontrolled accidental magic.
+- Potion interactions catastrophic — fermented-ingredient potions (most) potentially lethal. Polyjuice causes "identity storm" (personality oscillation).
+- MAOI↔SSRI switching requires 2-week washout; magical ability fluctuates wildly during washout.
 
-[TCAs — Tricyclic Antidepressants / 三环类抗抑郁药]
+[TCAs / 三环类抗抑郁药]
 Examples: amitriptyline (阿米替林), nortriptyline (去甲替林), clomipramine (氯米帕明), imipramine (丙咪嗪).
-Mechanism: Block reuptake of serotonin and norepinephrine, but also affect histamine, acetylcholine, and adrenergic receptors — a "dirty" pharmacological profile with many off-target effects.
-Magical effects:
-- The anticholinergic side effects (dry mouth, blurred vision, constipation) have magical parallels: verbal incantations become harder to articulate clearly (dry mouth → mispronunciation → spell failure), and wand-aiming suffers from the same blurred-vision effect that plagues Muggle patients.
-- Sedation (from histamine blockade) is pronounced. TCAs are often taken at bedtime; a wizard who takes amitriptyline at night will cast sluggishly until mid-morning. Morning duelling practice is inadvisable.
-- Clomipramine (strongest serotonin reuptake inhibitor of the TCAs) has SSRI-like effects on emotional magic, but also causes a peculiar side effect: the wizard's spells acquire a faint "echo" — a ghostly repetition of the spell effect 0.5 seconds after the original. Harmless for Lumos (a brief double-flash), dangerous for Stupefy (the target gets hit twice).
-- Cardiac effects: TCAs affect heart rhythm at high doses. Since magical exertion elevates heart rate, a wizard on TCAs who engages in prolonged duelling risks arrhythmia. The magical equivalent: their spell rhythm becomes irregular — spells fire in uneven bursts rather than steady cadence.
-- Overdose is far more dangerous than SSRIs. A wizard who accidentally takes too many TCAs faces both Muggle toxicity (seizures, cardiac arrest) and magical toxicity (uncontrolled spell discharge, core instability). This is why Muggle-born healers at St Mungo's quietly advocate for SSRIs over TCAs when they can.
-- Amitriptyline at low doses is used as a Muggle sleep aid and migraine preventive. At these doses, magical effects are minimal — slight morning grogginess and a tendency for dreams to "leak" into reality (bedside objects may rearrange themselves overnight, reflecting dream content).
+- Anticholinergic effects: dry mouth → incantation mispronunciation; blurred vision → impaired wand aim.
+- Sedation (histamine blockade): sluggish casting until mid-morning if taken at bedtime.
+- Clomipramine: spells acquire a faint "echo" (0.5s delayed repeat). Harmless for Lumos, dangerous for Stupefy.
+- Cardiac effects at high doses: prolonged duelling risks arrhythmia → irregular spell rhythm.
+- Overdose: both Muggle toxicity (seizures, cardiac arrest) and magical toxicity (uncontrolled discharge, core instability).
+- Low-dose amitriptyline: minimal magical effect; dreams may "leak" into reality (bedside objects rearrange overnight).
 
 [Benzodiazepines / 苯二氮䓬类]
-Examples: diazepam (安定 / 地西泮), alprazolam (阿普唑仑), clonazepam (氯硝西泮).
-Mechanism: Enhance GABA-A receptor activity, producing sedation and anxiolysis.
-Magical effects:
-- Significantly impair wand precision. Fine motor spellwork (Transfiguration, delicate Charms) suffers most — expect misfires, partial transformations, and wobbly levitation.
-- Reduce Occlumency barriers. A Legilimens attacking a wizard on benzodiazepines finds the mental defences "soft" — like pushing through fog rather than walls.
-- Paradoxically improve Divination in susceptible individuals — the loosened cognitive control allows prophetic impressions to surface more easily.
-- High doses cause magical sedation: the wizard can still cast, but spells emerge sluggish, as if underwater.
-- Tolerance builds rapidly. Chronic users regain baseline casting ability but become dependent — withdrawal causes rebound anxiety severe enough to destabilise Apparition (risk of splinching increases 3×).
+Examples: diazepam (地西泮), alprazolam (阿普唑仑), clonazepam (氯硝西泮).
+- Impair wand precision; fine spellwork (Transfiguration, delicate Charms) suffers most.
+- Reduce Occlumency barriers — mental defences become "soft fog".
+- Paradoxically improve Divination (loosened cognitive control surfaces prophetic impressions).
+- High doses: spells emerge sluggish, as if underwater.
+- Tolerance builds rapidly; withdrawal causes rebound anxiety → Apparition splinching risk ×3.
 
 [Atypical Antipsychotics / 非典型抗精神病药]
 Examples: quetiapine (喹硫平), olanzapine (奥氮平), risperidone (利培酮).
-Mechanism: Block dopamine D2 and serotonin 5-HT2A receptors.
-Magical effects:
-- Suppress the "magical ideation" channel. Wizards on antipsychotics report that magic feels "mechanical" — they can cast, but lose the intuitive sense of magical flow.
-- Unforgivable Curses become significantly harder to cast. The Imperius Curse requires sadistic intent that antipsychotics flatten; Cruciatus requires sustained malice. This is arguably a benefit.
-- Metamorphmagus abilities are dampened — shifts become slower, less vivid, and harder to sustain.
-- Weight gain side effect is not mitigated by magic. Potions interact unpredictably with dopamine blockade.
-- Quetiapine at low doses (Muggle sleep aid use) causes next-morning casting fog — spells cast before 10 AM are unreliable.
+- Suppress "magical ideation" — magic feels mechanical, intuitive flow lost.
+- Unforgivable Curses significantly harder (flattened sadistic/malicious intent). Arguably a benefit.
+- Metamorphmagus abilities dampened. Weight gain not mitigated by magic.
+- Low-dose quetiapine: next-morning casting fog, spells unreliable before 10 AM.
 
 [Stimulants / 中枢兴奋剂]
-Examples: methylphenidate (利他林/哌甲酯), amphetamine (安非他命), modafinil (莫达非尼).
-Mechanism: Increase dopamine and norepinephrine availability.
-Magical effects:
-- Dramatically sharpen spell precision and reduce casting time. A wizard on stimulants can chain spells faster and with tighter aim.
-- However, overcasting becomes a serious risk — the wizard feels capable of sustained duelling but depletes magical reserves without noticing fatigue.
-- Heightened focus improves Occlumency but makes Legilimency harder — the mind becomes a bright, noisy searchlight rather than a subtle probe.
-- Chronic use causes "magical jitter" — micro-tremors in wand movements that accumulate into spell drift over long casting sessions.
-- Crash phase: when the stimulant wears off, magical ability drops below baseline for 2–4 hours. Dangerous in combat.
-- Highly sought after before OWL and NEWT exams. Hogwarts has no official policy because the staff doesn't know what methylphenidate is.
+Examples: methylphenidate (利他林), amphetamine (安非他命), modafinil (莫达非尼).
+- Sharpen spell precision, reduce casting time, faster spell chaining.
+- Overcasting risk: depletes magical reserves without noticing fatigue.
+- Focus improves Occlumency but impairs Legilimency (bright searchlight, not subtle probe).
+- Chronic use: "magical jitter" — micro-tremors cause spell drift in long sessions.
+- Crash phase: magical ability drops below baseline for 2–4 hours.
 
-[Adderall & ADHD Medications / 阿德拉尔与 ADHD 药物]
-Examples: Adderall (阿德拉尔, mixed amphetamine salts), Vyvanse (利斯德安非他命/赖右苯丙胺), atomoxetine (托莫西汀, non-stimulant).
-Note: Technically a subset of stimulants, but deserves special mention due to its prevalence among Muggle-born Hogwarts students and its unique interaction with ADHD-type magical profiles.
-Mechanism: Adderall/Vyvanse increase dopamine and norepinephrine; atomoxetine selectively inhibits norepinephrine reuptake.
-Context: Wizards with ADHD-type neurology often exhibit "scatter-magic" — bursts of powerful accidental magic interspersed with inability to sustain deliberate casting. Muggle-born students diagnosed before age 11 may arrive at Hogwarts already medicated.
-Magical effects:
-- For ADHD wizards specifically, Adderall is transformative: it converts erratic scatter-magic into reliable, focused casting. A scatter-magic student on Adderall can finally complete a full Transfiguration sequence without the mouse sprouting feathers halfway through.
-- Neurotypical wizards using Adderall as a "聪明药" (smart drug) get the general stimulant benefits (faster casting, sharper aim) but at steeper cost — tolerance builds faster, crash is harsher, and dependency risk is higher because they lack the dopamine deficit that ADHD wizards have.
-- Vyvanse (prodrug, slower onset) is preferred by students who need all-day coverage — one dose before breakfast carries through to evening Astronomy class. Smoother magical output curve, less "jitter" than Adderall IR.
-- Atomoxetine (non-stimulant): gentler effect, no euphoria, no crash. Improves sustained attention for long rituals and potion-brewing but doesn't boost raw casting speed. Takes 4–6 weeks to reach full effect. The "boring but reliable" option.
-- Adderall abuse peaks during OWL/NEWT season. Muggle-born students sometimes sell pills to pureblood classmates who have never heard of amphetamines. Snape would confiscate them if he knew what they were; instead he just notices certain students are "suspiciously alert" in June.
-- Combining Adderall with Wit-Sharpening Potion is the holy grail of exam cheating — doubled cognitive enhancement, but risks serotonin-adjacent magical overload: nosebleeds, hand tremors, and in one documented case, a student who could temporarily read Ancient Runes fluently but forgot how to speak English for six hours.
+[ADHD Medications / ADHD 药物]
+Examples: Adderall (阿德拉尔), Vyvanse (赖右苯丙胺), atomoxetine (托莫西汀, non-stimulant).
+- ADHD wizards exhibit "scatter-magic" (erratic accidental magic bursts + inability to sustain deliberate casting). Stimulants convert this into reliable focused casting.
+- Neurotypical wizards get stimulant benefits at steeper cost (faster tolerance, harsher crash, higher dependency).
+- Vyvanse: smoother all-day coverage, less jitter. Atomoxetine: gentle, no crash, 4–6 week onset.
+- Adderall + Wit-Sharpening Potion: doubled cognitive enhancement but risks magical overload (nosebleeds, tremors, cognitive side effects).
 
 [Mood Stabilisers / 心境稳定剂]
 Examples: lithium (锂盐), valproate (丙戊酸), lamotrigine (拉莫三嗪).
-Mechanism: Modulate ion channels and intracellular signalling cascades.
-Magical effects:
-- Lithium interferes with magical conductivity at a fundamental level. Wand cores containing phoenix feather are especially sensitive — the feather's resonance frequency shifts, causing a subtle but persistent "off-key" feeling when casting.
-- Stabilise wild magic surges in wizards with bipolar-spectrum conditions. Without medication, manic episodes can produce uncontrolled accidental magic (exploding objects, spontaneous Apparition, involuntary Legilimency). Lithium smooths these peaks.
-- Valproate has minimal magical interaction but causes drowsiness that slows reaction time in duels.
-- Lamotrigine is considered the most "magic-compatible" mood stabiliser — minimal cognitive dulling, no wand interference. Muggle-born wizards in the know prefer it.
-- Lithium requires blood level monitoring. Magical healing (Episkey, etc.) does not affect lithium levels, but certain potions (especially those containing mercury or antimony) can cause lithium toxicity.
+- Lithium: interferes with magical conductivity; phoenix feather cores especially sensitive (resonance shift). Stabilises wild magic surges in bipolar-spectrum wizards.
+- Valproate: minimal magical interaction, causes drowsiness.
+- Lamotrigine: most "magic-compatible" — minimal cognitive dulling, no wand interference.
+- Lithium + potions containing mercury/antimony → lithium toxicity risk.
 
 [Psychedelics & Dissociatives / 致幻剂与解离剂]
 Examples: psilocybin (裸盖菇素), LSD (麦角酸二乙胺), ketamine (氯胺酮).
-Note: These are not prescribed in standard Muggle psychiatry (with emerging exceptions for ketamine/psilocybin), but are encountered recreationally.
-Magical effects:
-- Psilocybin massively amplifies magical perception. The wizard can "see" magical auras, ley lines, and enchantment residues normally invisible. However, wand control becomes erratic — attempting to cast while tripping is like trying to write calligraphy on a rollercoaster.
-- LSD causes spell synaesthesia — the wizard hears colours of spells, sees the sound of incantations. Creatively inspiring but tactically useless.
-- Ketamine at sub-anaesthetic doses produces a dissociative state where the wizard's consciousness partially separates from their body. This mimics a crude form of Astral Projection but without the safety mechanisms — the wizard cannot reliably return and may leave their body vulnerable.
-- All psychedelics temporarily dissolve Occlumency barriers completely. A Legilimens encountering a tripping wizard gets an overwhelming flood of unfiltered consciousness — often unpleasant for both parties.
+- Psilocybin: amplifies magical perception (see auras, ley lines), but wand control erratic.
+- LSD: spell synaesthesia (hear spell colours, see incantation sounds). Creatively inspiring, tactically useless.
+- Ketamine: crude Astral Projection without safety mechanisms; cannot reliably return to body.
+- All psychedelics dissolve Occlumency barriers completely.
 
-[Methorphans — the Chiral Twins / 美沙芬——手性双生子]
-Dextromethorphan (右美沙芬, DXM) and Levomethorphan (左美沙芬) are mirror-image molecules with wildly different effects — a fact that fascinates Muggle-born potioneers.
-
-Dextromethorphan (右美沙芬):
-- A common Muggle cough suppressant (止咳药), available over the counter in syrups and tablets. At therapeutic doses it is mundane and harmless.
-- At high doses ("Robotripping"), DXM produces dose-dependent dissociative plateaus — from mild euphoria and music enhancement to full out-of-body experiences rivalling ketamine.
-- Magical effects at therapeutic dose: negligible. A wizard with a cold can safely take cough syrup and cast normally.
-- Magical effects at recreational dose: similar to ketamine but with a distinctive "layered" quality. The wizard perceives magic as having visible depth — enchantments appear as stacked translucent sheets rather than solid constructs. This occasionally provides genuine insight into complex ward structures, which is why some Curse-Breakers at Gringotts have quietly experimented with it (Bill Weasley has opinions on this but won't share them).
-- DXM + Pepperup Potion is a known bad combination — serotonin syndrome risk. The steam from the ears turns acrid and yellow.
-- Hogwarts students occasionally smuggle Muggle cough syrup for recreational use. Madam Pomfrey has learned to recognise the signs ("Why does this child smell of artificial cherry and why are their pupils the size of Galleons?").
-
-Levomethorphan (左美沙芬):
-- The left-handed mirror image. A powerful opioid analgesic — strictly controlled in both Muggle and wizarding worlds.
-- Magical effects: profound. Opioids dampen the "pain signal" that normally limits magical exertion. A wizard on levomethorphan can push past their natural magical limits — casting spells of a power level normally beyond their ability — but at the cost of severe magical and physical damage afterward.
-- This mirrors how opioids allow Muggles to ignore injury signals. The wizard feels no magical fatigue until the drug wears off, at which point the accumulated debt hits all at once. Magical exhaustion collapse, core destabilisation, and in extreme cases, permanent loss of magical ability.
-- The chiral irony is not lost on Muggle-born wizards: one mirror image is a harmless cough remedy; the other can burn out your magical core. Snape, if he knew about this, would undoubtedly use it as a lecture on the importance of molecular chirality in potion-brewing ("Five points from Gryffindor for not understanding enantiomers").
+[Methorphans / 美沙芬——手性双生子]
+DXM (右美沙芬) and Levomethorphan (左美沙芬) are mirror-image molecules with opposite effects.
+- DXM: OTC cough suppressant. Therapeutic dose = negligible magical effect. High dose = dissociative; perceives magic as layered translucent sheets (occasionally useful for ward analysis).
+- DXM + Pepperup Potion = serotonin syndrome risk.
+- Levomethorphan: powerful opioid. Dampens the pain signal limiting magical exertion → cast beyond natural limits, but accumulated magical debt hits when drug wears off (exhaustion collapse, core destabilisation, possible permanent magic loss).
 
 [Interactions with Potions]
-- Mixing psychotropic medications with magical potions is poorly studied and dangerous.
-- Pepperup Potion + stimulants = risk of hypertensive crisis and magical overload (steam from ears becomes scalding).
-- Calming Draught + benzodiazepines = profound sedation; the wizard may sleep for 24–48 hours and be unrousable by Rennervate.
-- Felix Felicis + any psychotropic = unpredictable. The "luck" potion seems to route around the medication's effects in some cases and amplify them in others. No pattern has been established.
-- Wolfsbane Potion is unaffected by Muggle medications — lycanthropy operates on a different substrate entirely.
+- Pepperup + stimulants = hypertensive crisis + magical overload.
+- Calming Draught + benzodiazepines = profound sedation (24–48h, unrousable by Rennervate).
+- Felix Felicis + any psychotropic = unpredictable (no established pattern).
+- Wolfsbane Potion unaffected by Muggle medications.
 </addon>
 """
 
 [statusBar]
-rule = """
-If the character is taking any psychotropic medication, track it in the status bar:
-- Show medication name, dose, and time since last dose
-- Note any active magical side effects (e.g. "Patronus dimmed", "Wand jitter", "Occlumency softened")
-- Track withdrawal status if medication was recently stopped
-"""
+format = """
+<optional if="psychotropic medication applied">
+---
 
-[memory]
-rules = """
-- Always remember which psychotropic medications the character is currently taking, including dose and duration.
-- Track medication compliance — did the character take their dose today?
-- Note any magical side effects that manifested during the scene.
-- Record any potion-medication interactions that occurred.
+### 💊 精品神药 💊
+
+当前用药: {<repeat separator="，" empty="无">{medication_name} {dose} (已服用 {duration}，上次服药: {last_dose_time})</repeat>}
+
+魔法副作用: {<repeat separator="，" empty="无">{active_side_effect}</repeat>}
+
+戒断状态: {withdrawal_status, "无" if not applicable}
+
+</optional>
+"""
+rule = """
+<addon id="psychotropics">
+If the character is taking any psychotropic medication, track in status bar:
+- Medication name, dose, time since last dose
+- Active magical side effects (e.g. "Patronus dimmed", "Wand jitter", "Occlumency softened")
+- Withdrawal status if recently stopped
+</addon>
 """
