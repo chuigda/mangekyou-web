@@ -66,6 +66,56 @@ async function handleLoadApiConfig(event: Event) {
                @change="handleLoadApiConfig" />
         <hr />
 
+        <h3>CHR 文件</h3>
+
+        <div class="chr-section">
+            <Row>
+                <label>模拟器</label>
+                <button @click="simulatorFileInput?.click()">上传</button>
+                <span v-if="simulatorCHR" class="tooltip">{{ simulatorCHR.universeName }}</span>
+                <span v-else class="red-tooltip">未加载</span>
+            </Row>
+            <input ref="simulatorFileInput" type="file" accept=".toml,.chr" hidden
+                   @change="handleFileUpload($event, uploadSimulatorCHR)" />
+        </div>
+
+        <div class="chr-section">
+            <Row>
+                <label>玩家</label>
+                <button @click="playerFileInput?.click()">上传</button>
+                <span v-if="playerCHR" class="tooltip">{{ playerCHR.playerName }}</span>
+                <span v-else class="red-tooltip">未加载</span>
+            </Row>
+            <input ref="playerFileInput" type="file" accept=".toml,.chr" hidden
+                   @change="handleFileUpload($event, uploadPlayerCHR)" />
+        </div>
+
+        <div class="chr-section">
+            <Row>
+                <label>附加</label>
+                <button @click="additionalFileInput?.click()">添加</button>
+            </Row>
+            <input ref="additionalFileInput" type="file" accept=".toml,.chr" hidden
+                   @change="handleFileUpload($event, uploadAdditionalCHR)" />
+            <div v-for="(entry, index) in additionalCHRs" :key="index" class="chr-item">
+                <Row>
+                    <span :class="entry.enabled ? 'tooltip' : 'tooltip disabled-addon'"
+                          @click="toggleAddon(index)">
+                        {{ entry.chr.name || `附加 #${index + 1}` }}
+                    </span>
+                    <button @click="moveAddon(index, -1)" :disabled="index === 0" title="上移">↑</button>
+                    <button @click="moveAddon(index, 1)" :disabled="index === additionalCHRs.length - 1" title="下移">↓</button>
+                    <button @click="toggleAddon(index)" :title="entry.enabled ? '禁用' : '启用'">
+                        {{ entry.enabled ? '✓' : '✗' }}
+                    </button>
+                    <button @click="removeAddon(index)" title="移除">🗑</button>
+                </Row>
+            </div>
+            <span v-if="additionalCHRs.length === 0" class="tooltip">无</span>
+        </div>
+
+        <hr />
+
         <h3>连接</h3>
         <Row>
             <label>WS 地址</label>
@@ -177,54 +227,6 @@ async function handleLoadApiConfig(event: Event) {
             <input v-model.number="inlineMessageLimit" type="number" class="short" step="1" min="0" />
         </Row>
 
-        <hr />
-        <h3>CHR 文件</h3>
-
-        <div class="chr-section">
-            <Row>
-                <label>模拟器</label>
-                <button @click="simulatorFileInput?.click()">上传</button>
-                <span v-if="simulatorCHR" class="tooltip">{{ simulatorCHR.universeName }}</span>
-                <span v-else class="red-tooltip">未加载</span>
-            </Row>
-            <input ref="simulatorFileInput" type="file" accept=".toml,.chr" hidden
-                   @change="handleFileUpload($event, uploadSimulatorCHR)" />
-        </div>
-
-        <div class="chr-section">
-            <Row>
-                <label>玩家</label>
-                <button @click="playerFileInput?.click()">上传</button>
-                <span v-if="playerCHR" class="tooltip">{{ playerCHR.playerName }}</span>
-                <span v-else class="red-tooltip">未加载</span>
-            </Row>
-            <input ref="playerFileInput" type="file" accept=".toml,.chr" hidden
-                   @change="handleFileUpload($event, uploadPlayerCHR)" />
-        </div>
-
-        <div class="chr-section">
-            <Row>
-                <label>附加</label>
-                <button @click="additionalFileInput?.click()">添加</button>
-            </Row>
-            <input ref="additionalFileInput" type="file" accept=".toml,.chr" hidden
-                   @change="handleFileUpload($event, uploadAdditionalCHR)" />
-            <div v-for="(entry, index) in additionalCHRs" :key="index" class="chr-item">
-                <Row>
-                    <span :class="entry.enabled ? 'tooltip' : 'tooltip disabled-addon'"
-                          @click="toggleAddon(index)">
-                        {{ entry.chr.name || `附加 #${index + 1}` }}
-                    </span>
-                    <button @click="moveAddon(index, -1)" :disabled="index === 0" title="上移">↑</button>
-                    <button @click="moveAddon(index, 1)" :disabled="index === additionalCHRs.length - 1" title="下移">↓</button>
-                    <button @click="toggleAddon(index)" :title="entry.enabled ? '禁用' : '启用'">
-                        {{ entry.enabled ? '✓' : '✗' }}
-                    </button>
-                    <button @click="removeAddon(index)" title="移除">🗑</button>
-                </Row>
-            </div>
-            <span v-if="additionalCHRs.length === 0" class="tooltip">无</span>
-        </div>
     </div>
 </template>
 
