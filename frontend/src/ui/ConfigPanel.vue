@@ -8,6 +8,7 @@ import {
     statusBarApiUrl, statusBarApiKey, memoryApiUrl, memoryApiKey,
     connectWs, disconnectWs,
     uploadSimulatorCHR, uploadPlayerCHR, uploadAdditionalCHR,
+    toggleAddon, moveAddon, removeAddon,
     saveContext, loadContext,
     saveApiConfig, loadApiConfig
 } from '../store'
@@ -29,10 +30,6 @@ async function handleFileUpload(
     const text = await file.text()
     await handler(text)
     input.value = ''
-}
-
-function removeAdditionalCHR(index: number) {
-    additionalCHRs.value.splice(index, 1)
 }
 
 async function handleLoadContext(event: Event) {
@@ -212,10 +209,18 @@ async function handleLoadApiConfig(event: Event) {
             </Row>
             <input ref="additionalFileInput" type="file" accept=".toml,.chr" hidden
                    @change="handleFileUpload($event, uploadAdditionalCHR)" />
-            <div v-for="(chr, index) in additionalCHRs" :key="index" class="chr-item">
+            <div v-for="(entry, index) in additionalCHRs" :key="index" class="chr-item">
                 <Row>
-                    <span class="tooltip">{{ chr.name || `附加 #${index + 1}` }}</span>
-                    <button @click="removeAdditionalCHR(index)">✗</button>
+                    <span :class="entry.enabled ? 'tooltip' : 'tooltip disabled-addon'"
+                          @click="toggleAddon(index)">
+                        {{ entry.chr.name || `附加 #${index + 1}` }}
+                    </span>
+                    <button @click="moveAddon(index, -1)" :disabled="index === 0" title="上移">↑</button>
+                    <button @click="moveAddon(index, 1)" :disabled="index === additionalCHRs.length - 1" title="下移">↓</button>
+                    <button @click="toggleAddon(index)" :title="entry.enabled ? '禁用' : '启用'">
+                        {{ entry.enabled ? '✓' : '✗' }}
+                    </button>
+                    <button @click="removeAddon(index)" title="移除">🗑</button>
                 </Row>
             </div>
             <span v-if="additionalCHRs.length === 0" class="tooltip">无</span>
@@ -253,5 +258,10 @@ async function handleLoadApiConfig(event: Event) {
 
 .chr-item {
     padding-left: 1em;
+}
+
+.disabled-addon {
+    opacity: 0.4;
+    text-decoration: line-through;
 }
 </style>

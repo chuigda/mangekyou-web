@@ -1,5 +1,5 @@
 import { reactive, ref, computed } from 'vue'
-import type { SimulatorCHR, PlayerCHR, AdditionalCHR } from './llm/chr_file'
+import type { SimulatorCHR, PlayerCHR, AdditionalCHR, AddonEntry } from './llm/chr_file'
 import type { Message, SimulatorMessage } from './llm/chat_message'
 import type { LLMConfig, SimulationContext } from './llm/context'
 import { buildSimulationRequest, buildStatusBarUpdateRequest, buildMemorySummarizeRequest } from './llm/context'
@@ -56,8 +56,15 @@ export const memoryConfig = reactive<LLMConfig>(defaultLightWeightLLMConfig())
 // ── CHR Files ──
 export const simulatorCHR = ref<SimulatorCHR | undefined>(undefined)
 export const playerCHR = ref<PlayerCHR | undefined>(undefined)
-export const additionalCHRs = ref<AdditionalCHR[]>([])
+export const additionalCHRs = ref<AddonEntry[]>([])
 export const userAdditionalCHR = ref<AdditionalCHR>({})
+
+/** Only enabled addons, in array order */
+export const activeAdditionalCHRs = computed<AdditionalCHR[]>(() =>
+    additionalCHRs.value
+        .filter(e => e.enabled)
+        .map(e => e.chr)
+)
 
 // ── Simulation Context ──
 export const messages = ref<Message[]>([])
@@ -150,8 +157,30 @@ export async function uploadAdditionalCHR(text: string) {
     if (typeof result === 'string') {
         dialogError.value = `Additional CHR 解析失败:\n${result}`
     } else {
-        additionalCHRs.value.push(result)
+        additionalCHRs.value.push({
+            chr: result,
+            enabled: true,
+        })
     }
+}
+
+export function toggleAddon(index: number) {
+    const entry = additionalCHRs.value[index]
+    if (entry) entry.enabled = !entry.enabled
+}
+
+export function moveAddon(index: number, direction: -1 | 1) {
+    const target = index + direction
+    const list = additionalCHRs.value
+    if (target < 0 || target >= list.length) return
+    // swap array positions
+    const tmp = list[index]!!
+    list[index] = list[target]!!
+    list[target] = tmp
+}
+
+export function removeAddon(index: number) {
+    additionalCHRs.value.splice(index, 1)
 }
 
 function splitSimulatorOutput(raw: string): { content: string; summarize: string } {
@@ -168,7 +197,7 @@ function getSimulationContext(): SimulationContext | undefined {
     return {
         simulatorCHR: simulatorCHR.value,
         playerCHR: playerCHR.value,
-        additionalCHR: additionalCHRs.value,
+        additionalCHR: activeAdditionalCHRs.value,
         userAdditionalCHR: userAdditionalCHR.value,
         messages: messages.value
     }
@@ -361,7 +390,7 @@ interface SavedContext {
     inlineMessageLimit?: number
     simulatorCHR: SimulatorCHR | undefined
     playerCHR: PlayerCHR | undefined
-    additionalCHRs: AdditionalCHR[]
+    additionalCHRs: AddonEntry[]
     userAdditionalCHR: AdditionalCHR
     messages: Message[]
 }

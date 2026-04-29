@@ -28,6 +28,12 @@ export interface PlayerCHR extends CHRBase {
 
 export type CHR = SimulatorCHR | AdditionalCHR | PlayerCHR
 
+/** Wrapper that adds enable/disable metadata to an AdditionalCHR */
+export interface AddonEntry {
+    chr: AdditionalCHR
+    enabled: boolean
+}
+
 export interface CHRFile<C extends CHRBase> {
     fileName: string
     absolutePath: string
