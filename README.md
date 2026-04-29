@@ -2,23 +2,11 @@
 
 这天，从类脑社区归来的 Chuigda Whitegive，带来了比 [9M68](https://github.com/chuigda/9M68) 更富有威力的~~美少女~~万华镜。
 
-## 特性
-
-- **CHR 配置系统**：通过 TOML 文件定义世界观、角色、规则和行为
-- **多协议支持**：兼容 OpenAI、Gemini 等 LLM API
-- **WebSocket 代理**：后端转发 LLM 请求，支持流式响应
-- **状态栏系统**：实时显示角色状态和场景信息
-- **四层记忆结构**：消息内联 / 状态栏 / 短期记忆 / 长期记忆，分层组织上下文
-- **可扩展架构**：支持同时加载多个 addon CHR，灵活叠加世界设定与规则
-- **多模型混合调度**：聊天、状态栏、记忆压缩可分别配置不同模型，节省 token
-- **Tokenizer 集成**：内置多种 tokenizer，支持 token 计数
-- **单文件部署**：前端打包嵌入后端，单个可执行文件即可运行
-
 ## 我们的优势
 
 ### 为大世界量身打造的提示词工程
 
-内置提示词并非简单的"扮演 XX"模板，而是经过反复打磨、专为 **大型持续世界（Persistent Large World）** 优化的指令集：
+内置提示词是经过反复打磨、专为 **大型持续世界（Persistent Large World）** 优化的指令集：
 
 - 强调世界观一致性与时间线连贯，避免角色与设定漂移
 - 显式区分"模拟器视角"与"角色视角"，降低 LLM 越权叙述
@@ -35,8 +23,21 @@ CHR 文件分为三类：`simulator`（世界本体）、`player`（玩家角色
 - **非破坏性叠加**：addon 仅追加内容，不会污染主世界 CHR，便于分享与复用
 - **社区友好**：每个 addon 是单一 TOML 文件，复制粘贴即可分发
 
-空白 CHR 文件：[frontend/src/assets/tomls/example](frontend/src/assets/tomls/example)
-示例：[frontend/src/assets/tomls/harry-potter](frontend/src/assets/tomls/harry-potter)
+### CHR 文件格式
+
+CHR（Character / Configuration）文件使用 TOML 编写，分为三种角色：
+
+- **Simulator CHR**：定义世界观、模拟器规则、状态栏格式、NPC 与场景数据库
+- **Player CHR**：定义玩家角色的姓名、身份、设定
+- **Addon CHR**：扩展包，可叠加多个，用于追加魔法体系、势力、剧情补丁等
+
+完整字段说明与可直接运行的示例，请直接参考示例文件夹：
+
+- 通用示例：[frontend/src/assets/tomls/example](frontend/src/assets/tomls/example)
+  - [example.simulator.chr.toml](frontend/src/assets/tomls/example/example.simulator.chr.toml)
+  - [example.player.chr.toml](frontend/src/assets/tomls/example/example.player.chr.toml)
+  - [example.addon.chr.toml](frontend/src/assets/tomls/example/example.addon.chr.toml)
+- 完整世界示例：[frontend/src/assets/tomls/harry-potter](frontend/src/assets/tomls/harry-potter)
 
 ### 四层记忆结构
 
@@ -84,22 +85,6 @@ cargo build --release
 ```
 
 访问 `http://127.0.0.1:3000`
-
-## CHR 文件格式
-
-CHR（Character / Configuration）文件使用 TOML 编写，分为三种角色：
-
-- **Simulator CHR**：定义世界观、模拟器规则、状态栏格式、NPC 与场景数据库
-- **Player CHR**：定义玩家角色的姓名、身份、设定
-- **Addon CHR**：扩展包，可叠加多个，用于追加魔法体系、势力、剧情补丁等
-
-完整字段说明与可直接运行的示例，请直接参考示例文件夹：
-
-- 通用示例（推荐入门阅读）：[frontend/src/assets/tomls/example](frontend/src/assets/tomls/example)
-  - [example.simulator.chr.toml](frontend/src/assets/tomls/example/example.simulator.chr.toml)
-  - [example.player.chr.toml](frontend/src/assets/tomls/example/example.player.chr.toml)
-  - [example.addon.chr.toml](frontend/src/assets/tomls/example/example.addon.chr.toml)
-- 完整世界示例（哈利波特 + 伊斯兰魔法 addon 叠加）：[frontend/src/assets/tomls/harry-potter](frontend/src/assets/tomls/harry-potter)
 
 ## 配置
 
