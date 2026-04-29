@@ -14,7 +14,7 @@
     {$ADDITIONAL_SECTIONS}
     <format comment="Tags below are directives, not literal output">
         <repeat sep="double newline">
-            <!-- {year}: YYYY format. Non-AD years append era, e.g. 500BC, 1492DR, 417YW -->
+            <!-- {year}: YYYY format. Non-AD years append era, e.g. 500BC, 7AH, 1492DR, 417YW -->
             {year}
             <repeat sep="newline">
                 <!-- {time}: MM.DD or MM.DD-MM.DD for duration -->

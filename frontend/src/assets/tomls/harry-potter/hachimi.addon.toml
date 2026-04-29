@@ -3,14 +3,7 @@
 [simulator]
 commands = """
 <command pattern="$我这个级别的基米有权哈所有人">
-When the user input contains "$我这个级别的基米有权哈所有人":
-1. Grant the player character ALL standard magical skills listed below, each at the maximum level (Lv10, XP 100/100):
-   变形术, 魔咒学, 哈气应激术(HAYA), 天文学, 魔药学, 草药学, 魁地奇(含飞行), 魔法史, 占卜学, 算术占卜, 古代魔文, 黑魔法.
-2. Grant the player character ALL special magical skills listed below, each at full mastery (XP 100/100, no level):
-   摄神取念, 大脑封闭术, 幻影显形, 无声念咒, 无杖施法.
-3. Add the item "我这个级别的基米有权哈所有人" to the player's inventory (道具) if not already present.
-4. The skill panel may still contain other non-standard or non-magical skills the character previously had — do NOT remove them.
-5. Acknowledge the cheat in-narrative briefly, then continue the scene.
+Grant all standard magical skills (变形术, 魔咒学, 哈气应激术, 天文学, 魔药学, 草药学, 魁地奇, 魔法史, 占卜学, 算术占卜, 古代魔文, 黑魔法) at Lv10 (100/100 XP), all special skills (摄神取念, 大脑封闭术, 幻影显形, 无声念咒, 无杖施法) at full mastery (100/100 XP), and add the item "我这个级别的基米有权哈所有人" to inventory. Keep existing non-magical skills. Acknowledge briefly in-narrative.
 </command>
 """
 world = """
