@@ -19,24 +19,19 @@
 
 CHR 文件分为三类：`simulator`（世界本体）、`player`（玩家角色）、`addon`（扩展包）。
 
-- **多 addon 同时加载**：可以把"魔法体系""势力补丁""新角色卡"拆成独立的 addon，按需组合
-- **非破坏性叠加**：addon 仅追加内容，不会污染主世界 CHR，便于分享与复用
-- **社区友好**：每个 addon 是单一 TOML 文件，复制粘贴即可分发
-
-### CHR 文件格式
-
-CHR（Character / Configuration）文件使用 TOML 编写，分为三种角色：
-
 - **Simulator CHR**：定义世界观、模拟器规则、状态栏格式、NPC 与场景数据库
 - **Player CHR**：定义玩家角色的姓名、身份、设定
 - **Addon CHR**：扩展包，可叠加多个，用于追加魔法体系、势力、剧情补丁等
 
-完整字段说明与可直接运行的示例，请直接参考示例文件夹：
+优势：
+
+- **多 addon 同时加载**：可以把"魔法体系""势力补丁""新角色卡"拆成独立的 addon，按需组合
+- **非破坏性叠加**：addon 仅追加内容，不会污染主世界 CHR，便于分享与复用
+- **社区友好**：每个 addon 是单一 TOML 文件，复制粘贴即可分发
+
+CHR文件使用 TOML 编写，完整字段说明与可直接运行的示例，请直接参考示例文件夹：
 
 - 通用示例：[frontend/src/assets/tomls/example](frontend/src/assets/tomls/example)
-  - [example.simulator.chr.toml](frontend/src/assets/tomls/example/example.simulator.chr.toml)
-  - [example.player.chr.toml](frontend/src/assets/tomls/example/example.player.chr.toml)
-  - [example.addon.chr.toml](frontend/src/assets/tomls/example/example.addon.chr.toml)
 - 完整世界示例：[frontend/src/assets/tomls/harry-potter](frontend/src/assets/tomls/harry-potter)
 
 ### 四层记忆结构
