@@ -38,7 +38,7 @@ async function handleSend() {
 }
 
 function handleKeydown(e: KeyboardEvent) {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === 'Enter' && e.ctrlKey) {
         e.preventDefault()
         if (canSend.value) handleSend()
     }
@@ -95,7 +95,7 @@ const statusText = computed(() => {
                 v-model="playerInput"
                 @keydown="handleKeydown"
                 :disabled="isSending"
-                placeholder="输入玩家行动..."
+                placeholder="输入玩家行动... (Ctrl+Enter 发送)"
                 rows="3"
             />
             <div class="input-buttons">

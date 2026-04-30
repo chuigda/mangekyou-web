@@ -25,10 +25,12 @@ async function handleFileUpload(
     handler: (text: string) => Promise<void>
 ) {
     const input = event.target as HTMLInputElement
-    const file = input.files?.[0]
-    if (!file) return
-    const text = await file.text()
-    await handler(text)
+    const files = input.files
+    if (!files || files.length === 0) return
+    for (const file of Array.from(files)) {
+        const text = await file.text()
+        await handler(text)
+    }
     input.value = ''
 }
 
@@ -95,7 +97,7 @@ async function handleLoadApiConfig(event: Event) {
                 <label>附加</label>
                 <button @click="additionalFileInput?.click()">添加</button>
             </Row>
-            <input ref="additionalFileInput" type="file" accept=".toml,.chr" hidden
+            <input ref="additionalFileInput" type="file" accept=".toml,.chr" hidden multiple
                    @change="handleFileUpload($event, uploadAdditionalCHR)" />
             <div v-for="(entry, index) in additionalCHRs" :key="index" class="chr-item">
                 <Row>
