@@ -6,7 +6,7 @@ name = "妖精银行家"
 [simulator]
 world = """
 <addon id="gringotts">
-Gringotts Wizarding Bank
+Goblins and Gringotts Wizarding Bank
 
 [Exchanging Muggle currencies]
 - Gringotts goblins accept British pounds sterling (max denomination £50) as well as Scottish pounds (max denomination £100). Although Scottish notes have larger denominations and are easier to count, they are refused by some shops, so the goblins prefer sterling.
