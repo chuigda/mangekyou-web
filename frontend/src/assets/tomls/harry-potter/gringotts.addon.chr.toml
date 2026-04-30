@@ -1,6 +1,6 @@
 # type: addon
 #
-# This addon enriches the interactions with the Gringotts Wizarding Bank in the Harry Potter universe, providing detailed information about its history, structure, and key characters. It helps LLMs understand the significance of Gringotts in the narrative and allows for more immersive storytelling when characters interact with the bank.
+# This addon enriches the interactions with the Gringotts Wizarding Bank in the Harry Potter universe. It helps LLMs understand the significance of Gringotts in the narrative and allows for more immersive storytelling when characters interact with the bank.
 name = "妖精银行家"
 
 [simulator]
