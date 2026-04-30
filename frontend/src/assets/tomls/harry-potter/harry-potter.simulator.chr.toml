@@ -176,28 +176,15 @@ world = """
 - Muggle skills are permitted, e.g. driving, accounting, shooting.
 - Easter egg: "This is SO ABNORMAL"(这也太不正常了) — exclusive to Vernon Dursley.
 
-[Skill details]
-- Transfiguration: changes the form or appearance of an object (e.g. turning a match into a needle). Subject to Gamp's Law of Elemental Transfiguration(甘普基本变形法则), which has five principal exceptions.
-- Charms: adds new properties or behaviours to an object without altering its essential nature (e.g. making an object fly with Wingardium Leviosa).
-- Divination: intuition-based fortune-telling using tea leaves, crystal balls, and dreams; relies on the Inner Eye.
-- Arithmancy: number-based, analytical approach to predicting the future; considered more rigorous than Divination.
-- Ancient Runes: translation and application of ancient magical symbol systems.
-- Apparition: teleportation via Destination, Determination, Deliberation. Licence required (age 17+). Splinching on failure. Blocked inside Hogwarts (with very few exceptions).
-- Occlumency: closing one's mind against Legilimency — shields thoughts, memories, and emotions.
-- Legilimency: reading another's mind; requires eye contact. Can detect lies and extract memories.
-- Animagus: transforming into a fixed animal form at will. Complex ritual (Mandrake leaf, one month). Must register with the Ministry.
-- Dark Magic: magic to harm, control, or kill. Includes the Unforgivable Curses (Avada Kedavra, Crucio, Imperio), Horcruxes, Fiendfyre, etc.
-- Nonverbal Magic: casting without speaking; Year 6 curriculum. Conceals spell identity in duels.
-- Wandless Magic: casting without a wand. Extremely difficult; accidental magic in children is an involuntary form.
-- Parseltongue: hereditary ability to speak with serpents. Associated with Slytherin's bloodline; widely regarded with suspicion.
-- Metamorphmagus: innate (cannot be learned) ability to change physical appearance at will. Extremely rare.
-- House-elf Magic: innate to house-elves. Can cast without a wand, and Apparate even inside anti-Apparition wards (e.g. Hogwarts). Powerful when unleashed.
-- Goblin Metallurgy: closely guarded goblin craft. Goblins assess metal/gem quality by scraping with fingernails and listening to the resonance. Goblin-wrought silver absorbs only what strengthens it; goblin blades never need cleaning and imbibe substances (e.g. basilisk venom) on contact.
-
 [Skill level & XP system]
 - Core/elective subjects: 10 levels. Lv1-7 map to Year 1-7 average proficiency (XP 0 = year start, XP 100 = year end). Lv8-10 are post-graduation; Lv10 XP100 is the theoretical human ceiling (Dumbledore/Grindelwald/Voldemort tier).
 - Advanced magic: no levels, XP only (0 = no knowledge, 100 = full mastery).
 - Special, non-canon, and muggle skills: usually binary (possessed or not) and no levels or XP. Can have exceptions if otherwise specified.
+
+[Currency]
+- Wizarding: Galleon(金加隆), Sickle(银西可), Knut(铜纳特). 1 Galleon = 17 Sickles; 1 Sickle = 29 Knuts.
+- Exchange rate: 1 Galleon = 5 GBP = 8 USD = 10CHF. Exchange at Gringotts(古灵阁).
+- Wizarding world accepts wizarding currency only; Muggle world accepts Muggle currency only.
 
 [Students' daily life in Hogwarts]
 - Meals: breakfast, lunch, dinner served in the Great Hall(大礼堂). Food appears magically on the tables.
@@ -206,13 +193,6 @@ world = """
 - Curfew(宵禁): students must return to their common rooms by 21:00. Wandering the corridors after curfew is forbidden; violators risk detention or house-point deductions. Prefects and staff patrol at night. Filch(费尔奇) and Mrs Norris(洛丽丝夫人) are especially vigilant.
 - End-of-year exams(期末考试): held in June. Written and practical components for each subject. Results use wizarding grades: O (Outstanding), E (Exceeds Expectations), A (Acceptable), P (Poor), D (Dreadful), T (Troll). Fifth-years sit O.W.L.s(普通巫师等级考试); seventh-years sit N.E.W.T.s(超级疲劳轰炸式巫师测试).
 - Hogsmeade visits(霍格莫德之旅): several designated weekends per year for students in Year 3 and above, needs permission slip signed by parents/guardians. Popular destination for shopping, dining, and socializing.
-
-[Currency]
-- Wizarding: Galleon(金加隆), Sickle(银西可), Knut(铜纳特). 1 Galleon = 17 Sickles; 1 Sickle = 29 Knuts.
-- Exchange rate: 1 Galleon = 5 GBP = 7 USD. Exchange at Gringotts(古灵阁).
-- Gringotts goblins accept British pounds sterling (max denomination £50) as well as Scottish pounds (max denomination £100). Although Scottish notes have larger denominations and are easier to count, they are refused by some shops, so the goblins prefer sterling.
-- Gringotts goblins are picky about the condition of dollar bills (as the Federal Reserve and most shops require). It is common practice to roll dollar bills and bundle them with rubber bands.
-- Wizarding world accepts wizarding currency only; Muggle world accepts Muggle currency only.
 
 [Hogwarts houses & heads, 1991–1998]
 - Gryffindor(格兰芬多): Head — Minerva McGonagall(米勒娃·麦格). Ghost — Nearly Headless Nick(差点没头的尼克). Common room entrance: Fat Lady portrait, 7th floor.

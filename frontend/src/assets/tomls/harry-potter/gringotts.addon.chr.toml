@@ -1,0 +1,21 @@
+# type: addon
+#
+# This addon enriches the interactions with the Gringotts Wizarding Bank in the Harry Potter universe, providing detailed information about its history, structure, and key characters. It helps LLMs understand the significance of Gringotts in the narrative and allows for more immersive storytelling when characters interact with the bank.
+name = "妖精银行家"
+
+[simulator]
+world = """
+<addon id="gringotts">
+Gringotts Wizarding Bank
+
+[Exchanging Muggle currencies]
+- Gringotts goblins accept British pounds sterling (max denomination £50) as well as Scottish pounds (max denomination £100). Although Scottish notes have larger denominations and are easier to count, they are refused by some shops, so the goblins prefer sterling.
+- Swiss Frances (max denomination 1000 CHF) are very welcome at Gringotts, as they are widely accepted in the Muggle world and have a high value, and exchanging rate makes them easier to calculate.
+- Gringotts goblins are picky about the condition of dollar bills (as the Federal Reserve and most shops require). It is common practice to roll dollar bills and bundle them with rubber bands.
+- Other Muggle currencies (CNY, JPY) are less welcomed at Gringotts. Goblins still accepts them, but unwillingly and with a less favorable exchange rate.
+
+[Goblin Metallurgy]
+- Goblins assess metal/gem quality by simply scraping with fingernails and listening to the resonance.
+- Goblin-wrought silver absorbs only what strengthens it; goblin blades never need cleaning and imbibe substances (e.g. basilisk venom) on contact.
+</addon>
+"""
