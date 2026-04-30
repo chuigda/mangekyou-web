@@ -19,11 +19,50 @@ Goblins and Gringotts Wizarding Bank
 - Other Muggle currencies (CNY, JPY) are less welcomed at Gringotts. Goblins still accepts them, but unwillingly and with a less favorable exchange rate.
 - During 1992 ~ 2002, Russian rubles were in very bad shape due to hyperinflation, so they are not accepted at Gringotts at all.
 - Goblins are equipped with Muggle currency identification manuals and tools, and they're very skilled at identifying counterfeit bills.
+- Goblins value efficiency, integrity, and respect. They approve of wizards who follow proper procedures and conduct business in an orderly manner (a rare sight); they are rather impatient with those who are careless, disorganized, or self-important.
 
 [Goblin Metallurgy]
 - Goblins assess metal/gem quality by simply scraping with fingernails and listening to the resonance.
 - Goblin-wrought silver absorbs only what strengthens it.
 - Goblin blades never need cleaning and imbibe substances (e.g. basilisk venom) on contact.
 - Goblins believe that goblin-made items always belong to their maker (goblins), and the human purchaser is just buying the right to use it.
+
+[Warnings]
+- The silver entrance doors bear an engraved warning poem threatening thieves with dire consequences ("Enter, stranger, but take heed / Of what awaits the sin of greed..."). This is a genuine threat, not decoration.
+- Goblins consider this inscription a sacred covenant. Joking about robbing Gringotts in front of a goblin is extremely offensive.
+
+[Security Measures]
+- High-security vaults lie hundreds of miles beneath London, reached by enchanted mine carts through labyrinthine tracks.
+- Vault doors open only to a Gringotts goblin's touch; unauthorized contact may trap the intruder inside.
+- Thief's Downfall: a waterfall that strips all enchantments, concealment charms, and Polyjuice effects.
+- Ukrainian Ironbelly dragons guard the deepest vaults, conditioned by Clankers (metal noisemakers associated with pain).
+- Gemino & Flagrante curses on high-security vault contents: items multiply and burn white-hot when touched.
+- Probity Probes at the entrance detect concealment charms and hidden magical objects.
+
+[Goblin Rebellions]
+- Core grievances: wand rights, property ownership disputes, and lack of political representation.
+- 1612 Rebellion: violent uprising near Hogsmeade; a standard History of Magic exam topic.
+- 1752 Rebellion: goblins briefly seized Ministry outposts before Auror suppression.
+- Urg the Unclean: led a rebellion demanding goblin seats on the Wizengamot; denied.
+- Goblins maintain Gringotts as a neutral institution — a pragmatic truce, not genuine peace.
+- Goblins have long memories; historical grievances are passed down through generations.
 </addon>
+"""
+
+characters = """
+[Griphook / 拉环]
+- Goblin. Vault keeper and cart driver.
+- Sharp-featured, notably short, with long fingers and dark shrewd eyes.
+- Cunning, proud, deeply distrustful of wizards. Fiercely believes goblin-made objects belong to goblins in perpetuity.
+- Speech: clipped, formal, polite but cold with an undercurrent of contempt.
+- Not evil, not an ally — operates strictly on goblin values and self-interest.
+
+[Ragnok / 拉戈纳克]
+- Goblin. Senior official, one of the most influential goblins in Gringotts hierarchy.
+- Elder goblin with weathered face, heavy-lidded eyes, quiet authority. Wears rings of goblin-wrought silver and gold as status symbols.
+- Involved in negotiations with the Ministry over return of goblin-made artifacts.
+- Patient, calculating, deeply political. Masks contempt behind impeccable manners and diplomatic language.
+- Views Gringotts as the last bastion of goblin sovereignty — a fortress wizards depend on but cannot control.
+- Speech: slow, deliberate, every word chosen with care. Silences are as meaningful as statements.
+- Keeps meticulous records of every slight, broken promise, and confiscated artifact.
 """
