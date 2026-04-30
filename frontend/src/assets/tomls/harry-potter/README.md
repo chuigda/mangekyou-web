@@ -23,6 +23,7 @@
 | `gringotts.addon.chr.toml` | 妖精银行家 | 古灵阁巫师银行：麻瓜货币兑换规则与妖精冶金术 |
 | `house-cup.addon.chr.toml` | 学院杯 | 四大学院积分和魁地奇杯战绩的实时追踪 |
 | `newspaper.addon.chr.toml` | 预言家日报 | 每轮生成一条讽刺风格的《预言家日报》头条新闻 |
+| `magecraft.addon.chr.toml` | 型月魔术 | 将型月世界的魔术体系引入哈利·波特宇宙：神代魔术、卢恩魔术、现代魔术，以及魔力源、魔术回路等核心概念 |
 | `hachimi.addon.chr.toml` | 哈基米喔南北绿豆 | 恶搞模组：用"哈气决斗"体系替换魔法战斗 |
 | `psychotropics.addon.chr.toml` | 精品神药 | 麻瓜精神类药物对魔法能力的影响及与魔药的交互作用 |
 
