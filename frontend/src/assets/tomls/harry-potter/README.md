@@ -16,9 +16,10 @@
 
 | 文件 | 名称 | 说明 |
 | --- | --- | --- |
-| `spells.addon.chr.toml` | 咒语大全 | 完整的咒语数据库（辅助咒、变形咒、防御咒、攻击咒、恶咒），帮助 LLM 正确使用咒语 |
+| `magic.addon.chr.toml` | 咒语大全 | 完整的咒语数据库（辅助咒、变形咒、防御咒、攻击咒、恶咒、治疗咒、黑魔法），帮助 LLM 正确使用咒语 |
 | `exam.addon.chr.toml` | 烦人的考试 | 考试系统：期末考试、OWL、NEWT、WOMBAT 的时间线、评分等级及 XP 奖励规则 |
 | `goblet-of-fire.addon.chr.toml` | 三强争霸赛 | 三强争霸赛（1994-95）的完整时间线、三项任务细节及勇士积分追踪 |
+| `gringotts.addon.chr.toml` | 妖精银行家 | 古灵阁巫师银行：麻瓜货币兑换规则与妖精冶金术 |
 | `house-cup.addon.chr.toml` | 学院杯 | 四大学院积分和魁地奇杯战绩的实时追踪 |
 | `newspaper.addon.chr.toml` | 预言家日报 | 每轮生成一条讽刺风格的《预言家日报》头条新闻 |
 | `hachimi.addon.chr.toml` | 哈基米喔南北绿豆 | 恶搞模组：用"哈气决斗"体系替换魔法战斗 |
