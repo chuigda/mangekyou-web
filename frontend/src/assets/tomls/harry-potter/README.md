@@ -8,7 +8,7 @@
 
 | 文件 | 类型 | 说明 |
 | --- | --- | --- |
-| `harry-potter.simulator.chr.toml` | Simulator | 主模拟器：定义霍格沃茨世界观、开局流程、状态栏（场景/属性/物品/人际关系）、技能体系、地点数据库、NPC 管理规则与叙事准则 |
+| `harry-potter.simulator.chr.toml` | Simulator | 主模拟器：定义世界观、开局流程、状态栏（场景/属性/物品/人际关系）、技能体系、地点数据库、叙事准则 |
 
 ### Addon 扩展包
 
@@ -28,7 +28,7 @@
 
 ## 使用方式
 
-1. 上传 `harry-potter.simulator.chr.toml` 作为模拟器
-2. 上传你的玩家角色卡（可使用 `blank/example.player.chr.toml` 模板创建）
-3. 按需添加上方的 Addon 扩展包
+1. 载入 `harry-potter.simulator.chr.toml` 作为模拟器
+2. 载入玩家角色卡（可使用 `blank/example.player.chr.toml` 模板创建）
+3. 按需载入并启用上方的 Addon 扩展包
 4. 按照开场白中的模板创建角色，开始游戏
