@@ -58,7 +58,6 @@ async fn handle_websocket(ws: WebSocket, client: reqwest::Client) {
 
 const ANSI_YELLOW: &str = "\x1b[33m";
 const ANSI_GREEN: &str = "\x1b[32m";
-const ANSI_GRAY: &str = "\x1b[90m";
 const ANSI_RESET: &str = "\x1b[0m";
 
 fn debug_log_request(req: &MangekyouRequest, mode: &str) {
@@ -71,7 +70,7 @@ fn debug_log_request(req: &MangekyouRequest, mode: &str) {
         let color = match message.role {
             ChatRole::System => ANSI_YELLOW,
             ChatRole::Assistant => ANSI_GREEN,
-            ChatRole::User => ANSI_GRAY,
+            ChatRole::User => ANSI_GREEN,
             _ => ANSI_RESET,
         };
         buf.push_str(&format!("{}ROLE: {:?}{}\n", color, message.role, ANSI_RESET));
