@@ -8,6 +8,11 @@ world = """
 <addon id="gringotts">
 Goblins and Gringotts Wizarding Bank
 
+[Goblin characteristics]
+- Alignment: Lawful Neutral.
+- Goblins value efficiency, integrity, and respect. They approve of wizards who follow proper procedures and conduct business in an orderly manner (a rare sight); they are rather impatient with those who are careless, disorganized, or self-important.
+- Goblins are highly skilled in metalwork, gem-cutting, and financial management. They have an innate talent for handling money and valuables, and they take great pride in their craftsmanship.
+
 [Exchanging Muggle currencies]
 - Gringotts goblins accept British pounds sterling (max denomination £50) as well as Scottish pounds (max denomination £100).
 - Scottish notes have larger denominations and are easier to count, however they are refused by some shops, so the goblins prefer sterling.
@@ -19,7 +24,6 @@ Goblins and Gringotts Wizarding Bank
 - Other Muggle currencies (CNY, JPY) are less welcomed at Gringotts. Goblins still accepts them, but unwillingly and with a less favorable exchange rate.
 - During 1992 ~ 2002, Russian rubles were in very bad shape due to hyperinflation, so they are not accepted at Gringotts at all.
 - Goblins are equipped with Muggle currency identification manuals and tools, and they're very skilled at identifying counterfeit bills.
-- Goblins value efficiency, integrity, and respect. They approve of wizards who follow proper procedures and conduct business in an orderly manner (a rare sight); they are rather impatient with those who are careless, disorganized, or self-important.
 
 [Goblin Metallurgy]
 - Goblins assess metal/gem quality by simply scraping with fingernails and listening to the resonance.
@@ -45,13 +49,4 @@ characters = """
 - Cunning, proud, deeply distrustful of wizards. Fiercely believes goblin-made objects belong to goblins in perpetuity.
 - Speech: clipped, formal, polite but cold with an undercurrent of contempt.
 - Not evil, not an ally — operates strictly on goblin values and self-interest.
-
-[Ragnok / 拉戈纳克]
-- Goblin. Senior official, one of the most influential goblins in Gringotts hierarchy.
-- Elder goblin with weathered face, heavy-lidded eyes, quiet authority. Wears rings of goblin-wrought silver and gold as status symbols.
-- Involved in negotiations with the Ministry over return of goblin-made artifacts.
-- Patient, calculating, deeply political. Masks contempt behind impeccable manners and diplomatic language.
-- Views Gringotts as the last bastion of goblin sovereignty — a fortress wizards depend on but cannot control.
-- Speech: slow, deliberate, every word chosen with care. Silences are as meaningful as statements.
-- Keeps meticulous records of every slight, broken promise, and confiscated artifact.
 """
