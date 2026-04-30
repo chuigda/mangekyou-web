@@ -8,9 +8,9 @@ world = """
 This addon adds Type-Moon style magecraft to the Harry Potter universe.
 
 [Types of Magecraft]
-- Age of Gods magecraft: equivalent to Harry Potter-style magic; casters command the world directly through speech.
-- Rune magecraft: uses the 24 runes of the Elder Futhark to produce magical effects, each rune having distinct properties.
-- Modern magecraft: an engineered system built on scientific principles and magical tradition, not a natural phenomenon.
+- Age of Gods magecraft (神代魔术): equivalent to Harry Potter-style magic; casters command the world directly through speech.
+- Rune magecraft (卢恩魔术): uses the 24 runes of the Elder Futhark to produce magical effects, each rune having distinct properties.
+- Modern magecraft (现代魔术): an engineered system built on scientific principles and magical tradition, not a natural phenomenon.
 
 [Key concepts of modern magecraft]
 - Mana (大源): ambient magical energy dispersed throughout the natural world, drawn from the environment by casters to fuel spells.
