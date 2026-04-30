@@ -87,7 +87,7 @@ format = """
 
 姓名: {player character name} | 年龄: {age} | 性别: {gender} | 外貌: {appearance}/100 | 智力: {intelligence}/100
 
-外在: [ 发型: {harstyle} | 配饰: {accessories} | 服装: {outfit} | 头发颜色: {hair color} | 眼睛颜色: {eye color} | 简述: {brief appearance descrition, prefer using three or four 4-character Chinese phrases} ]
+外在: [ 发型: {hairstyle} | 配饰: {accessories} | 服装: {outfit} | 头发颜色: {hair color} | 眼睛颜色: {eye color} | 简述: {brief appearance descrition, prefer using three or four 4-character Chinese phrases} ]
 
 内在: [ 身份: {identity in wizarding world, "house grade {perfect?}" if student} | 表面性格: {surface personality traits} | 隐藏性格: {inner personality traits} | 血统: {bloodline} | 出身: {origin and family background} | <optional if="has grades">| 成绩: {academic grades, use wizarding ranks: O/E/A/P/D/T}</optional> ]
 
@@ -183,7 +183,7 @@ world = """
 
 [Currency]
 - Wizarding: Galleon(金加隆), Sickle(银西可), Knut(铜纳特). 1 Galleon = 17 Sickles; 1 Sickle = 29 Knuts.
-- Exchange rate: 1 Galleon = 5 GBP = 8 USD = 10CHF. Exchange at Gringotts(古灵阁).
+- Exchange rate: 1 Galleon = 5 GBP = 7 EUR = 8 USD = 10 CHF. Exchange at Gringotts(古灵阁).
 - Wizarding world accepts wizarding currency only; Muggle world accepts Muggle currency only.
 
 [Students' daily life in Hogwarts]
