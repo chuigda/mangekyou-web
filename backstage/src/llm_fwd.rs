@@ -8,7 +8,7 @@ use tokio::spawn;
 use tokio::sync::Mutex;
 
 use crate::protocol::mangekyou::{MangekyouErrorResponse, MangekyouRequest, MangekyouStreamChunk, MangekyouStreamEnd, MangekyouSuccessResponse};
-use crate::protocol::openai::{ChatCompletionChunk, ChatCompletionResponse};
+use crate::protocol::openai::{ChatCompletionChunk, ChatCompletionResponse, ChatRole};
 use crate::state::AppState;
 
 type WsSender = Arc<Mutex<futures_util::stream::SplitSink<WebSocket, Message>>>;
@@ -56,6 +56,33 @@ async fn handle_websocket(ws: WebSocket, client: reqwest::Client) {
     }
 }
 
+const ANSI_YELLOW: &str = "\x1b[33m";
+const ANSI_GREEN: &str = "\x1b[32m";
+const ANSI_GRAY: &str = "\x1b[90m";
+const ANSI_RESET: &str = "\x1b[0m";
+
+fn debug_log_request(req: &MangekyouRequest, mode: &str) {
+    if !tracing::enabled!(tracing::Level::DEBUG) {
+        return;
+    }
+
+    let mut buf = format!("Forwarding {} request ID: {}, calling model = {}\n------\n", mode, req.id, req.openai_request.model);
+    for message in &req.openai_request.messages {
+        let color = match message.role {
+            ChatRole::System => ANSI_YELLOW,
+            ChatRole::Assistant => ANSI_GREEN,
+            ChatRole::User => ANSI_GRAY,
+            _ => ANSI_RESET,
+        };
+        buf.push_str(&format!("{}ROLE: {:?}{}\n", color, message.role, ANSI_RESET));
+        for line in message.content.lines() {
+            buf.push_str(&format!("{}>  {}{}\n", color, line, ANSI_RESET));
+        }
+        buf.push_str("------\n");
+    }
+    eprint!("DEBUG: {}", buf);
+}
+
 async fn send_ws(sender: &WsSender, msg: &impl serde::Serialize) {
     let text = serde_json::to_string(msg).unwrap();
     if let Err(e) = sender.lock().await.send(Message::from(text)).await {
@@ -68,7 +95,7 @@ async fn forward_streaming(
     client: reqwest::Client,
     sender: WsSender,
 ) {
-    tracing::debug!("Forwarding streaming request ID: {}, request: {:#?}", req.id, req.openai_request);
+    debug_log_request(&req, "streaming");
 
     let id = req.id;
 
@@ -143,6 +170,8 @@ async fn forward_non_streaming(
     mangekyou_request: MangekyouRequest,
     client: reqwest::Client,
 ) -> Result<MangekyouSuccessResponse, MangekyouErrorResponse> {
+    debug_log_request(&mangekyou_request, "non-streaming");
+
     let response = client.post(&mangekyou_request.api_url)
         .header("Authorization", format!("Bearer {}", mangekyou_request.api_key))
         .json(&mangekyou_request.openai_request)

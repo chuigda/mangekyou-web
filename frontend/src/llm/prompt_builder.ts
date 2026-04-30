@@ -63,21 +63,21 @@ export function buildSimulatorSystemPrompt(
     }
 
     return SimulatorSystemPromptTemplate
-        .replace('    ', '')
-        .replace('{$UNIVERSE_NAME}', simulatorCHR.universeName)
-        .replace('{$LANGUAGE_SELECTION}', languageName)
-        .replace('{$LENGTH_INDICATOR}', lengthIndicator)
-        .replace('{$LITERAL_WORK_NAME}', simulatorCHR.literalWorkName)
-        .replace('{$ADDITIONAL_TASKS}\n', sanitize2(additionalTasks))
-        .replace('{$ADDITIONAL_COMMANDS}\n', sanitize2(additionalCommands))
-        .replace('{$WORLD_SETTINGS}\n', sanitize(worldSettings))
-        .replace('{$PLAYER_CHARACTER}\n', sanitize(playerCHR.settings))
-        .replace('{$CHARACTER_DATABASE}\n', sanitize(characterDatabase))
-        .replace('{$ADDITIONAL_DATABASE_SECTIONS}\n', sanitize(additionalDatabaseSections))
-        .replace('{$ADDITIONAL_BEHAVIORS}\n', sanitize2(additionalBehaviors))
-        .replace('{$ADDITIONAL_PROHIBITIONS}\n', sanitize2(additionalProhibitions))
-        .replace('{$ADDITIONAL_SECTIONS}\n', sanitize(additionalSections))
-        .replace('{$PC_NAME}', playerCHR.playerName)
+        .replaceAll('    ', '')
+        .replaceAll('{$UNIVERSE_NAME}', simulatorCHR.universeName)
+        .replaceAll('{$LANGUAGE_SELECTION}', languageName)
+        .replaceAll('{$LENGTH_INDICATOR}', lengthIndicator)
+        .replaceAll('{$LITERAL_WORK_NAME}', simulatorCHR.literalWorkName)
+        .replaceAll('{$ADDITIONAL_TASKS}\n', sanitize2(additionalTasks))
+        .replaceAll('{$ADDITIONAL_COMMANDS}\n', sanitize2(additionalCommands))
+        .replaceAll('{$WORLD_SETTINGS}\n', sanitize(worldSettings))
+        .replaceAll('{$PLAYER_CHARACTER}\n', sanitize(playerCHR.settings))
+        .replaceAll('{$CHARACTER_DATABASE}\n', sanitize(characterDatabase))
+        .replaceAll('{$ADDITIONAL_DATABASE_SECTIONS}\n', sanitize(additionalDatabaseSections))
+        .replaceAll('{$ADDITIONAL_BEHAVIORS}\n', sanitize2(additionalBehaviors))
+        .replaceAll('{$ADDITIONAL_PROHIBITIONS}\n', sanitize2(additionalProhibitions))
+        .replaceAll('{$ADDITIONAL_SECTIONS}\n', sanitize(additionalSections))
+        .replaceAll('{$PC_NAME}', playerCHR.playerName)
 }
 
 export function buildSimulatorUserPrompt(
@@ -117,9 +117,9 @@ export function buildSimulatorUserPrompt(
     r += '\n'
 
     r += SimulatorUserPromptInstructionTemplate
-        .replace('    ', '')
-        .replace('{$LANGUAGE_SELECTOR}', languageName)
-        .replace('{$PC_NAME}', playerCHR.playerName)
+        .replaceAll('    ', '')
+        .replaceAll('{$LANGUAGE_SELECTOR}', languageName)
+        .replaceAll('{$PC_NAME}', playerCHR.playerName)
 
     r += '</input>'
 
@@ -133,6 +133,7 @@ export function buildStatusBarUpdaterSystemPrompt(
 ): string {
     const { name: languageName } = LanguageConfigs[simulatorCHR.language]
 
+    let statusBarFormat = simulatorCHR.statusBar.format
     let statusBarUpdatingRule = simulatorCHR.statusBar.rule
     let additionalSections = simulatorCHR.statusBar.sections
 
@@ -146,8 +147,16 @@ export function buildStatusBarUpdaterSystemPrompt(
         additionalDatabaseSections = simulatorCHR.simulator.database
     }
 
+    console.info(additionalCHRs)
+
     for (const chr of additionalCHRs) {
+        console.info(chr.statusBar)
+        console.info(isDefined(chr.statusBar))
+
         if (isDefined(chr.statusBar)) {
+            if (chr.statusBar.format) {
+                statusBarFormat = c(statusBarFormat, chr.statusBar.format) ?? statusBarFormat
+            }
             statusBarUpdatingRule = c(statusBarUpdatingRule, chr.statusBar.rule)
             additionalSections = c(additionalSections, chr.statusBar.sections)
         }
@@ -160,16 +169,16 @@ export function buildStatusBarUpdaterSystemPrompt(
     }
 
     return StatusBarUpdaterSystemPromptTemplate
-        .replace('    ', '')
-        .replace('{$LANGUAGE_SELECTION}', languageName)
-        .replace('{$WORLD_SETTINGS}\n', sanitize(worldSettings))
-        .replace('{$PLAYER_CHARACTER}\n', sanitize(playerCHR.settings))
-        .replace('{$CHARACTER_DATABASE}\n', sanitize(characterDatabase))
-        .replace('{$ADDITIONAL_DATABASE_SECTIONS}\n', sanitize(additionalDatabaseSections))
-        .replace('{$STATUS_BAR_UPDATING_RULE}\n', sanitize2(statusBarUpdatingRule))
-        .replace('{$ADDITIONAL_SECTIONS}\n', sanitize(additionalSections))
-        .replace('{$STATUS_BAR_FORMAT}\n', sanitize(simulatorCHR.statusBar.format))
-        .replace('{$PC_NAME}', playerCHR.playerName)
+        .replaceAll('    ', '')
+        .replaceAll('{$LANGUAGE_SELECTION}', languageName)
+        .replaceAll('{$WORLD_SETTINGS}\n', sanitize(worldSettings))
+        .replaceAll('{$PLAYER_CHARACTER}\n', sanitize(playerCHR.settings))
+        .replaceAll('{$CHARACTER_DATABASE}\n', sanitize(characterDatabase))
+        .replaceAll('{$ADDITIONAL_DATABASE_SECTIONS}\n', sanitize(additionalDatabaseSections))
+        .replaceAll('{$STATUS_BAR_UPDATING_RULE}\n', sanitize2(statusBarUpdatingRule))
+        .replaceAll('{$ADDITIONAL_SECTIONS}\n', sanitize(additionalSections))
+        .replaceAll('{$STATUS_BAR_FORMAT}\n', sanitize(statusBarFormat))
+        .replaceAll('{$PC_NAME}', playerCHR.playerName)
 }
 
 export function buildStatusBarUpdaterUserPrompt(
@@ -181,13 +190,13 @@ export function buildStatusBarUpdaterUserPrompt(
     simulatorOutputAfterPlayerAction: string
 ): string {
     return StatusBarUpdaterUserPromptTemplate
-        .replace('    ', '')
-        .replace('{$COARSE_MEMORY}\n', sanitize(coarseMemory))
-        .replace('{$PRECISE_MEMORY}\n', sanitize(preciseMemory))
-        .replace('{$SIMULATOR_OUTPUT_BEFORE_PLAYER_ACTION}\n', sanitize(simulatorOutputBeforePlayerAction))
-        .replace('{$PREVIOUS_STATUS_BAR}\n', sanitize(previousStatusBar))
-        .replace('{$PLAYER_ACTION}\n', sanitize(playerAction))
-        .replace('{$SIMULATOR_OUTPUT_AFTER_PLAYER_ACTION}\n', sanitize(simulatorOutputAfterPlayerAction))
+        .replaceAll('    ', '')
+        .replaceAll('{$COARSE_MEMORY}\n', sanitize(coarseMemory))
+        .replaceAll('{$PRECISE_MEMORY}\n', sanitize(preciseMemory))
+        .replaceAll('{$SIMULATOR_OUTPUT_BEFORE_PLAYER_ACTION}\n', sanitize(simulatorOutputBeforePlayerAction))
+        .replaceAll('{$PREVIOUS_STATUS_BAR}\n', sanitize(previousStatusBar))
+        .replaceAll('{$PLAYER_ACTION}\n', sanitize(playerAction))
+        .replaceAll('{$SIMULATOR_OUTPUT_AFTER_PLAYER_ACTION}\n', sanitize(simulatorOutputAfterPlayerAction))
 }
 
 export function buildMemorySummarizerSystemPrompt(
@@ -207,11 +216,11 @@ export function buildMemorySummarizerSystemPrompt(
     }
 
     return MemorySummarizerSystemPromptTemplate
-        .replace('    ', '')
-        .replace('{$UNIVERSE_NAME}', simulatorCHR.universeName)
-        .replace('{$LANGUAGE_SELECTION}', languageName)
-        .replace('{$MEMORY_SUMMARIZING_RULES}\n', sanitize2(memorySummarizingRules))
-        .replace('{$ADDITIONAL_SECTIONS}\n', sanitize(additionalSections))
+        .replaceAll('    ', '')
+        .replaceAll('{$UNIVERSE_NAME}', simulatorCHR.universeName)
+        .replaceAll('{$LANGUAGE_SELECTION}', languageName)
+        .replaceAll('{$MEMORY_SUMMARIZING_RULES}\n', sanitize2(memorySummarizingRules))
+        .replaceAll('{$ADDITIONAL_SECTIONS}\n', sanitize(additionalSections))
 }
 
 export function buildMemorySummarizerUserPrompt(
@@ -219,9 +228,9 @@ export function buildMemorySummarizerUserPrompt(
     preciseMemory: string
 ) {
     return MemorySummarizerUserPromptTemplate
-        .replace('    ', '')
-        .replace('{$COARSE_MEMORY}\n', sanitize(coarseMemory))
-        .replace('{$PRECISE_MEMORY}\n', sanitize(preciseMemory))
+        .replaceAll('    ', '')
+        .replaceAll('{$COARSE_MEMORY}\n', sanitize(coarseMemory))
+        .replaceAll('{$PRECISE_MEMORY}\n', sanitize(preciseMemory))
 }
 
 function c(a?: string, b?: string): string | undefined {
