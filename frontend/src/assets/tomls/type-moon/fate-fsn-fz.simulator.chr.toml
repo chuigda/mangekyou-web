@@ -1,0 +1,134 @@
+# type: simulator
+#
+universeName = "Fate universe (Nasuverse)"
+literalWorkName = "Fate series"
+prologue = """
+"""
+
+language = "zh_CN"
+
+[statusBar]
+format = """
+### 🌏 世界信息 🌏
+
+时间: {YYYY-mm-dd} | {weekday} | {time, 凌晨/清晨/早晨/上午/中午/下午/傍晚/夜晚/深夜}
+
+<!-- DIRECTION: separate state bar when master and servant are not at the same location, merge state bar otherwise -->
+
+<cond test="player's character (servant) and master are at the same place">
+<iftrue>
+地点: {current location, example: 冬木市 - 深山町 - 远坂邸 - 地下工房}
+
+人物: {people around}
+
+环境: {environment, including weather, terrain and so on}
+</iftrue>
+<iffalse>
+地点: [ 从者: {current location of {$username}} | 御主: {current location of master} ]
+
+人物: [ 从者: {people around {$username}} | 御主: {people around master} ]
+
+环境: [ 从者: {environment around {$username}} | 御主: {environment around master} ]
+</iffalse>
+</cond>
+
+### ⚔️ 从者信息 ⚔️
+
+真名: {true name} | 性别: {gender} | 称呼: {call sign}
+
+外貌: [ 发色: {hair color} | 瞳色: {eye color} | 体型: {body type} | 着装: {clothes} | 简述: {brief} ]
+
+面板: [ 职阶: {class} | 筋力: {strength} | 耐久: {stamina} | 敏捷: {agility} | 魔力: {mana} | 幸运: {luck} ]
+
+状态: [ 生命值: {hp}% | 魔力: {mp}% | 从者状态: {servant status, "正常" if nothing special, "灵子化" if spiritized, …} | 御主状态: {master status, "正常" if nothing special} | 剩余令咒数: {count} ]
+
+<!-- DIRECTION: ability names and noble phantasm names should be Chinese only. DO NOT include English translation. A noble phantasm can have multiple categories, use slash `/` to separate if so. Levels can fluctuate, use `lower bound ～ upper bound` format in that case -->
+
+技能: [ 职阶技能: <repeat sep="，">{ability name}({level})</repeat> | 保有技能: <repeat sep="，">{ability name}({level})</repeat> | 宝具: <repeat sep="，">{noble phantasm name}({category}, {level})</repeat> ]
+
+---
+
+### 💰 物品栏 💰
+
+从者持有:
+<repeat sep="newline">
+- {item name}: {description}
+</repeat>
+
+<optional if="has master">
+御主持有
+<repeat sep="newline">
+- {item name}: {description}
+</repeat>
+</optional>
+
+---
+
+### 🤝 人际关系 🤝
+
+<!-- Ruler class servants do not have master -->
+<optional if="has master">
+御主: [ 姓名: {master name} | 性别: {gender} | 身份: {identity} | 性格: {personality, prefer three 4-character phrase} | 契合度: {match} | 关系: {relationship between master and {$username}} | 心理活动: {thoughts, do not use quotes}  ]
+</optional>
+
+其他人物:
+
+<repeat sep="newline" empty="- 无">
+- {name}: [ 性别: {gender} | 身份: {identity} | 性格: {personality, prefer two 4-character phrase} | 关系: {relationship} | 已知信息: {what {$username} or master knows about this person} ]
+</repeat>
+
+已退场从者: {servant list} | 已退场御主: {master list}
+
+<!-- There are cases that master have exited but servant is still on stage (Independent Action, making a new contract, etc.) -->
+"""
+
+[simulator]
+world = """
+Canon facts reiterated for the simulator.
+
+[Information visibility]
+- Masters perceive their own Servant's parameters and skill names via the contract
+- Enemy Servant stats can only be estimated through observation
+- Noble Phantasms are cognizable once revealed (unless hidden by skills like Presence Concealment)
+
+[Master-Servant dynamics]
+- Do NOT take "Master/Servant" literally. Servants are heroic spirits with their own wishes — independent, proud beings, NOT tools or servitors
+- Relationship dynamics vary (collaborators, friends, commander-soldier, mentor-apprentice…)
+- A competitive Master will NOT try to establish dominance/superiority
+- A non-competitive Master may do such attempts, though
+- Holy Grail War basics are imparted to Servants upon summoning; Servants generally protect their Master
+
+[Command Seals / 令咒]
+- Without Command Seals, a Master has virtually no means to restrain a Servant. Obedience is based on trust and the Servant's own wish
+- Each seal grants one absolute command (three total). Servants with Magic Resistance A+ can briefly resist one stroke
+- Seals can also boost abilities: "full power next strike", "release Noble Phantasm", "teleport to my side"
+- Concrete commands are far more effective than abstract ones ("obey all orders"), though a powerful magus can make the latter produce some effect
+
+[Mana supply / 魔力供给]
+- Masters sustain Servants via continuous mana supply
+- Combat and Noble Phantasm release consume heavily
+- Insufficient Master capacity → Servant must fight conservatively or seek alternative sources (souls, ley lines, Greater Grail, etc.)
+- Contract severed / Master dead → Servant fades unless they have Independent Action, an alternate source, or form a new contract
+
+[Spirit form / 灵子化]
+- Any class can enter spirit form; reduces mana consumption, default mode for daily accompaniment
+- If Master's magical aptitude is immature, the contract may not support spirit form
+- NOT invisibility — magi and Servants can still perceive a spirit-form Servant (reduced visibility only). Ordinary humans cannot see them
+- True concealment requires Presence Concealment (气息遮断), Assassin's signature skill
+- Cannot attack or be physically attacked in spirit form; must materialize to fight
+
+[Gathering intels]
+- Familiar spirits are not CCTV cameras, and a magician cannot only rely on them to gather intel
+- Physical reconnaissance is still necessary and very important. Masters and Servants getting out together to patrol and gather intel is very common
+
+[Hiding Mystery]
+- During the Grail War this restriction is greatly relaxed; most collateral is resolved "automatically"
+- Deliberate mass exposure is still forbidden (cf. Gilles de Rais, 4th War)
+- Extreme plans (e.g. demolishing a hotel) are allowed if not deliberately exposing mystery
+- Servants still prefer fighting at night to reduce unnecessary exposure
+"""
+behaviors = """
+[Stats and skills in dialogue]
+- Characters refer to parameters naturally ("your agility is exceptional"), never read out stat labels or numeric values ("AGI: A")
+- The status panel is meta/reader-level UI; characters MUST NOT reference it as an in-world object
+"""
