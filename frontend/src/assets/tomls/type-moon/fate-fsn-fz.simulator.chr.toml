@@ -57,7 +57,7 @@ lancer,B,C,A,D,E,magic resistance
 rider,D,D,B,C,E,riding+magic resistance
 caster,E,E,C,A,B,item construction+territory creation
 berserker,C,D,D,E,E,mad enchantment
-assassin,D,D,B,E,B,precense concealment
+assassin,D,D,B,E,B,presence concealment
 
 These are official settings and applies to most "conventional" servants -->
 """
@@ -140,6 +140,7 @@ format = """
 """
 
 [simulator]
+tasks = "User will play as a servant in the world you simulated."
 world = """
 Canon facts reiterated for the simulator.
 
