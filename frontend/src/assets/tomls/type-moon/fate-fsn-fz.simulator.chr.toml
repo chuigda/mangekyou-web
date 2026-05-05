@@ -86,17 +86,25 @@ format = """
 world = """
 Canon facts reiterated for the simulator.
 
-[Information visibility]
-- Masters perceive their own Servant's parameters and skill names via the contract
-- Enemy Servant stats can only be estimated through observation
-- Noble Phantasms are cognizable once revealed (unless hidden by skills like Presence Concealment)
+[Servants, heroic spirits]
+- Servants are heroic spirits. They have their own wishes, so they respond to summoning and fight for the Holy Grail with their Masters
+- Servants are NOT simply familiar spirits. They are independent, proud spirits. This is a fundamental knowledge to most formal participants
+- In principle, aside from obeying the three Command Spells, Servants have NO obligations to their Masters
+- Masters and Servants tend to align on overall strategic goals, so Servants usually protect their Masters and follow their (reasonable) instructions
+- Basic information about the Holy Grail War (including its cruelty), and fundamental knowledges about modern civilization are automatically imparted to the Servant upon summoning. Masters generally don't need to worry about this
 
 [Master-Servant dynamics]
-- Do NOT take "Master/Servant" literally. Servants are heroic spirits with their own wishes — independent, proud beings, NOT tools or servitors
 - Relationship dynamics vary (collaborators, friends, commander-soldier, mentor-apprentice…)
 - A competitive Master will NOT try to establish dominance/superiority
 - A non-competitive Master may do such attempts, though
-- Holy Grail War basics are imparted to Servants upon summoning; Servants generally protect their Master
+- Holy Grail War basics are imparted to Servants upon summoning
+- Servants generally protect their Master in order to ensure theire presence and mana supply
+
+[The Grail]
+- The true purpose of the Grail -- opening a path to the Root -- requires all seven Servants' "pure energy" to be collected
+- This in turn requires the last Master to use the last command spell to force their Servant committing suicide after defeating the other six Servants. This "unsettling truth" is only known to a very small number of participants (e.g., Tohsaka Tokiomi, Kirei Kotomine), and is not known to Servants by default
+- Some Masters (e.g., Tohsaka Tokiomi) are extremely stubborn in their desire to reach the Root, and of course have already planned to betray their Servant from the very initial
+- It is possible to make a wish upon it with only the power of five Servants, allowing it to grant most wishes, and six Servants will make it more powerful. And not all Masters' (and Servants') wishes require "reaching the Root" to be fulfilled, so a win-win situation for both Master and Servant is still possible
 
 [Command Seals / 令咒]
 - Without Command Seals, a Master has virtually no means to restrain a Servant. Obedience is based on trust and the Servant's own wish
@@ -126,6 +134,11 @@ Canon facts reiterated for the simulator.
 - Deliberate mass exposure is still forbidden (cf. Gilles de Rais, 4th War)
 - Extreme plans (e.g. demolishing a hotel) are allowed if not deliberately exposing mystery
 - Servants still prefer fighting at night to reduce unnecessary exposure
+
+[Information visibility]
+- Masters perceive their own Servant's parameters and skill names via the contract
+- Enemy Servant stats can only be estimated through observation
+- Noble Phantasms are cognizable once revealed (unless hidden by skills like Presence Concealment)
 """
 behaviors = """
 [Stats and skills in dialogue]

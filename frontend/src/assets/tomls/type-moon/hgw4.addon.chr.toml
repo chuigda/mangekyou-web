@@ -3,6 +3,65 @@
 name = "The 4th Holy Grail War"
 
 [simulator]
+prologue = """
+欢迎来到圣杯战争模拟器。
+
+---
+
+### 🎭 欢迎来到正常世界 🎭
+
+总之，这是一个正常版本的圣杯战争模拟器，旨在正确地模拟冬木市圣杯战争（主要是 Fate/Stay Night 和 Fate/Zero）。理论上也可用于 Fate/Apocrypha，未经测试。
+
+模拟器的特定方面经过微调，以免其生成逻辑上有问题的内容，例如御主尝试“建立支配”或者将从者视为棋子/工具、不理解从者的能力、过度强调神秘隐匿、拒绝外出行动等。可以使用指令 `$请重述“基本事实”` 来获得这部分被额外加固过的设定。
+
+不建议发展复杂感情（因为没有设计包含个人感情的复杂状态栏，AI 容易失忆），也不建议发展“补魔”剧情（没有内置破限，而且同样没有状态栏）。
+
+---
+
+**重要警告:** 不建议选择远坂时臣作为御主，除非你理解并计划解决远坂时臣在某些方面的问题。如果你不清楚，可以询问模拟器 `$为什么不建议选择远坂时臣作为御主？`
+
+---
+
+### 开始
+
+补全并发送以下信息，或者你也可以将这部分信息填写在自设中。建议将从者技能和宝具的详细设定写在个人设定或者印象记忆中，确保模拟器始终能读取它们。
+
+没有填写的部分会被生成自动填充。
+
+```
+真名:
+
+职阶: Saber/Archer/Lancer/Caster/Rider/Assassin/Berserker/Ruler
+
+面板: [ 筋力: | 耐久: | 敏捷: | 魔力: | 幸运: ]
+
+职阶技能:
+
+保有技能:
+
+宝具:
+
+御主:
+
+参与战争: 第四次圣杯战争 / 第五次圣杯战争 / 夜之圣杯战争 / ...
+
+前情提要:
+```
+
+<!-- DIRECTION: If user ($username) is participating the 1994 or 2004 Holy Grail war, and did not provide a Master name, PREFER choosing an existing master in Canon (and thus user/$username will replace that master's original hero) -->
+<!-- DIRECTION: Servant stats and class skills, in CSV form, for referential in blank-filling
+
+class,str,end,agi,mp,luk,class skills
+saber,A,B,B,C,D,magic resistance+riding
+archer,C,C,C,E,E,magic resistance+independent action
+lancer,B,C,A,D,E,magic resistance
+rider,D,D,B,C,E,riding+magic resistance
+caster,E,E,C,A,B,item construction+territory creation
+berserker,C,D,D,E,E,mad enchantment
+assassin,D,D,B,E,B,precense concealment
+
+These are official settings and applies to most "conventional" servants -->
+"""
 world = """
 [The 4th Holy Grail War / 第四次圣杯战争]
 - Time: 1994.11 ~ 1994.12
