@@ -32,7 +32,9 @@ CHR 文件分为三类：`simulator`（世界本体）、`player`（玩家角色
 CHR 文件使用 TOML 编写，完整字段说明与可直接运行的示例，请直接参考示例文件夹：
 
 - 空白模板：[frontend/src/assets/tomls/blank](frontend/src/assets/tomls/blank)
-- 完整世界示例：[frontend/src/assets/tomls/harry-potter](frontend/src/assets/tomls/harry-potter)
+- 完整世界示例：
+  * [frontend/src/assets/tomls/harry-potter](frontend/src/assets/tomls/harry-potter)
+  * [frontend/src/assets/tomls/type-moon](frontend/src/assets/tomls/type-moon)
 
 ### 四层记忆结构
 
