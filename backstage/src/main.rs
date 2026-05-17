@@ -5,6 +5,7 @@ mod llm_tok;
 mod win32;
 mod state;
 
+use std::collections::HashMap;
 use std::sync::Arc;
 
 use axum::Router;
@@ -35,13 +36,13 @@ const JS_FILE: &'static str = include_str!("../../frontend/dist/assets/index.js"
 const CSS_FILE: &'static str = include_str!("../../frontend/dist/assets/index.css");
 
 async fn application_start() -> Result<(), Box<dyn std::error::Error>> {
-    tracing::info!("Pre-initializing tokenizers");
-    let tokenizers = llm_tok::load_tokenizers()?;
-    tracing::info!("Tokenizers pre-initialization complete");
+    // tracing::info!("Pre-initializing tokenizers");
+    // let tokenizers = llm_tok::load_tokenizers()?;
+    // tracing::info!("Tokenizers pre-initialization complete");
 
     let state = AppState {
         client: reqwest::Client::new(),
-        tokenizers: Arc::new(tokenizers),
+        tokenizers: Arc::new(HashMap::new())
     };
 
     let app = Router::new()

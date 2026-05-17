@@ -11,6 +11,7 @@ use tokio::task::spawn_blocking;
 
 use crate::state::AppState;
 
+#[allow(unused)]
 pub fn load_tokenizers() -> Result<HashMap<String, Arc<Tokenizer>>, Box<dyn std::error::Error>> {
     let path = Path::new("modele");
     if !path.exists() || !path.is_dir() {
